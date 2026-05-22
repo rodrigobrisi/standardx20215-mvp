@@ -2005,37 +2005,7 @@ function reset(){
   render();
 }
 
-var _auth=(function(){try{return sessionStorage.getItem("stdx_auth")==="ok";}catch(e){return false;}}
-)();
-function verificarSenha(){
-  var inp=document.getElementById("_lInp");
-  if(!inp)return;
-  if(inp.value==="standardx2025"){
-    try{sessionStorage.setItem("stdx_auth","ok");}catch(e){}
-    var ov=document.getElementById("_lOv");
-    if(ov) document.body.removeChild(ov);
-    render();
-  }else{
-    var err=document.getElementById("_lErr");
-    if(err) err.textContent="Senha incorreta.";
-    inp.value=""; inp.focus();
-  }
-}
-function mostrarLogin(){
-  var ov=document.createElement("div");
-  ov.id="_lOv"; ov.className="login-overlay";
-  ov.innerHTML="<div class='login-box'>"
-    +"<div class='login-logo'>StandardX</div>"
-    +"<div class='login-sub'>MVP · Acesso restrito</div>"
-    +"<input id='_lInp' class='login-inp' type='password' placeholder='Senha de acesso' "
-    +"onkeydown=\"if(event.key==='Enter')verificarSenha()\"/>"
-    +"<button class='login-btn' onclick='verificarSenha()'>Entrar →</button>"
-    +"<div id='_lErr' class='login-err'></div></div>";
-  document.body.appendChild(ov);
-  setTimeout(function(){var el=document.getElementById("_lInp");if(el)el.focus();},100);
-}
-
-if(!_auth){mostrarLogin();}else{render();}
+// Login gerenciado pelo controlador central
 
 
 
