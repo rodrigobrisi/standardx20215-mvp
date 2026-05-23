@@ -223,7 +223,8 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .mod-box{background:var(--bg2);border:1px solid var(--bord);border-radius:20px;padding:48px 40px;max-width:480px;width:100%;text-align:center}
 .mod-logo{font-family:Syne,sans-serif;font-size:32px;font-weight:800;color:var(--px2);margin-bottom:6px}
 .mod-sub{font-size:13px;color:var(--tx3);margin-bottom:36px;line-height:1.7}
-.mod-btn{width:100%;padding:18px 20px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:12px;text-align:left;display:flex;align-items:center;gap:14px}
+.mod-btn{width:100%;padding:18px 20px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:12px;text-align:left;display:flex;align-items:center;gap:14px;transition:opacity .15s}
+.mod-btn:hover{opacity:.88}
 .mod-btn-owner{background:var(--az);color:#07090F}
 .mod-btn-prop{background:var(--bg3);color:var(--tx2);border:1px solid var(--bord2)}
 .watermark{position:fixed;bottom:10px;right:14px;font-size:10px;color:rgba(255,255,255,.1);pointer-events:none;z-index:998;font-family:Syne,sans-serif;letter-spacing:1px;user-select:none}
@@ -235,11 +236,11 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
     <div class="mod-logo">StandardX</div>
     <div class="mod-sub">Plataforma de Engenharia FEL &middot; MVP<br>Selecione seu perfil para continuar</div>
     <button class="mod-btn mod-btn-owner" onclick="iniciarOwner()">
-      <span style="font-size:24px">🏗️</span>
+      <span style="font-size:24px">&#127959;</span>
       <div><div>Owner</div><div style="font-size:11px;font-weight:500;opacity:.8">Definir escopo e gerar RFP</div></div>
     </button>
     <button class="mod-btn mod-btn-prop" onclick="iniciarProponente()">
-      <span style="font-size:24px">📋</span>
+      <span style="font-size:24px">&#128203;</span>
       <div><div>Proponente</div><div style="font-size:11px;font-weight:500;opacity:.8">Elaborar proposta t&eacute;cnica</div></div>
     </button>
     <div style="font-size:10px;color:var(--tx3);margin-top:20px">Vers&atilde;o de teste &middot; Acesso restrito</div>
@@ -273,26 +274,21 @@ function iniciarProponente(){
   _modAtivo="prop"; _Prender();
 }
 function pedirSenha(destino){
-  var ov=document.createElement("div");
-  ov.id="senhaOv";ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px";
+  var ov=document.createElement("div");ov.id="senhaOv";
+  ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px";
   var box=document.createElement("div");
   box.style.cssText="background:#0F1520;border:1px solid #243352;border-radius:14px;padding:36px;max-width:360px;width:100%;text-align:center";
-  box.innerHTML="<div style='font-family:Syne,sans-serif;font-size:20px;font-weight:700;color:#EEF2FF;margin-bottom:4px'>StandardX</div><div style='font-size:12px;color:#94A3B8;margin-bottom:24px'>Insira a senha de acesso</div><input id='senhaInp' type='password' style='width:100%;background:#07090F;border:1px solid #243352;border-radius:8px;padding:12px;color:#EEF2FF;font-size:16px;text-align:center;outline:none;margin-bottom:10px'/><button id='senhaBtn' style='width:100%;background:#7C3AED;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px'>Entrar</button><div id='senhaErr' style='font-size:12px;color:#F87171;min-height:16px'></div>";
+  box.innerHTML="<div style='font-family:Syne,sans-serif;font-size:22px;font-weight:800;color:#EEF2FF;margin-bottom:4px'>StandardX</div>"
+    +"<div style='font-size:12px;color:#94A3B8;margin-bottom:24px'>Insira a senha de acesso</div>"
+    +"<input id='senhaInp' type='password' style='width:100%;background:#07090F;border:1px solid #243352;border-radius:8px;padding:13px;color:#EEF2FF;font-size:16px;text-align:center;letter-spacing:4px;outline:none;margin-bottom:10px'/>"
+    +"<button id='senhaBtn' style='width:100%;background:#7C3AED;color:#fff;border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px'>Entrar</button>"
+    +"<div id='senhaErr' style='font-size:12px;color:#F87171;min-height:16px'></div>";
   ov.appendChild(box);document.body.appendChild(ov);
   var inp=document.getElementById("senhaInp");inp.focus();
   inp.onkeydown=function(e){if(e.key==="Enter")validarSenha(destino);};
   document.getElementById("senhaBtn").onclick=function(){validarSenha(destino);};
 }
-
-function validarSenha(destino){
-  var inp=document.getElementById("senhaInp");
-  if(inp.value==="standardx2025"){
-    try{sessionStorage.setItem("stdx_auth","ok");}catch(e){}
-    _autenticado=true;
-    document.getElementById("senhaOv").remove();
-    if(destino==="owner") iniciarOwner(); else iniciarProponente();
-  }else{document.getElementById("senhaErr").textContent="Senha incorreta.";inp.value="";inp.focus();}
-}
+function validarSenha(destino){var inp=document.getElementById("senhaInp");if(inp.value==="standardx2025"){try{sessionStorage.setItem("stdx_auth","ok");}catch(e){}_autenticado=true;document.getElementById("senhaOv").remove();if(destino==="owner")iniciarOwner();else iniciarProponente();}else{document.getElementById("senhaErr").textContent="Senha incorreta.";inp.value="";inp.focus();}}
 function render(){
   var _sc=0,_el=document.querySelector("#app-owner .tbl-wrap");if(_el)_sc=_el.scrollTop;
   var h="";for(var i=1;i<5;i++){var c=i<S.tela?"done":i===S.tela?"cur":"";var k=i<S.tela?"onclick='goT("+i+")' style='cursor:pointer'":"";h+="<div class='stp "+c+"' "+k+"></div>";}
@@ -1775,12 +1771,6 @@ function T4(){
   h+="<button class='btn' style='background:var(--am);width:100%;justify-content:center' onclick='event.stopPropagation();gerarRFP()'>⬇ Exportar RFP (.docx)</button>";
   h+="</div>";
 
-  // Card NOVO: Ir para Proponente (mesmo teste)
-  h+="<div class='card' style='border:1.5px solid var(--vd-bord);cursor:pointer;background:var(--vd-bg)' onclick='irParaProponente()'>";
-  h+="<div style='font-size:28px;margin-bottom:12px'>🚀</div>";
-  h+="<div style='font-family:\"Syne\",sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;color:var(--vd2)'>Ir para o módulo Proponente</div>";
-  h+="<div style='font-size:12px;color:var(--tx3);line-height:1.6'>Abre o módulo proponente com o escopo que você acabou de definir</div>";
-  h+="</div>";
   // Card 2: Enviar para proponentes
   h+="<div class='card' style='border:1.5px solid var(--bord2);cursor:pointer;transition:all .2s' onmouseover=\"this.style.borderColor='var(--px)'\" onmouseout=\"this.style.borderColor='var(--bord2)'\" onclick='enviarProponentes()'>";
   h+="<div style='font-size:28px;margin-bottom:12px'>📤</div>";
@@ -1808,26 +1798,7 @@ function T4(){
 
 // ── RENDER ─────────────────────────────────────────────────
 var Ts=[T0,T1,T2,TPRED,T3,T4];
-function render(){
-  var _tblScroll=0;
-  var _tblEl=document.querySelector('.tbl-wrap');
-  if(_tblEl) _tblScroll=_tblEl.scrollTop;
-  var stepsHtml="";
-  for(var i=0;i<6;i++){
-    var cls=i<S.tela?"done":i===S.tela?"cur":"";
-    var clk=i<S.tela?"onclick='goT("+i+")'":"";
-    stepsHtml+="<div class='stp"+(" "+cls).trim()+"' "+clk+" title='Etapa "+(i+1)+"'></div>";
-  }
-  document.getElementById("steps").innerHTML=stepsHtml;
-  var sc=document.getElementById("scr");
-  sc.className="scr fade";
-  sc.innerHTML=Ts[S.tela]();
-  void sc.offsetWidth;
-  if(_tblScroll>0){
-    var _tblEl2=document.querySelector('.tbl-wrap');
-    if(_tblEl2) _tblEl2.scrollTop=_tblScroll;
-  }
-}
+// render() do controlador
 // ── HANDLERS ───────────────────────────────────────────────
 function selObjAdv(id){ selObj(id); goT(1); }
 function selObj(id){
@@ -2005,40 +1976,24 @@ function reset(){
   render();
 }
 
-// Login gerenciado pelo controlador central
 
 
 
-// Ponte: ESCOPO vem do escopo injetado pelo Owner ou do simulado
-var ESCOPO = (function(){
-  // 1. Escopo injetado diretamente pelo Owner (mesma sessão)
-  if(typeof _escopoInjetado !== 'undefined' && _escopoInjetado && _escopoInjetado.obj) return _escopoInjetado;
-  // 2. localStorage
+var ESCOPO=(function(){
+  if(typeof _escopoInjetado!=="undefined"&&_escopoInjetado&&_escopoInjetado.obj) return _escopoInjetado;
   try{var s=localStorage.getItem("stdx_escopo");if(s){var p=JSON.parse(s);if(p&&p.obj)return p;}}catch(e){}
-  // 3. URL parameter
-  try{var b64=new URLSearchParams(window.location.search).get("escopo");if(b64)return JSON.parse(decodeURIComponent(escape(atob(b64))));}catch(e){}
-  // 4. Simulado (demo)
   return {
     obj:{id:"fel2",l:"Desenvolvimento de Escopo e Seleção de Alternativas",p:"Estimativa de Investimento ±25%",nv:"B"},
-    tipo:"greenfield",vis:{on:true,modo:"obrigatorio"},
-    m3d:true,lod:"LOD 200",softs:["E3D"],defSoft:"owner",
-    normas:["abnt","asme"],dur:16,
-    aqMode:"mercado",aqForn:3,aqReunForn:true,
-    aqBids:{eq_princ:2,mat:1,sv_civil:1,sv_mec:1},
-    aqReun:{eq_princ:3,mat:3,sv_civil:3,sv_mec:3},
+    tipo:"greenfield",vis:{on:true,modo:"obrigatorio"},m3d:true,lod:"LOD 200",softs:["E3D"],defSoft:"owner",
+    normas:["abnt"],dur:16,aqMode:"mercado",aqForn:3,aqReunForn:true,
+    aqBids:{eq_princ:2,mat:1,sv_civil:1,sv_mec:1},aqReun:{eq_princ:3,mat:3,sv_civil:3,sv_mec:3},
     aqItens:{eq_princ:true,eq_aux:false,mat:true,sv_terra:false,sv_infra:false,sv_civil:true,sv_mec:true,sv_elet:false},
-    reunioes:[
-      {id:"r1",t:"Kick off",f:"Por evento",h:4},
-      {id:"r2",t:"Coordenação técnica",f:"Quinzenal",h:2},
-      {id:"r3",t:"Reunião de progresso",f:"Quinzenal",h:2},
-      {id:"r_forn",t:"Reunião com fornecedores",f:"Por evento",h:3}
-    ],
+    reunioes:[{id:"r1",t:"Kick off",f:"Por evento",h:4},{id:"r2",t:"Coordenação técnica",f:"Quinzenal",h:2},{id:"r3",t:"Reunião de progresso",f:"Quinzenal",h:2},{id:"r_forn",t:"Reunião com fornecedores",f:"Por evento",h:3}],
     sel:{"PRO-001":"B","PRO-002":"B","PRO-004":"B","MEC-001":"B","MEC-004":"B","ELE-001":"B","AUT-001":"B","EST-001":"B","GES-001":"B","GES-002":"B","INV-001":"B","INV-002":"B"},
     predDisp:{}
   };
 })();
-var _viaLink = false;
-
+var _viaLink=false;
 var HORAS_REF = {
   "PRO-001": {
     fel1: {h:24, d:{"RT5": 20, "RT4": 40, "RT3": 30, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
@@ -2488,8 +2443,7 @@ var P={
 // Inicializar reuniões do owner
 for(var _ri=0;_ri<ESCOPO.reunioes.length;_ri++){
   var _r=ESCOPO.reunioes[_ri];
-  P.reunPart[_r.id]=2;
-  P.reunH[_r.id]=(_r.h&&_r.h>0)?_r.h:2;
+  P.reunPart[_r.id]=2; P.reunH[_r.id]=2;
 }
 // Inicializar qtd reuniões internas baseadas na duração do projeto
 (function(){
@@ -2634,7 +2588,7 @@ function _P_PsetCatAtiv(el){
     tdTot.textContent=tot>0?tot+'h':'—';
     tdTot.style.color=tot>0?'var(--am2)':'var(--tx3)';
   }
-  _PupdSum();
+  updSum();
 }
 function _P_PhAtivTotal(){
   var t=0;
@@ -2652,7 +2606,7 @@ function _P_PsetCat(el){
     tdTot.textContent=tot>0?tot+'h':'—';
     tdTot.style.color=tot>0?'var(--px2)':'var(--tx3)';
   }
-  _PupdSum();
+  updSum();
 }
 function setD(el){
   if(!P.hCat[el.dataset.c]) P.hCat[el.dataset.c]={};
@@ -2686,7 +2640,7 @@ function _P_PbuildCatBarsHTML(){
   html+='</div>';
   return html;
 }
-function _P_PupdSum(){
+function updSum(){
   var te=document.getElementById('sum-tec'); if(te) te.textContent=_PhTec()+'h';
   var tg=document.getElementById('sum-gest'); if(tg) tg.textContent=_PhGest()+'h';
   var tt=document.getElementById('sum-tot'); if(tt) tt.textContent=_PhTotal()+'h';
@@ -2695,7 +2649,7 @@ function _P_PupdSum(){
 function _P_PsetFilt(f){P.filt=f;_Prender();}
 function _P_PsetBusca(v){P.busca=v;_Prender();}
 function _P_PsetRP(el){P.reunPart[el.dataset.rid]=+el.value;_Prender();}
-function _PsetRH(el){P.reunH[el.dataset.rid]=+el.value;_Prender();}
+function _P_PsetRH(el){P.reunH[el.dataset.rid]=+el.value;_Prender();}
 function _P_PtogRI(id){
   P.reunInt[id].inc=!P.reunInt[id].inc;
   if(P.reunInt[id].inc){
@@ -2715,7 +2669,7 @@ function _P_PsetRIF(el){
 }
 
 // ── T0: LOGIN ──────────────────────────────────────────────
-function T0(){
+function _PT0(){
   return "<div class='login-wrap'><div class='login-box'>"
     +"<div style='font-family:Syne,sans-serif;font-size:30px;font-weight:800;margin-bottom:6px'>Standard<span style='color:var(--px)'>X</span></div>"
     +"<div style='font-size:13px;color:var(--tx3);margin-bottom:28px'>Módulo da Empresa Proponente</div>"
@@ -2727,7 +2681,7 @@ function T0(){
 }
 
 // ── T1: ESCOPO RECEBIDO ────────────────────────────────────
-function T1(){
+function _PT1(){
   var o=ESCOPO.obj;
   var nSel=Object.keys(ESCOPO.sel).length;
   var nO=0,nOp=0;
@@ -2856,7 +2810,7 @@ function T1(){
   h+="<div class='fnav'><div></div><button class='btn' onclick='_PgoT(2)'>Ver informações predecessoras →</button></div>";
   return h;
 }
-function T2(){
+function _PT2(){
   var predList=getPredList();
   var predDisp=ESCOPO.predDisp||{};
   var h="<div class='titulo'>Informações predecessoras</div>";
@@ -2918,7 +2872,7 @@ function T2(){
 }
 
 // ── T3: DIMENSIONAMENTO DE HORAS ───────────────────────────
-function T4(){
+function _PT4(){
   var h="<div class='titulo'>Reuniões e atividades</div>";
   h+="<div class='sub'>Defina sua participação nas reuniões com o Owner e as reuniões internas da equipe.</div>";
 
@@ -2935,9 +2889,9 @@ function T4(){
     }
     if(ESCOPO.vis.modo==="obrigatorio"||(ESCOPO.vis.modo==="opcional"&&P.visRealiza===true)){
       h+="<div class='gest-row'><div style='flex:1'><div style='font-size:13px;font-weight:500'>Quantidade de visitas</div></div>";
-      h+="<div style='display:flex;align-items:center;gap:6px'><input type='number' class='gest-inp' min='1' value='"+(P.visQtd||1)+"' onchange='P.visQtd=+this.value;_Prender()'/><span style='color:var(--tx3)'>visitas</span></div></div>";
+      h+="<div style='display:flex;align-items:center;gap:6px'><input type='number' class='gest-inp' min='1' value='"+(P.visQtd||1)+"' onchange='P.visQtd=+this.value;render()'/><span style='color:var(--tx3)'>visitas</span></div></div>";
       h+="<div class='gest-row'><div style='flex:1'><div style='font-size:13px;font-weight:500'>Participantes por visita</div></div>";
-      h+="<div style='display:flex;align-items:center;gap:6px'><input type='number' class='gest-inp' min='1' value='"+(P.visPart||2)+"' onchange='P.visPart=+this.value;_Prender()'/><span style='color:var(--tx3)'>pessoas</span></div></div>";
+      h+="<div style='display:flex;align-items:center;gap:6px'><input type='number' class='gest-inp' min='1' value='"+(P.visPart||2)+"' onchange='P.visPart=+this.value;render()'/><span style='color:var(--tx3)'>pessoas</span></div></div>";
       h+="<div style='font-size:13px;font-weight:500;margin-bottom:8px'>Disciplinas participantes</div>";
       h+="<div style='display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px'>";
       for(var dvi=0;dvi<DV.length;dvi++){
@@ -2947,7 +2901,7 @@ function T4(){
       }
       h+="</div>";
       h+="<div class='gest-row'><span style='font-size:13px;font-weight:500'>Horas por visita</span>";
-      h+="<div style='display:flex;align-items:center;gap:6px'><input type='number' class='gest-inp' min='0' value='"+(P.visHoras||8)+"' onchange='P.visHoras=+this.value;_Prender()'/><span style='color:var(--tx3)'>h/visita</span></div></div>";
+      h+="<div style='display:flex;align-items:center;gap:6px'><input type='number' class='gest-inp' min='0' value='"+(P.visHoras||8)+"' onchange='P.visHoras=+this.value;render()'/><span style='color:var(--tx3)'>h/visita</span></div></div>";
       var visTotal=(P.visQtd||1)*(P.visPart||2)*(P.visHoras||8);
       h+="<div class='gest-row' style='padding-top:6px'><span style='font-size:12px;color:var(--tx3)'>Total: "+(P.visQtd||1)+" × "+(P.visPart||2)+" × "+(P.visHoras||8)+"h</span>";
       h+="<span style='font-family:Syne,sans-serif;font-size:16px;font-weight:700;color:var(--az2)'>"+visTotal+"h</span></div>";
@@ -2981,20 +2935,17 @@ function T4(){
     if(r.id==="r_forn") continue;
     var part=P.reunPart[r.id]||1;
     var rh=P.reunH[r.id]||0;
-    var nRO=(FW[r.f]&&FW[r.f]>0)?Math.max(1,Math.round((ESCOPO.dur||16)/FW[r.f])):1;
-    totRO+=nRO*part*rh;
-    h+="<div class='gest-row'><div style='flex:1'><div style='font-size:13px;font-weight:500'>"+ r.t+"</div>";
-    h+="<div style='font-size:11px;color:var(--tx3)'>"+r.f+" · "+nRO+" reun. × "+part+" rec. × "+rh+"h = "+(nRO*part*rh)+"h</div></div>";
+    totRO+=part*rh;
+    h+="<div class='gest-row'><div style='flex:1'><div style='font-size:13px;font-weight:500'>"+r.t+"</div>";
+    h+="<div style='font-size:11px;color:var(--tx3)'>"+r.f+" · total: "+(part*rh)+"h</div></div>";
     h+="<div style='display:flex;align-items:center;gap:8px'>";
     h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
     h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Recursos</span>";
     h+="<input type='number' class='gest-inp' style='width:58px' min='1' value='"+part+"' data-rid='"+r.id+"' onchange='_PsetRP(this)'/></div>";
     h+="<span style='font-size:14px;color:var(--tx3)'>×</span>";
     h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
-    h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Horas/reun.</span>";
-    h+="<div style='width:58px;background:var(--bg3);border:1px solid var(--bord);border-radius:6px;padding:6px 4px;text-align:center;font-size:13px;font-weight:700;color:var(--vd2)'>"+rh+"h</div>";
-    h+="<span style='font-size:8px;color:var(--vd2);opacity:.8'>Owner</span>";
-    h+="</div>";
+    h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Horas</span>";
+    h+="<input type='number' class='gest-inp' style='width:58px' min='0' value='"+rh+"' data-rid='"+r.id+"' onchange='_PsetRH(this)'/></div>";
     h+="<span style='font-size:11px;color:var(--tx3)'>/reun.</span></div></div>";
   }
   // Reunião com fornecedores por pacote
@@ -3015,11 +2966,11 @@ function T4(){
       h+="<div style='display:flex;align-items:center;gap:8px'>";
       h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
       h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Recursos</span>";
-      h+="<input type='number' class='gest-inp' style='width:55px' min='1' value='"+P.fornEquipe+"' onchange='P.fornEquipe=+this.value;_Prender()'/></div>";
+      h+="<input type='number' class='gest-inp' style='width:55px' min='1' value='"+P.fornEquipe+"' onchange='P.fornEquipe=+this.value;render()'/></div>";
       h+="<span style='font-size:14px;color:var(--tx3)'>×</span>";
       h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
       h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Horas</span>";
-      h+="<input type='number' class='gest-inp' style='width:55px' min='0' value='"+P.fornHReun+"' onchange='P.fornHReun=+this.value;_Prender()'/></div>";
+      h+="<input type='number' class='gest-inp' style='width:55px' min='0' value='"+P.fornHReun+"' onchange='P.fornHReun=+this.value;render()'/></div>";
       h+="<span style='font-size:11px;color:var(--tx3)'>/reun.</span></div></div>";
     }
   }
@@ -3072,7 +3023,7 @@ function T4(){
   h+="<div class='fnav'><button class='btn-s' onclick='_PgoT(2)'>← Voltar</button><button class='btn' onclick='_PgoT(4)'>Distribuição de atividades → →</button></div>";
   return h;
 }
-function T3b(){
+function _PT3b(){
   var h="<div class='titulo'>Distribuição de horas — Atividades de suporte</div>";
   h+="<div class='sub'>Distribua as horas de cada atividade pelas categorias de recurso · Gestão, reuniões e visitas</div>";
 
@@ -3088,11 +3039,8 @@ function T3b(){
     var r=ESCOPO.reunioes[ri];
     if(r.id==="r_forn") continue;
     var part=P.reunPart[r.id]||1, rh=P.reunH[r.id]||0;
-    var nRO2=(FW[r.f]&&FW[r.f]>0)?Math.max(1,Math.round((ESCOPO.dur||16)/FW[r.f])):1;
-    var reun_tot=nRO2*part*rh;
-    ativs.push({id:"reun_"+r.id, grp:"Reuniões com Owner", l:r.t,
-      sub:nRO2+" reun. × "+part+" rec. × "+rh+"h/reun.",
-      ref:reun_tot});
+    var reun_tot=part*rh;
+    ativs.push({id:"reun_"+r.id, grp:"Reuniões com Owner", l:r.t, sub:part+" rec. × "+rh+"h/reun.", ref:reun_tot});
   }
   // Reuniões com fornecedores
   if(ESCOPO.aqMode&&ESCOPO.aqMode!=="referencia"&&ESCOPO.aqReunForn&&ESCOPO.aqItens){
@@ -3182,7 +3130,7 @@ function T3b(){
   return h;
 }
 
-function T3(){
+function _PT3(){
   var h="<div class='titulo'>Distribuição de horas — Entregáveis</div>";
   var cenarioLabel=P.cenario?{otimista:"🟢 Cenário Otimista",realista:"🔵 Cenário Realista",pessimista:"🟡 Cenário Pessimista"}[P.cenario]:"";
   var subMsg=P.cenario?"Ajuste as horas por categoria se necessário":"Selecione um cenário acima para distribuir as horas automaticamente.";
@@ -3318,7 +3266,7 @@ var thTec=""; for(var ti=0;ti<CATS_TEC.length;ti++) thTec+="<th style='text-alig
 
 
 // ── T3b: DISTRIBUIÇÃO ATIVIDADES ────────────────────────
-function T6(){
+function _PT6(){
   var h="<div class='titulo'>Resumo</div>";
   h+="<div class='sub'>Consolidado de horas, distribuição por categoria e prontidão das informações</div>";
 
@@ -3425,13 +3373,12 @@ function T6(){
   return h;
 }
 
-function T5(){
+function _PT5(){
   // Calcular totais de reuniões (igual ao T4)
   var totRO=0;
   for(var ri=0;ri<ESCOPO.reunioes.length;ri++){
     var r2=ESCOPO.reunioes[ri]; if(r2.id==="r_forn") continue;
-    var nRO_t5=(FW[r2.f]&&FW[r2.f]>0)?Math.max(1,Math.round((ESCOPO.dur||16)/FW[r2.f])):1;
-    totRO+=nRO_t5*(P.reunPart[r2.id]||1)*(P.reunH[r2.id]||0);
+    totRO+=(P.reunPart[r2.id]||1)*(P.reunH[r2.id]||0);
   }
   if(ESCOPO.aqMode&&ESCOPO.aqMode!=="referencia"&&ESCOPO.aqReunForn&&ESCOPO.aqItens){
     for(var fkx in ESCOPO.aqItens){
@@ -3617,7 +3564,7 @@ function T5(){
     h+="<input type='number' class='gest-inp' style='width:58px' min='1' value='"+(P.reunPart["r_forn"]||1)+"' data-rid='r_forn' onchange='_PsetRP(this)'/></div>";
     h+="<span style='font-size:14px;color:var(--tx3)'>×</span>";
     h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'><span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Horas</span>";
-    h+="<input type='number' class='gest-inp' style='width:58px' min='0' value='"+(P.reunH["r_forn"]||2)+"' data-rid='r_forn' onchange='setRH(this)'/></div>";
+    h+="<input type='number' class='gest-inp' style='width:58px' min='0' value='"+(P.reunH["r_forn"]||2)+"' data-rid='r_forn' onchange='_PsetRH(this)'/></div>";
     h+="<span style='font-size:11px;color:var(--tx3)'>/reun.</span></div></div>";
     if(pacotes.length){
       h+="<div style='font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 8px'>Fornecedores por pacote</div>";
@@ -3625,160 +3572,19 @@ function T5(){
         var pac=pacotes[pi];
         h+="<div class='gest-row'><span style='font-size:12px;color:var(--tx2)'>"+ pac.l+"</span>";
         h+="<div style='display:flex;align-items:center;gap:6px'>";
-        h+="<input type='number' class='gest-inp' style='width:58px' min='1' value='"+(P.fornPacote[pac.id]||(ESCOPO.aqForn||3))+"' data-pid='"+ pac.id+"' onchange='setFornPacote(this)'/>";
+        h+="<input type='number' class='gest-inp' style='width:58px' min='1' value='"+(P.fornPacote[pac.id]||(ESCOPO.aqForn||3))+"' data-pid='"+ pac.id+"' onchange='_PsetFornPacote(this)'/>";
         h+="<span style='font-size:11px;color:var(--tx3)'>fornecedores</span></div></div>";
       }
     }
     h+="</div>";
   }
-  h+="<div style='display:flex;gap:12px;margin-top:24px;flex-wrap:wrap'>";
-  h+="<button onclick='_PgerarProposta()' style='flex:1;min-width:180px;background:var(--vd);color:#07090F;border:none;border-radius:10px;padding:16px;font-size:14px;font-weight:700;cursor:pointer'>📄 Gerar Proposta (PDF)</button>";
-  h+="</div>";
-  return h;
-}
-
-
-function _P_PgerarProposta(){
-  var doc=gerarHTMLProposta();
-  var w=window.open("","_blank");
-  if(!w){alert("Permita popups para gerar a proposta.");return;}
-  w.document.write(doc);
-  w.document.close();
-  setTimeout(function(){w.print();},600);
-}
-function _PgerarHTMLProposta(){
-  var o=ESCOPO.obj;
-  var cenarioLabel={otimista:"Otimista (×0.75)",realista:"Realista (×1.00)",pessimista:"Pessimista (×1.40)"}[P.cenario]||"—";
-  var dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
-  var CATS_ALL=CATS_TEC.concat(CATS_GEST);
-
-  var h="<!DOCTYPE html><html lang='pt-BR'><head><meta charset='UTF-8'/>";
-  h+="<title>Proposta — "+o.l+"</title>";
-  h+="<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;font-size:9.5pt;color:#111}";
-  h+="@page{size:A4 landscape;margin:14mm 12mm}@media print{.no-print{display:none}}";
-  h+=".pg{max-width:277mm;margin:0 auto;padding:14mm 12mm}";
-  h+="h1{font-size:17pt;font-weight:700;color:#0D1F3C;margin-bottom:4px}";
-  h+="h2{font-size:11pt;font-weight:700;color:#0D1F3C;border-bottom:2px solid #0D1F3C;padding-bottom:3px;margin:18px 0 8px}";
-  h+="h3{font-size:9.5pt;font-weight:700;color:#1E3A6E;margin:10px 0 3px}";
-  h+="table{width:100%;border-collapse:collapse;font-size:8pt;margin-bottom:8px}";
-  h+="th{background:#0D1F3C;color:#fff;padding:5px 6px;text-align:center;font-size:7.5pt}";
-  h+="th.left{text-align:left}td{padding:3px 6px;border-bottom:1px solid #E2E8F0}";
-  h+="td.num{text-align:center;font-family:monospace}";
-  h+="tr:nth-child(even) td{background:#F8FAFC}";
-  h+=".tr-disc td{background:#EFF6FF;font-weight:700;color:#1E3A6E;padding:5px 6px}";
-  h+=".header{border-bottom:3px solid #0D1F3C;padding-bottom:10px;margin-bottom:16px}";
-  h+=".sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}";
-  h+=".sum-box{background:#F0F4FF;border-radius:5px;padding:8px;text-align:center}";
-  h+=".sum-n{font-size:18pt;font-weight:700}";
-  h+=".sum-l{font-size:7.5pt;color:#666;margin-top:1px}";
-  h+=".footer{margin-top:20px;padding-top:8px;border-top:1px solid #E2E8F0;font-size:8pt;color:#666;text-align:center}";
-  h+="</style></head><body><div class='pg'>";
-
-  // Cabeçalho
-  h+="<div class='header'>";
-  h+="<div style='font-size:8pt;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px'>Proposta Técnica e Comercial — StandardX</div>";
-  h+="<h1>"+o.l+"</h1>";
-  h+="<div style='font-size:9.5pt;color:#1E3A6E;margin-bottom:4px'>"+o.p+"</div>";
-  h+="<div style='font-size:8pt;color:#666'>"+dt+" &nbsp;|&nbsp; Prazo: "+(ESCOPO.dur||16)+" sem. &nbsp;|&nbsp; "+(ESCOPO.tipo==="greenfield"?"Greenfield":"Brownfield")+" &nbsp;|&nbsp; Cenário: "+cenarioLabel+"</div>";
-  h+="</div>";
-
-  // Resumo de horas
-  h+="<h2>1. Resumo de Horas</h2>";
-  h+="<div class='sum-grid'>";
-  var hItems=[["Técnicas",_PhTec(),"#1E3A6E"],["Gestão",_PhGest(),"#92400E"],["Atividades",_PhAtivTotal(),"#065F46"],["Total Geral",_PhTotal(),"#0D4F2E"]];
-  for(var i=0;i<hItems.length;i++){
-    h+="<div class='sum-box'><div class='sum-n' style='color:"+hItems[i][2]+"'>"+hItems[i][1]+"h</div><div class='sum-l'>"+hItems[i][0]+"</div></div>";
-  }
-  h+="</div>";
-  if(P.valor) h+="<div style='background:#FFFBEB;border:1px solid #D97706;border-radius:5px;padding:8px 12px;margin-bottom:12px'><span style='font-size:8.5pt;color:#666'>Valor proposto: </span><strong style='font-size:13pt;color:#92400E'>"+P.valor+"</strong></div>";
-
-  // Distribuição por categoria
-  h+="<h2>2. Distribuição de Horas por Categoria</h2>";
-  h+="<table><tr>";
-  var catTots={};
-  for(var ci=0;ci<CATS_ALL.length;ci++){
-    catTots[CATS_ALL[ci]]=0;
-    var isTec=CATS_TEC.indexOf(CATS_ALL[ci])>=0;
-    h+="<th style='background:"+(isTec?"#1E3A6E":"#4C1D95")+"'>"+CATS_ALL[ci]+"</th>";
-  }
-  h+="<th>Total</th></tr><tr>";
-  for(var cod in P.hCat) for(var c in P.hCat[cod]) if(catTots[c]!==undefined) catTots[c]+=P.hCat[cod][c];
-  for(var aid in P.hAtiv) for(var c2 in P.hAtiv[aid]) if(catTots[c2]!==undefined) catTots[c2]+=P.hAtiv[aid][c2];
-  var gtot=0;
-  for(var ci2=0;ci2<CATS_ALL.length;ci2++){var v=catTots[CATS_ALL[ci2]]||0;h+="<td class='num'>"+(v||"—")+"</td>";gtot+=v;}
-  h+="<td class='num' style='font-weight:700'>"+gtot+"h</td></tr></table>";
-
-  // Horas por entregável
-  h+="<h2>3. Horas por Entregável</h2>";
-  h+="<table><tr><th class='left' style='width:70px'>Cód.</th><th class='left'>Entregável</th>";
-  for(var ci3=0;ci3<CATS_ALL.length;ci3++){
-    var isTec2=CATS_TEC.indexOf(CATS_ALL[ci3])>=0;
-    h+="<th style='background:"+(isTec2?"#1E3A6E":"#4C1D95")+"'>"+CATS_ALL[ci3]+"</th>";
-  }
-  h+="<th>Total</th></tr>";
-  var curDisc="";
-  for(var ei=0;ei<E.length;ei++){
-    var e2=E[ei]; if(!ESCOPO.sel[e2.c]) continue;
-    if(e2.d!==curDisc){curDisc=e2.d;h+="<tr class='tr-disc'><td colspan='"+(3+CATS_ALL.length)+"'>"+curDisc+"</td></tr>";}
-    var cats=P.hCat[e2.c]||{}; var eTot=0; for(var c3 in cats) eTot+=cats[c3];
-    h+="<tr><td style='font-family:monospace;font-size:7.5pt'>"+e2.c+"</td><td>"+e2.n+"</td>";
-    for(var ci4=0;ci4<CATS_ALL.length;ci4++){var cv=cats[CATS_ALL[ci4]]||0;h+="<td class='num'>"+(cv||"—")+"</td>";}
-    h+="<td class='num' style='font-weight:700'>"+(eTot||"—")+"</td></tr>";
-  }
-  h+="</table>";
-
-  // Horas por atividade
-  var hasAtiv=false; for(var a in P.hAtiv){var t2=0;for(var c4 in P.hAtiv[a])t2+=P.hAtiv[a][c4];if(t2>0){hasAtiv=true;break;}}
-  if(hasAtiv){
-    h+="<h2>4. Horas por Atividade de Suporte</h2>";
-    h+="<table><tr><th class='left'>Atividade</th>";
-    for(var ci5=0;ci5<CATS_ALL.length;ci5++){
-      var isTec3=CATS_TEC.indexOf(CATS_ALL[ci5])>=0;
-      h+="<th style='background:"+(isTec3?"#1E3A6E":"#4C1D95")+"'>"+CATS_ALL[ci5]+"</th>";
-    }
-    h+="<th>Total</th></tr>";
-    var aLabels={gestao:"Gestão"};
-    for(var ri=0;ri<ESCOPO.reunioes.length;ri++) aLabels["reun_"+ESCOPO.reunioes[ri].id]=ESCOPO.reunioes[ri].t;
-    for(var ii=0;ii<REUN_INT.length;ii++) aLabels["rint_"+REUN_INT[ii].id]=REUN_INT[ii].t;
-    aLabels["visitas"]="Visitas técnicas";
-    for(var aid2 in P.hAtiv){
-      var acat=P.hAtiv[aid2]; var aT=0; for(var c5 in acat) aT+=acat[c5];
-      if(!aT) continue;
-      h+="<tr><td>"+(aLabels[aid2]||aid2)+"</td>";
-      for(var ci6=0;ci6<CATS_ALL.length;ci6++){var av=acat[CATS_ALL[ci6]]||0;h+="<td class='num'>"+(av||"—")+"</td>";}
-      h+="<td class='num' style='font-weight:700'>"+aT+"h</td></tr>";
-    }
-    h+="</table>";
-  }
-
-  if(P.obs) h+="<h2>5. Observações</h2><p style='line-height:1.7;white-space:pre-wrap'>"+P.obs+"</p>";
-
-  h+="<div class='footer'>StandardX · Proposta Técnica e Comercial · "+dt+"</div></div>";
-  h+="<div class='no-print' style='text-align:center;padding:18px;background:#f5f5f5'>";
-  h+="<button onclick='window.print()' style='background:#0D1F3C;color:#fff;border:none;padding:11px 26px;border-radius:8px;font-size:14px;cursor:pointer;margin-right:10px'>🖨️ Imprimir / Salvar PDF</button>";
-  h+="<button onclick='window.close()' style='background:#eee;border:none;padding:11px 18px;border-radius:8px;font-size:14px;cursor:pointer'>Fechar</button></div>";
-  h+="</body></html>";
+  h+="<div style='margin:20px auto 0;background:var(--bg2);border:1px solid var(--bord);border-radius:10px;padding:14px;max-width:440px;font-size:11px;color:var(--tx3);line-height:1.6;text-align:center'>StandardX · Proponente v1 · Exportação disponível na versão de produção.</div>";
   return h;
 }
 
 // ── RENDER ─────────────────────────────────────────────────
-var _PTs=[T0,T1,T2,T4,T3b,T3,T6,T5];
-function _P_Prender(){
-  var _sc=0, _el=document.querySelector('.tbl-wrap');
-  if(_el) _sc=_el.scrollTop;
-  var sHtml="";
-  for(var i=1;i<8;i++){
-    var cls=i<P.tela?"done":i===P.tela?"cur":"";
-    var clk=i<P.tela?"onclick='_PgoT("+i+")'":"";
-    sHtml+="<div class='stp"+(" "+cls).trim()+"' "+clk+"></div>";
-  }
-  document.getElementById("steps").innerHTML=sHtml;
-  var sc=document.getElementById("scr");
-  sc.className="scr fade";
-  sc.innerHTML=_PTs[P.tela]();
-  void sc.offsetWidth;
-  if(_sc>0){var _el2=document.querySelector('.tbl-wrap');if(_el2)_el2.scrollTop=_sc;}
-}
+var _PTs=[_PT0,_PT1,_PT2,_PT4,_PT3b,_PT3,_PT6,_PT5];
+// render() do proponente removido — gerenciado pelo controlador
 function _P_PsetVisRealiza(v){P.visRealiza=v;_Prender();}
 function _P_PtSoftProp(id){if(!P.softPropList)P.softPropList=[];var i=P.softPropList.indexOf(id);if(i>=0)P.softPropList.splice(i,1);else P.softPropList.push(id);_Prender();}
 function setFornPac(el){if(!P.fornPac)P.fornPac={};P.fornPac[el.dataset.fk]=+el.value;_Prender();}
@@ -3839,12 +3645,11 @@ function _P_PaplicarCenario(c){
 }
 
 function _P_PgoT(t){P.tela=t;_Prender();}
-function setFornPacote(el){if(!P.fornPacote)P.fornPacote={};P.fornPacote[el.dataset.pid]=+el.value;_Prender();}
+function _P_PsetFornPacote(el){if(!P.fornPacote)P.fornPacote={};P.fornPacote[el.dataset.pid]=+el.value;_Prender();}
 function tSoftP(id){if(!P.softsP)P.softsP=[];var i=P.softsP.indexOf(id);if(i>=0)P.softsP.splice(i,1);else P.softsP.push(id);_Prender();}
 function _P_PsetVisRealiza(v){P.visRealiza=v;_Prender();}
 function _P_PtVisDV(dv){var i=P.visDisciplinas.indexOf(dv);if(i>=0)P.visDisciplinas.splice(i,1);else P.visDisciplinas.push(dv);_Prender();}
-// Inicializado pelo controlador
-
+// Init pelo controlador
 </script>
 </body>
 </html>
