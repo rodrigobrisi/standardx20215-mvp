@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>StandardX — Proponente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07090F;--bg2:#0F1520;--bg3:#141E2E;--bord:#1B2840;--bord2:#243352;
+  --az:#3B7BF6;--az2:#5B97FF;--az-bg:#070f1e;
+  --vd:#0FB981;--vd2:#16D98A;--vd-bg:#031a0e;--vd-bord:#084D26;
+  --am:#F5A623;--am2:#FFBA45;--am-bg:#1a0f00;--am-bord:#4A2D00;
+  --vm:#EF4444;--vm2:#FF6B6B;--vm-bg:#180404;--vm-bord:#5C1414;
+  --px:#7C3AED;--px2:#A78BFA;--px-bg:#130a2a;--px-bord:#4C1D95;
+  --tx:#EEF2FF;--tx2:#94A3B8;--tx3:#475569;--r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px}
+body{min-height:100vh;display:flex;justify-content:center}
+.shell{width:100%;max-width:1280px;padding:24px 20px;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--bord);margin-bottom:24px}
+.logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.5px}
+.logo em{color:var(--px);font-style:normal}
+.tag{font-size:11px;color:var(--px2);background:var(--px-bg);border:1px solid var(--px-bord);border-radius:20px;padding:3px 10px}
+.steps{display:flex;gap:6px;margin-left:auto}
+.stp{width:8px;height:8px;border-radius:50%;background:var(--bord2);transition:all .3s}
+.stp.cur{background:var(--px);width:24px;border-radius:4px}
+.stp.done{background:var(--vd);cursor:pointer}
+.scr{flex:1}
+.titulo{font-family:'Syne',sans-serif;font-size:23px;font-weight:700;margin-bottom:5px}
+.sub{color:var(--tx2);font-size:13px;margin-bottom:22px;line-height:1.6}
+.fnav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:16px;border-top:1px solid var(--bord)}
+.btn{background:var(--px);color:#fff;border:none;border-radius:8px;padding:11px 24px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .18s}
+.btn:hover{background:var(--px2);color:#1a0a2e}
+.btn-g{background:var(--vd);color:var(--bg)}.btn-g:hover{background:var(--vd2)}
+.btn-s{background:transparent;color:var(--tx2);border:1px solid var(--bord);border-radius:8px;padding:10px 20px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
+.btn-s:hover{border-color:var(--px);color:var(--px)}
+.card{background:var(--bg2);border:1px solid var(--bord);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.sec-l{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);margin-bottom:10px}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.inp{background:var(--bg);border:1px solid var(--bord);border-radius:8px;padding:11px 14px;color:var(--tx);font-size:13px;font-family:'DM Sans',sans-serif;width:100%;outline:none;margin-bottom:12px}
+.inp:focus{border-color:var(--px)}.inp::placeholder{color:var(--tx3)}
+/* Tabela */
+.tbl-wrap{border-radius:var(--r);overflow:visible}
+.tbl-wrap::-webkit-scrollbar{width:5px;height:5px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:3px}
+table{border-collapse:collapse;width:100%;table-layout:fixed;border-spacing:0}
+table th{background:var(--bg2);padding:8px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tx2);border-bottom:1px solid var(--bord2);white-space:nowrap}
+.thead-fixed{background:var(--bg2);border:1px solid var(--bord);border-radius:var(--r) var(--r) 0 0;overflow:hidden}
+.thead-fixed table{table-layout:fixed;width:100%;border-collapse:collapse}
+.tbody-scroll{overflow-y:scroll;overflow-x:auto;max-height:55vh;border:1px solid var(--bord);border-top:none;border-radius:0 0 var(--r) var(--r)}
+.tbody-scroll table{table-layout:fixed;width:100%;border-collapse:collapse}
+.tbody-scroll::-webkit-scrollbar{width:5px;height:5px}
+.tbody-scroll::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:3px}
+.tr-disc td{background:var(--bg3);padding:7px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);border-top:2px solid var(--bord2)}
+.tr-e{border-bottom:1px solid var(--bord)}
+.sumario{background:var(--bg2);border-top:1px solid var(--bord2);padding:12px 16px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;border-radius:0 0 var(--r) var(--r)}
+.sum-n{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;line-height:1}
+.sum-l{font-size:10px;color:var(--tx3);margin-top:2px}
+.search{background:var(--bg2);border:1px solid var(--bord);border-radius:8px;padding:9px 14px;color:var(--tx);font-size:13px;font-family:'DM Sans',sans-serif;width:100%;margin-bottom:10px;outline:none}
+.search:focus{border-color:var(--px)}.search::placeholder{color:var(--tx3)}
+.filtros{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.filtro{background:var(--bg2);border:1px solid var(--bord);border-radius:20px;padding:4px 14px;font-size:11px;color:var(--tx3);cursor:pointer;white-space:nowrap}
+.filtro:hover,.filtro.on{background:var(--px-bg);border-color:var(--px-bord);color:var(--px2)}
+.h-inp{background:var(--bg);border:1px solid var(--bord);border-radius:6px;padding:5px 6px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif;width:54px;text-align:center}
+.h-inp:focus{outline:none;border-color:var(--px)}
+.d-sel{background:var(--bg);border:1px solid var(--bord);border-radius:6px;padding:5px 6px;color:var(--tx);font-size:11px;font-family:'DM Sans',sans-serif}
+.d-sel:focus{outline:none;border-color:var(--px)}
+.gest-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bord)}
+.gest-row:last-child{border-bottom:none}
+.gest-inp{background:var(--bg);border:1px solid var(--bord);border-radius:6px;padding:6px 8px;color:var(--tx);font-size:13px;font-family:'DM Sans',sans-serif;width:70px;text-align:center}
+.gest-inp:focus{outline:none;border-color:var(--px)}
+.rcard{background:var(--bg3);border:1px solid var(--bord);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.rcard.on{border-color:var(--bord2);background:var(--bg2)}
+.rcard-top{display:flex;align-items:center;gap:10px}
+.tog{width:40px;height:22px;border-radius:11px;background:var(--bord2);position:relative;transition:all .2s;cursor:pointer;flex-shrink:0}
+.tog::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:3px;left:3px;transition:all .2s}
+.tog.on{background:var(--vd)}.tog.on::after{left:21px}
+.pbar{height:4px;background:var(--bord);border-radius:2px;overflow:hidden;width:80px}
+.pbar-f{height:100%;border-radius:2px}
+.prop-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bord)}
+.prop-row:last-child{border-bottom:none}
+.drw-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:flex;justify-content:flex-end}
+.drw{background:var(--bg2);border-left:1px solid var(--bord);width:420px;max-width:100vw;height:100%;overflow-y:auto;padding:24px}
+.drw::-webkit-scrollbar{width:4px}
+.drw::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:2px}
+.drw-close{width:30px;height:30px;background:var(--bg3);border:1px solid var(--bord);border-radius:6px;color:var(--tx2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.inf-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--bord)}
+.inf-item:last-child{border-bottom:none}
+.inf-check{width:16px;height:16px;accent-color:var(--vd);cursor:pointer;flex-shrink:0;margin-top:2px}
+.scope-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px}
+.scope-card{background:var(--bg3);border:1px solid var(--bord);border-radius:8px;padding:14px}
+.scope-lbl{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.scope-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:700}
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:80vh}
+.login-box{background:var(--bg2);border:1px solid var(--bord);border-radius:16px;padding:40px;width:100%;max-width:420px;text-align:center}
+.fade{animation:fi .25s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div class="logo">Standard<em>X</em></div>
+    <div class="tag">Proponente</div>
+    <div class="steps" id="steps"></div>
+  </div>
+  <div class="scr fade" id="scr"></div>
+</div>
+<div class="drw-ov" id="drw-ov" style="display:none" onclick="closeDrw()">
+  <div class="drw" onclick="event.stopPropagation()" id="drw"></div>
+</div>
+<script>
+const E=[
+  {c:"PRO-001",d:"Processo",n:"BFD — Block flow diagram"},
+  {c:"PRO-002",d:"Processo",n:"PFD — Process flow diagram"},
+  {c:"PRO-003",d:"Processo",n:"P&amp;ID — Piping &amp; instrumentation diagram"},
+  {c:"PRO-004",d:"Processo",n:"Balanço de massa e energia"},
+  {c:"PRO-005",d:"Processo",n:"Filosofia de operação"},
+  {c:"PRO-006",d:"Processo",n:"Lista de fluidos de processo"},
+  {c:"PRO-007",d:"Processo",n:"Simulação de processo"},
+  {c:"PRO-008",d:"Processo",n:"Critérios de projeto de processo"},
+  {c:"MEC-001",d:"Mecânica",n:"Lista de equipamentos"},
+  {c:"MEC-002",d:"Mecânica",n:"Datasheet de equipamentos"},
+  {c:"MEC-003",d:"Mecânica",n:"Especificação técnica de equipamentos"},
+  {c:"MEC-004",d:"Mecânica",n:"Arranjo geral de equipamentos (layout)"},
+  {c:"MEC-005",d:"Mecânica",n:"Memória de cálculo — sizing"},
+  {c:"MEC-006",d:"Mecânica",n:"Plano de inspeção e manutenção"},
+  {c:"MEC-007",d:"Mecânica",n:"Requisição de materiais — equipamentos"},
+  {c:"TUB-001",d:"Tubulação",n:"Especificação de tubulação (pipe class)"},
+  {c:"TUB-002",d:"Tubulação",n:"Lista de linhas"},
+  {c:"TUB-003",d:"Tubulação",n:"Arranjo de tubulação (plant layout)"},
+  {c:"TUB-004",d:"Tubulação",n:"Estudo de flexibilidade"},
+  {c:"TUB-005",d:"Tubulação",n:"Especificação de válvulas e acessórios"},
+  {c:"TUB-006",d:"Tubulação",n:"Cálculo hidráulico"},
+  {c:"TUB-007",d:"Tubulação",n:"Requisição de materiais — tubulação"},
+  {c:"ELE-001",d:"Elétrica",n:"Diagrama unifilar geral"},
+  {c:"ELE-002",d:"Elétrica",n:"Balanço de carga (load list)"},
+  {c:"ELE-003",d:"Elétrica",n:"Estudo de curto-circuito"},
+  {c:"ELE-004",d:"Elétrica",n:"Especificação de equipamentos elétricos"},
+  {c:"ELE-007",d:"Elétrica",n:"Classificação de áreas (hazardous area)"},
+  {c:"AUT-001",d:"Automação / Instrumentação",n:"Filosofia de controle e automação"},
+  {c:"AUT-002",d:"Automação / Instrumentação",n:"Lista de instrumentos (instrument index)"},
+  {c:"AUT-003",d:"Automação / Instrumentação",n:"Datasheet de instrumentos"},
+  {c:"AUT-004",d:"Automação / Instrumentação",n:"Arquitetura do sistema de controle"},
+  {c:"AUT-005",d:"Automação / Instrumentação",n:"Diagramas lógicos / cause &amp; effect"},
+  {c:"AUT-007",d:"Automação / Instrumentação",n:"SIL / análise LOPA"},
+  {c:"EST-001",d:"Estruturas",n:"Critérios de projeto estrutural"},
+  {c:"EST-002",d:"Estruturas",n:"Sondagem e estudo geotécnico"},
+  {c:"EST-003",d:"Estruturas",n:"Concepção estrutural"},
+  {c:"EST-004",d:"Estruturas",n:"Fundações"},
+  {c:"EST-005",d:"Estruturas",n:"Estruturas metálicas / concreto"},
+  {c:"ARQ-001",d:"Arquitetura",n:"Programa arquitetônico"},
+  {c:"ARQ-002",d:"Arquitetura",n:"Planta de situação e locação"},
+  {c:"ARQ-003",d:"Arquitetura",n:"Plantas baixas"},
+  {c:"PLA-001",d:"Planejamento",n:"Cronograma do projeto"},
+  {c:"PLA-002",d:"Planejamento",n:"Plano de execução do projeto (PEP)"},
+  {c:"PLA-003",d:"Planejamento",n:"Estratégia de contratação"},
+  {c:"PLA-005",d:"Planejamento",n:"Plano de gerenciamento de riscos"},
+  {c:"PLA-006",d:"Planejamento",n:"Curva S do projeto"},
+  {c:"INV-001",d:"Estimativa de Investimentos",n:"Estimativa de custos do projeto"},
+  {c:"INV-002",d:"Estimativa de Investimentos",n:"Breakdown do investimento (CAPEX)"},
+  {c:"INV-003",d:"Estimativa de Investimentos",n:"Análise econômica (VPL / TIR / Payback)"},
+  {c:"INV-004",d:"Estimativa de Investimentos",n:"Estimativa de OPEX"},
+  {c:"INV-005",d:"Estimativa de Investimentos",n:"Bases de estimativa"},
+  {c:"SEG-001",d:"Segurança de Processo",n:"Filosofia de segurança de processo"},
+  {c:"SEG-002",d:"Segurança de Processo",n:"HAZID"},
+  {c:"SEG-003",d:"Segurança de Processo",n:"HAZOP"},
+  {c:"SEG-004",d:"Segurança de Processo",n:"Estudo de dispersão e explosão"},
+  {c:"MEI-001",d:"Meio Ambiente",n:"Diagnóstico ambiental"},
+  {c:"MEI-002",d:"Meio Ambiente",n:"EIA/RIMA (quando aplicável)"},
+  {c:"GES-001",d:"Gestão de Projetos",n:"Escopo do projeto"},
+  {c:"GES-002",d:"Gestão de Projetos",n:"WBS"},
+  {c:"GES-003",d:"Gestão de Projetos",n:"Matriz de responsabilidades (RACI)"},
+  {c:"AQU-001",d:"Aquisições",n:"Análise técnica de propostas de fornecedores"},
+  {c:"AQU-002",d:"Aquisições",n:"Comparativo técnico-comercial de propostas"},
+  {c:"AQU-003",d:"Aquisições",n:"Relatório de equalização de propostas"},
+  {c:"AQU-004",d:"Aquisições",n:"Recomendação técnica de fornecedor"},
+  {c:"AQU-005",d:"Aquisições",n:"Acompanhamento de fabricação (FAT/expediting)"},
+  {c:"AQU-006",d:"Aquisições",n:"Inspeção técnica em fábrica (ITP)"},
+];
+const DISCS=["Processo","Mecânica","Tubulação","Elétrica","Automação / Instrumentação","Estruturas","Arquitetura","Planejamento","Estimativa de Investimentos","Segurança de Processo","Meio Ambiente","Gestão de Projetos","Aquisições"];
+const ST={
+  "PRO-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-004":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-005":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-006":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-007":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-008":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-002":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-004":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-005":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-006":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-007":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-001":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-002":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-004":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-005":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-006":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-007":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ELE-001":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ELE-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ELE-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ELE-004":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ELE-007":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-002":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-004":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-005":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-007":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "EST-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "EST-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "EST-003":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "EST-004":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "EST-005":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ARQ-001":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ARQ-002":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ARQ-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PLA-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PLA-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PLA-003":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PLA-005":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PLA-006":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "INV-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "INV-002":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "INV-003":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"Op"},
+  },
+  "INV-004":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"Op"},
+  },
+  "INV-005":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "SEG-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "SEG-002":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "SEG-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "SEG-004":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEI-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEI-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"Op"},
+  },
+  "GES-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "GES-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "GES-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-001":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-002":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-004":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-005":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-006":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+};
+const CONT={
+  "PRO-001":{A:"Blocos principais e fluxo macro do processo",B:"Correntes principais identificadas entre os blocos",C:"Balanço de massa simplificado por corrente",D:"Balanço completo com composições e propriedades físico-químicas"},
+  "PRO-002":{A:"Equipamentos principais e fluxo geral",B:"Instrumentação primária de controle indicada",C:"Correntes numeradas com dados de processo",D:"Dados completos de engenharia por corrente e equipamento"},
+  "PRO-003":{A:"—",B:"Esboço preliminar de P&ID",C:"P&ID básico com tags de equipamentos e instrumentos",D:"P&ID completo revisado e aprovado para construção"},
+  "PRO-004":{A:"Estimativa de ordem de grandeza das vazões",B:"Balanço por área de processo com dados principais",C:"Balanço consolidado por unidade de processo",D:"Balanço completo com variações operacionais"},
+  "PRO-005":{A:"Conceito operacional geral e modos de operação",B:"Modos de operação identificados e descritos",C:"Descrição detalhada de operação por sistema",D:"Procedimentos operacionais básicos por modo de operação"},
+  "PRO-006":{A:"—",B:"Fluidos principais com propriedades básicas",C:"Propriedades físico-químicas principais por fluido",D:"Datasheet completo de todos os fluidos do processo"},
+  "PRO-007":{A:"—",B:"Simulação conceitual em regime permanente",C:"Simulação validada com casos de projeto",D:"Simulação completa com casos transientes e variações"},
+  "PRO-008":{A:"Premissas gerais e objetivo do processo",B:"Parâmetros de projeto por sistema",C:"Critérios completos por equipamento e sistema",D:"Critérios detalhados com bases de cálculo documentadas"},
+  "MEC-001":{A:"Equipamentos principais listados com tipo e função",B:"Capacidade e dados de processo por equipamento",C:"Tag, especificação resumida e dados de processo",D:"Datasheet completo aprovado pelo fabricante"},
+  "MEC-002":{A:"—",B:"Datasheet conceitual com dados principais",C:"Datasheet básico com condições de operação e projeto",D:"Datasheet completo com requisição de compra aprovada"},
+  "MEC-003":{A:"Requisitos gerais de processo e segurança",B:"Especificação preliminar com dados principais",C:"Especificação básica com materiais e normas",D:"Especificação executiva completa para aquisição"},
+  "MEC-004":{A:"Arranjo conceitual — posicionamento relativo",B:"Dimensões principais dos equipamentos indicadas",C:"Posicionamento com cotas gerais e acessos",D:"Detalhamento completo de instalação e manutenção"},
+  "MEC-005":{A:"—",B:"Sizing conceitual por método simplificado",C:"Cálculo básico de dimensionamento conforme normas",D:"Cálculo detalhado completo conforme normas aplicáveis"},
+  "MEC-006":{A:"—",B:"—",C:"Requisitos gerais de manutenção por equipamento",D:"Plano detalhado com periodicidade e recursos"},
+  "MEC-007":{A:"—",B:"—",C:"Requisição preliminar para cotação de preço",D:"Requisição executiva completa para compra"},
+  "TUB-001":{A:"Classes de tubulação identificadas por serviço",B:"Pipe class conceitual com materiais básicos",C:"Pipe class básica por classe de pressão e temperatura",D:"Pipe class completa com todos os componentes"},
+  "TUB-002":{A:"—",B:"Linhas principais com serviço e diâmetro estimado",C:"Lista de linhas com dados de processo e pipe class",D:"Lista completa com especificação, isolamento e traçagem"},
+  "TUB-003":{A:"Rotas principais identificadas conceitualmente",B:"Layout conceitual com roteamento das linhas principais",C:"Layout básico com interferências resolvidas",D:"Isométricos e detalhes completos de instalação"},
+  "TUB-004":{A:"—",B:"—",C:"Análise qualitativa das linhas críticas",D:"Análise computacional completa (Caesar II ou similar)"},
+  "TUB-005":{A:"Tipos principais de válvulas por serviço",B:"Especificação por serviço com materiais básicos",C:"Especificação básica com tag e condições de projeto",D:"Especificação executiva completa com datasheet"},
+  "TUB-006":{A:"Estimativa de perdas de carga por sistema",B:"Cálculo simplificado por sistema de processo",C:"Cálculo básico das linhas principais",D:"Cálculo detalhado completo de todas as linhas"},
+  "TUB-007":{A:"—",B:"—",C:"Estimativa de materiais a granel para orçamento",D:"Requisição executiva completa com MTO detalhado"},
+  "ELE-001":{A:"Diagrama unifilar conceitual com tensões principais",B:"Níveis de tensão, potência instalada e topologia",C:"Proteções, seccionamentos e dados de curto-circuito",D:"Diagrama unifilar completo e detalhado para construção"},
+  "ELE-002":{A:"Estimativa de demanda total de energia elétrica",B:"Load list preliminar por área com fatores de demanda",C:"Load list básica por centro de controle (MCC)",D:"Load list completa com fator de demanda e potência"},
+  "ELE-003":{A:"—",B:"Estimativa de nível de curto-circuito",C:"Estudo preliminar para especificação de equipamentos",D:"Estudo completo com coordenação e seletividade"},
+  "ELE-004":{A:"—",B:"Especificação por tipo com dados básicos",C:"Especificação básica com tag e condições de instalação",D:"Especificação executiva completa com datasheet"},
+  "ELE-007":{A:"Áreas críticas com gases inflamáveis identificadas",B:"Classificação preliminar por zona e grupo",C:"Documento de classificação completo por zona",D:"Desenhos de classificação aprovados para construção"},
+  "AUT-001":{A:"Conceito geral de automação e nível definido",B:"Filosofia de controle por sistema de processo",C:"Filosofia detalhada com estratégias de controle",D:"Filosofia executiva completa com lógicas de controle"},
+  "AUT-002":{A:"Estimativa de quantidade de instrumentos por tipo",B:"Lista preliminar com tag e função",C:"Lista básica com tag, função e condições de processo",D:"Lista completa com especificação técnica"},
+  "AUT-003":{A:"—",B:"Datasheet conceitual por tipo de instrumento",C:"Datasheet básico com condições de processo",D:"Datasheet completo aprovado para compra"},
+  "AUT-004":{A:"Conceito de plataforma de controle definido",B:"Arquitetura conceitual (DCS / SCADA / CLP)",C:"Arquitetura básica com hardware e quantidade de I/O",D:"Projeto executivo completo do sistema de controle"},
+  "AUT-005":{A:"—",B:"Matriz C&E preliminar com intertravamentos principais",C:"Matriz C&E básica com todos os intertravamentos",D:"Diagramas lógicos completos aprovados para construção"},
+  "AUT-007":{A:"—",B:"Identificação dos loops que requerem SIL",C:"Determinação dos níveis SIL requeridos",D:"Verificação de SIL com projeto detalhado"},
+  "EST-001":{A:"Normas estruturais aplicáveis e cargas gerais",B:"Critérios de projeto por tipo de estrutura",C:"Critérios completos com combinações de carga",D:"Bases de cálculo detalhadas com memória de cálculo"},
+  "EST-002":{A:"Dados geológicos ou estimativa de capacidade de carga",B:"Campanha de sondagem definida",C:"Laudo geotécnico básico com caracterização do solo",D:"Laudo completo com recomendações de fundação"},
+  "EST-003":{A:"Conceito do sistema estrutural definido",B:"Pré-dimensionamento com seções estimadas",C:"Anteprojeto estrutural com desenhos gerais",D:"Projeto estrutural executivo completo para construção"},
+  "EST-004":{A:"Tipo de fundação indicado preliminarmente",B:"Estimativa de capacidade de carga e tipo",C:"Projeto básico de fundações com dimensionamento",D:"Projeto executivo completo de fundações"},
+  "EST-005":{A:"—",B:"Pré-dimensionamento de seções principais",C:"Projeto básico com desenhos gerais",D:"Projeto executivo com detalhes de montagem e fabricação"},
+  "ARQ-001":{A:"Necessidades funcionais e áreas estimadas",B:"Programa detalhado com requisitos por ambiente",C:"Programa aprovado com fluxograma de circulação",D:"Programa executivo completo com todos os requisitos"},
+  "ARQ-002":{A:"Localização conceitual na área do empreendimento",B:"Implantação com áreas principais e acessos",C:"Planta de locação com cotas gerais e orientação",D:"Planta de locação executiva completa"},
+  "ARQ-003":{A:"—",B:"Planta baixa esquemática com zoneamento",C:"Planta básica com dimensões e layout",D:"Plantas executivas completas para construção"},
+  "PLA-001":{A:"Cronograma de marcos principais (milestones)",B:"Cronograma nível 2 por fase com durações",C:"Cronograma nível 3 por disciplina com recursos",D:"Cronograma nível 4 detalhado com baseline aprovado"},
+  "PLA-002":{A:"Conceito de execução e estratégia geral",B:"PEP preliminar com estratégia de execução",C:"PEP básico com organograma e planos subsidiários",D:"PEP completo com todos os planos de gerenciamento"},
+  "PLA-003":{A:"Conceito make-or-buy por pacote principal",B:"Pacotes de contratação identificados",C:"Estratégia de contratação detalhada por pacote",D:"Plano de aquisições completo com cronograma de compras"},
+  "PLA-005":{A:"Riscos principais do projeto identificados",B:"Matriz de riscos preliminar com probabilidade e impacto",C:"Plano de gerenciamento com respostas definidas",D:"Registro de riscos completo atualizado"},
+  "PLA-006":{A:"Estimativa de curva S baseada em projetos similares",B:"Curva S preliminar por fase do projeto",C:"Curva S por disciplina com baseline físico",D:"Curva S detalhada com baseline de custo e físico"},
+  "INV-001":{A:"Estimativa de ordem de grandeza ±40% (fatorial)",B:"Estimativa fatorial ±25% com curvas de Lang / Hand",C:"Estimativa de orçamento ±15% com quantitativos básicos",D:"Estimativa definitiva ±10% com quantitativos detalhados"},
+  "INV-002":{A:"CAPEX total estimado por analogia",B:"CAPEX por área de processo ou sistema",C:"CAPEX por disciplina e pacote de contratação",D:"CAPEX detalhado por conta de controle e pacote"},
+  "INV-003":{A:"Análise de viabilidade macro com indicadores estimados",B:"Análise econômica preliminar com VPL, TIR e Payback",C:"Análise econômica básica com sensibilidades principais",D:"Análise econômica completa com múltiplos cenários"},
+  "INV-004":{A:"OPEX estimado por analogia com plantas similares",B:"OPEX por categoria (utilidades, mão de obra, manutenção)",C:"OPEX básico por sistema com memória de cálculo",D:"OPEX detalhado com memória de cálculo completa"},
+  "INV-005":{A:"Premissas gerais e metodologia de estimativa",B:"Bases de estimativa preliminares com índices utilizados",C:"Bases de estimativa básicas com dados de referência",D:"Documento completo de bases de estimativa aprovado"},
+  "SEG-001":{A:"Conceito geral de segurança e normas aplicáveis",B:"Filosofia preliminar de PSM com requisitos principais",C:"Filosofia básica por sistema com critérios de projeto",D:"Filosofia executiva completa com todos os programas PSM"},
+  "SEG-002":{A:"—",B:"HAZID conceitual com cenários de perigo identificados",C:"HAZID completo por área com recomendações",D:"HAZID detalhado com todas as ações implementadas"},
+  "SEG-003":{A:"—",B:"—",C:"HAZOP preliminar dos nós críticos do processo",D:"HAZOP completo com planilhas aprovadas e ações fechadas"},
+  "SEG-004":{A:"—",B:"Estudo qualitativo de dispersão e explosão",C:"Estudo quantitativo simplificado dos cenários críticos",D:"Modelagem completa com QRA/FERA aprovado"},
+  "MEI-001":{A:"Identificação de passivos ambientais potenciais",B:"Diagnóstico ambiental preliminar com dados secundários",C:"Diagnóstico básico completo com dados primários",D:"Diagnóstico executivo com estudos de campo detalhados"},
+  "MEI-002":{A:"Necessidade de EIA/RIMA identificada",B:"Escopo do EIA definido com termo de referência",C:"EIA em elaboração com estudos complementares",D:"EIA/RIMA completo protocolado no órgão ambiental"},
+  "GES-001":{A:"Escopo conceitual com objetivo e premissas",B:"Escopo preliminar com exclusões e restrições",C:"Escopo básico aprovado com WBS de alto nível",D:"Escopo executivo completo com WBS detalhada"},
+  "GES-002":{A:"WBS com 2 níveis (fase e área)",B:"WBS com 3 níveis (fase, área e disciplina)",C:"WBS com 4 níveis por disciplina e pacote",D:"WBS completa com dicionário de pacotes de trabalho"},
+  "GES-003":{A:"—",B:"RACI por fase e disciplina com responsáveis",C:"RACI básico completo por entregável e função",D:"RACI detalhado por entregável com matriz de aprovação"},
+  "AQU-001":{A:"—",B:"Análise técnica conceitual das alternativas",C:"Análise técnica completa com matriz de critérios",D:"Análise completa com recomendação documentada"},
+  "AQU-002":{A:"—",B:"Comparativo conceitual com critérios básicos",C:"Comparativo técnico-comercial com equalização de escopo",D:"Comparativo completo equalizado para tomada de decisão"},
+  "AQU-003":{A:"—",B:"Equalização conceitual com premissas básicas",C:"Equalização técnica com escopo e condições alinhados",D:"Relatório completo de equalização aprovado"},
+  "AQU-004":{A:"—",B:"Recomendação preliminar com justificativa técnica",C:"Recomendação técnica fundamentada com análise de risco",D:"Recomendação técnica completa aprovada para contratação"},
+  "AQU-005":{A:"—",B:"—",C:"Acompanhamento básico de marcos de fabricação",D:"Expediting completo com relatórios periódicos e FAT"},
+  "AQU-006":{A:"—",B:"—",C:"Inspeção básica em pontos de hold do ITP",D:"Inspeção completa conforme ITP aprovado com relatório final"},
+};
+const INFO={
+  "PRO-001":{o:["Definição do conceito e objetivo do processo","Capacidade de produção e throughput esperado","Matérias-primas e produtos principais","Restrições e premissas do processo"],r:["Estudos de viabilidade econômica","Dados de processos similares existentes"]},
+  "PRO-002":{o:["BFD aprovado com fluxo macro definido","Capacidade nominal e turndown ratio","Condições operacionais principais (T, P, vazão)","Critérios de projeto de processo"],r:["Dados de simulação conceitual","Propriedades dos fluidos principais"]},
+  "PRO-003":{o:["PFD aprovado com correntes numeradas","Balanço de massa e energia por sistema","Filosofia de controle e automação","Lista de fluidos com propriedades físico-químicas"],r:["Resultados de simulação de processo","Normas aplicáveis (ISA, IEC 61511)"]},
+  "PRO-004":{o:["PFD com correntes e equipamentos identificados","Composição das correntes de alimentação","Condições operacionais por sistema","Capacidade nominal de projeto"],r:["Dados cinéticos e termodinâmicos","Variações operacionais previstas"]},
+  "PRO-005":{o:["Conceito e objetivo do processo definido","Modos de operação previstos","Requisitos de segurança operacional"],r:["Experiência operacional em plantas similares"]},
+  "PRO-006":{o:["PFD com todas as correntes identificadas","Balanço de massa com composição por corrente","Dados físico-químicos dos componentes"],r:["Resultados de simulação de processo"]},
+  "PRO-007":{o:["PFD aprovado","Composição e condições das correntes","Dados termodinâmicos e cinéticos"],r:["Licenças de pacotes de simulação (Aspen, HYSYS)"]},
+  "PRO-008":{o:["Objetivo e capacidade do processo","Dados do local do projeto","Normas e códigos aplicáveis"],r:["Dados históricos de plantas similares"]},
+  "MEC-001":{o:["PFD com todos os equipamentos identificados","Balanço de massa e energia por equipamento","Capacidade nominal de projeto"],r:["Dados de simulação de processo"]},
+  "MEC-002":{o:["Lista de equipamentos aprovada","Condições de operação e projeto","Lista de fluidos com propriedades","Normas de projeto (ASME, API)"],r:["Dados de equipamentos similares em operação"]},
+  "MEC-003":{o:["Datasheets aprovados","Normas técnicas aplicáveis (ASME, API, NR-13)","Requisitos de material"],r:["Memória de cálculo de sizing"]},
+  "MEC-004":{o:["Lista de equipamentos com dimensões e pesos","Planta de situação e locação","Requisitos de acesso para operação e manutenção","Classificação de áreas"],r:["Conceito estrutural preliminar"]},
+  "MEC-005":{o:["Lista de equipamentos com dados de processo","Balanço de massa e energia","Normas de dimensionamento"],r:["Catálogos e curvas de fornecedores"]},
+  "MEC-006":{o:["Especificações técnicas dos equipamentos","Normas de inspeção (API 510, 570, 653, NR-13)"],r:["Histórico de manutenção de equipamentos similares"]},
+  "MEC-007":{o:["Especificação técnica aprovada","Datasheet completo","Prazo de entrega requerido"],r:["Lista de fornecedores aprovados"]},
+  "TUB-001":{o:["Lista de fluidos com pressão, temperatura e composição","Critérios de projeto de processo","Normas aplicáveis (ASME B31.3)"],r:["Dados de corrosão dos fluidos"]},
+  "TUB-002":{o:["P&ID aprovado com todas as linhas","Pipe class definida por serviço","Condições operacionais e de projeto por linha"],r:["Layout de equipamentos aprovado"]},
+  "TUB-003":{o:["Layout de equipamentos aprovado com cotas","Lista de linhas completa","Concepção estrutural com posições de suportes"],r:["Estudo de flexibilidade preliminar"]},
+  "TUB-004":{o:["Arranjo de tubulação com roteamento definido","Temperaturas de operação e projeto","Cargas permitidas nos bocais dos equipamentos"],r:["Dados de vibração e cargas dinâmicas"]},
+  "TUB-005":{o:["Pipe class por serviço","P&ID com tipos de válvulas identificados","Lista de fluidos com propriedades"],r:["Requisitos de atuação (manual, elétrica, pneumática)"]},
+  "TUB-006":{o:["Lista de linhas com diâmetros e comprimentos","Balanço de massa com vazões por linha","Curvas características de bombas e compressores"],r:["Coeficientes de perda de carga de válvulas"]},
+  "TUB-007":{o:["Arranjo de tubulação aprovado","Especificação de válvulas aprovada","MTO extraído do modelo"],r:["Lista de fornecedores aprovados"]},
+  "ELE-001":{o:["Lista de equipamentos com potências instaladas","Dados da concessionária de energia","Normas aplicáveis (NBR 14039, IEC 61936)"],r:["Requisitos de confiabilidade e redundância"]},
+  "ELE-002":{o:["Lista de equipamentos com potências elétricas","Lista de instrumentos com consumos","Fatores de demanda e serviço"],r:["Projeção de expansão futura"]},
+  "ELE-003":{o:["Diagrama unifilar aprovado","Impedâncias dos transformadores e geradores","Dados da concessionária"],r:["Requisitos de seletividade e coordenação"]},
+  "ELE-004":{o:["Balanço de carga aprovado","Classificação de áreas","Estudo de curto-circuito","Normas (IEC, NBR, ATEX/IECEx)"],r:["Requisitos de eficiência energética"]},
+  "ELE-007":{o:["P&ID com fontes de vazamento identificadas","Lista de fluidos com ponto de fulgor, LIE e LSE","Taxa de ventilação das áreas"],r:["Dados meteorológicos locais"]},
+  "AUT-001":{o:["Conceito e objetivo do processo","Critérios de projeto de processo","Requisitos de segurança operacional","Nível de automação desejado"],r:["Normas aplicáveis (ISA-5.1, IEC 61511)"]},
+  "AUT-002":{o:["P&ID aprovado com todos os tags","Filosofia de controle e automação","Lista de fluidos de processo"],r:["Requisitos de comunicação (protocolos industriais)"]},
+  "AUT-003":{o:["Lista de instrumentos completa","Lista de fluidos com propriedades","Condições de operação por instrumento","Classificação de áreas"],r:["Requisitos de SIL para loops críticos"]},
+  "AUT-004":{o:["Filosofia de controle aprovada","Lista de instrumentos com contagem de I/O","Requisitos de redundância"],r:["Política do cliente para plataformas (DCS, SCADA, CLP)"]},
+  "AUT-005":{o:["P&ID aprovado com intertravamentos","Filosofia de controle com estratégias de shutdown","Estados seguros dos equipamentos"],r:["Requisitos de SIL para funções de segurança"]},
+  "AUT-007":{o:["P&ID aprovado","Diagramas de causa e efeito aprovados","Frequências de eventos iniciadores"],r:["Resultados completos do HAZOP"]},
+  "EST-001":{o:["Dados do local (vento, sismo, altitude)","Normas estruturais aplicáveis","Cargas de processo previstas"],r:["Dados climáticos históricos da região"]},
+  "EST-002":{o:["Planta de situação e locação aprovada","Normas de sondagem (NBR 6484, NBR 6502)","Profundidade estimada de fundação"],r:["Dados geológicos regionais disponíveis"]},
+  "EST-003":{o:["Layout de equipamentos com dimensões e pesos","Critérios de projeto estrutural aprovados","Resultado do estudo geotécnico"],r:["Arranjo de tubulação preliminar"]},
+  "EST-004":{o:["Laudo geotécnico completo","Concepção estrutural com cargas de projeto","Pesos e dimensões dos equipamentos"],r:["Dados de interferências subterrâneas"]},
+  "EST-005":{o:["Concepção estrutural aprovada","Fundações aprovadas","Cargas de projeto completas","Normas de cálculo estrutural"],r:["Requisitos de proteção contra incêndio"]},
+  "ARQ-001":{o:["Requisitos funcionais por ambiente","Fluxos de pessoal e materiais","Normas de acessibilidade e segurança (NRs, ABNT)"],r:["Política do cliente para padrões de acabamento"]},
+  "ARQ-002":{o:["Levantamento topográfico do terreno","Legislação municipal de uso e ocupação do solo","Afastamentos legais obrigatórios"],r:["Dados de ventos predominantes"]},
+  "ARQ-003":{o:["Programa arquitetônico aprovado","Planta de locação aprovada","Dimensões mínimas por ambiente"],r:["Requisitos de instalações prediais"]},
+  "PLA-001":{o:["Escopo do projeto com lista de entregáveis","Durações estimadas por disciplina","Marcos contratuais e datas obrigatórias"],r:["Lead times de equipamentos críticos"]},
+  "PLA-002":{o:["Escopo do projeto aprovado","Organograma da equipe de projeto","Estratégia de contratação definida"],r:["Requisitos de reporte ao cliente"]},
+  "PLA-003":{o:["Escopo do projeto com WBS definida","Estimativa de custos por pacote","Calendário de contratações requerido"],r:["Lead times críticos de aquisição"]},
+  "PLA-005":{o:["Escopo do projeto definido","Identificação preliminar de riscos","Lições aprendidas de projetos similares"],r:["Apetite ao risco do cliente"]},
+  "PLA-006":{o:["Cronograma físico aprovado","Estimativa de custos por período","Distribuição de horas por disciplina e fase"],r:["Condições de pagamento contratuais"]},
+  "INV-001":{o:["Lista de equipamentos com tamanho e capacidade","Bases de estimativa definidas","Índices de custo de mercado atualizados"],r:["Dados de projetos similares concluídos"]},
+  "INV-002":{o:["Estimativa de custos total aprovada","WBS com contas de controle","Estratégia de contratação com pacotes definidos"],r:["Cronograma de desembolso previsto"]},
+  "INV-003":{o:["Estimativa de CAPEX aprovada","Estimativa de OPEX aprovada","Taxa mínima de atratividade (TMA)"],r:["Cenários de sensibilidade definidos"]},
+  "INV-004":{o:["Lista de equipamentos com consumo de utilidades","Filosofia de operação (operadores, turnos)","Dados de custo de utilidades"],r:["Histórico de OPEX de plantas similares"]},
+  "INV-005":{o:["Objetivo e escopo do projeto definidos","Metodologia de estimativa adotada","Dados de referência utilizados"],r:["Premissas de câmbio e inflação"]},
+  "SEG-001":{o:["Conceito e objetivo do processo","Critérios de projeto de processo","Normas aplicáveis (NR-13, API RP, IEC 61511)"],r:["Dados de periculosidade dos fluidos (FISPQ)"]},
+  "SEG-002":{o:["PFD aprovado com sistemas identificados","Filosofia de segurança de processo","Lista de equipamentos e fluidos perigosos","Equipe multidisciplinar disponível"],r:["Layout preliminar de equipamentos"]},
+  "SEG-003":{o:["P&ID completo e aprovado","Filosofia de operação aprovada","Resultados do HAZID","Equipe multidisciplinar com facilitador certificado"],r:["Normas de HAZOP aplicáveis (IEC 61882)"]},
+  "SEG-004":{o:["Lista de fluidos com propriedades de dispersão","Classificação de áreas com zonas definidas","Layout de equipamentos com cotas","Dados meteorológicos locais"],r:["Softwares de modelagem (Phast, SAFETI, ALOHA)"]},
+  "MEI-001":{o:["Planta de locação do empreendimento","Legislação ambiental aplicável","Dados secundários disponíveis (IBGE, INPE, ANA)"],r:["Estudos ambientais anteriores na área"]},
+  "MEI-002":{o:["Diagnóstico ambiental completo","PFD com dados de emissões e efluentes","Termo de referência do órgão ambiental"],r:["Estudos de impacto de projetos similares"]},
+  "GES-001":{o:["BFD ou conceito do processo aprovado","Requisitos e expectativas do cliente","Premissas e exclusões acordadas"],r:["Lições aprendidas de projetos similares"]},
+  "GES-002":{o:["Escopo do projeto com todos os entregáveis","Estratégia de execução e contratação definida"],r:["Templates de WBS da empresa"]},
+  "GES-003":{o:["Escopo do projeto aprovado","Organograma da equipe de projeto","Papéis e responsabilidades de cada função"],r:["Requisitos contratuais de responsabilidade"]},
+  "AQU-001":{o:["Requisição de compra ou especificação emitida","Propostas técnicas recebidas","Critérios de avaliação técnica definidos"],r:["Histórico de fornecedores homologados"]},
+  "AQU-002":{o:["Análise técnica de cada proposta concluída","Propostas comerciais recebidas","Matriz de critérios definida"],r:["Condições de pagamento e prazo por fornecedor"]},
+  "AQU-003":{o:["Análise técnica e comparativo comercial realizados","Condições equalizadas (impostos, frete, Incoterm)"],r:["Dados de lead time por fornecedor"]},
+  "AQU-004":{o:["Relatório de equalização aprovado","Critérios de seleção definidos e aprovados"],r:["Histórico de desempenho dos fornecedores candidatos"]},
+  "AQU-005":{o:["Pedido de compra emitido e aceito","Plano de fabricação aprovado pelo fornecedor","ITP aprovado"],r:["Cronograma de marcos de fabricação"]},
+  "AQU-006":{o:["ITP aprovado","Procedimentos de teste e inspeção do fornecedor","Certificações e qualificações requeridas"],r:["Normas de inspeção aplicáveis (API, ASME, AWS)"]},
+};
+
+// ── CONSTANTES ─────────────────────────────────────────────
+var NVS=["A","B","C","D"];
+var NV_OBJ={fel1:"A",fel2:"B",fel3:"C",det:"D"};
+var SOFTS=[
+  {id:"e3d",l:"E3D",v:"Aveva"},{id:"p3d",l:"Plant 3D",v:"Aveva"},{id:"pdms",l:"PDMS",v:"Aveva"},
+  {id:"rvt",l:"Revit",v:"Autodesk"},{id:"nvs",l:"Navisworks",v:"Autodesk"},{id:"op",l:"OpenPlant",v:"Bentley"}
+];
+var SOFTS=[
+  {id:"e3d",l:"E3D",v:"Aveva"},{id:"p3d",l:"Plant 3D",v:"Aveva"},{id:"pdms",l:"PDMS",v:"Aveva"},
+  {id:"rvt",l:"Revit",v:"Autodesk"},{id:"nvs",l:"Navisworks",v:"Autodesk"},{id:"op",l:"OpenPlant",v:"Bentley"}
+];
+var DV=["PRO","MEC","TUB","ELE","AUT","EST","ARQ","PLA","INV","SEG","MEI","GES","AQU"];
+var CATS_TEC=["RT5","RT4","RT3","RT2","RT1"];
+var CATS_GEST=["GP3","GP2","GP1|Plan"];
+var CATS_ALL=CATS_TEC.concat(CATS_GEST);
+var FREQS=["Semanal","Quinzenal","Mensal","Por evento"];
+var FW={"Semanal":1,"Quinzenal":2,"Mensal":4,"Por evento":0};
+var DISCS_RESP=["Processo","Mecânica","Tubulação","Elétrica","Automação / Instrumentação",
+  "Estruturas","Arquitetura","Planejamento","Estimativa de Investimentos",
+  "Segurança de Processo","Meio Ambiente","Gestão de Projetos","Aquisições","Multidisciplinar"];
+var REUN_INT=[
+  {id:"ri1",t:"Kick off interno",df:"Por evento"},
+  {id:"ri2",t:"Reunião de acompanhamento",df:"Quinzenal"},
+  {id:"ri3",t:"Reunião de planejamento e controle",df:"Quinzenal"},
+  {id:"ri4",t:"Reunião de encerramento",df:"Por evento"}
+];
+var NORMAS_LABEL={abnt:"ABNT",asme:"ASME / API / IEEE",iso:"ISO",en:"EN (Europeu)",nr:"NRs"};
+var AQ_LABEL={
+  eq_princ:"Equip. principais",eq_aux:"Equip. auxiliares",mat:"Materiais",
+  sv_terra:"Terraplenagem",sv_infra:"Infraestrutura",sv_civil:"Construção civil",
+  sv_mec:"Mont. mecânica",sv_elet:"Mont. elétrica/Automação"
+};
+
+// ── LER ESCOPO DA URL ──────────────────────────────────────
+function lerEscopo(){
+  try{
+    var stored=localStorage.getItem("stdx_escopo");
+    if(stored){ var parsed=JSON.parse(stored); if(parsed&&parsed.obj) return parsed; }
+  }catch(e){}
+  try{
+    var b64=new URLSearchParams(window.location.search).get("escopo");
+    if(!b64) return null;
+    return JSON.parse(decodeURIComponent(escape(atob(b64))));
+  }catch(e){return null;}
+}
+var _escopoURL=lerEscopo();
+var _viaLink=!!_escopoURL;
+
+var ESCOPO=_escopoURL||{
+  obj:{id:"fel2",l:"Desenvolvimento de Escopo e Seleção de Alternativas",p:"Estimativa de Investimento ±25%",nv:"B"},
+  tipo:"greenfield",vis:{on:true,modo:"obrigatorio"},
+  m3d:true,lod:"LOD 200",softs:["E3D"],defSoft:"owner",
+  normas:["abnt","asme"],
+  dur:16,
+  aqMode:"mercado",
+  aqForn:3,aqReunForn:true,
+  aqBids:{eq_princ:2,mat:1,sv_civil:1,sv_mec:1},
+  aqReun:{eq_princ:3,mat:3,sv_civil:3,sv_mec:3},
+  aqItens:{eq_princ:true,eq_aux:false,mat:true,sv_terra:false,sv_infra:false,sv_civil:true,sv_mec:true,sv_elet:false},
+  reunioes:[
+    {id:"r1",t:"Kick off",f:"Por evento"},
+    {id:"r2",t:"Coordenação técnica",f:"Quinzenal"},
+    {id:"r3",t:"Reunião de progresso",f:"Quinzenal"},
+    {id:"r4",t:"Project Review",f:"Mensal"},
+    {id:"r5",t:"Steering committee",f:"Mensal"},
+    {id:"r6",t:"Lessons Learned",f:"Por evento"},
+    {id:"r_forn",t:"Reunião com fornecedores",f:"Por evento"}
+  ],
+  sel:{
+    "PRO-001":"B","PRO-002":"B","PRO-004":"B","PRO-005":"B","PRO-008":"B",
+    "MEC-001":"B","MEC-004":"B","ELE-001":"B","ELE-002":"B","ELE-007":"B",
+    "AUT-001":"B","AUT-004":"B","EST-001":"B","EST-002":"B","EST-003":"B",
+    "ARQ-001":"B","ARQ-002":"B","PLA-001":"B","PLA-002":"B","PLA-003":"B","PLA-005":"B",
+    "INV-001":"B","INV-002":"B","INV-003":"B","INV-004":"B","INV-005":"B",
+    "SEG-001":"B","SEG-002":"B","MEI-001":"B","MEI-002":"B",
+    "GES-001":"B","GES-002":"B","GES-003":"B",
+    "AQU-001":"B","AQU-002":"B","AQU-003":"B","AQU-004":"B"
+  },
+  predDisp:{}
+};
+
+// ── ESTADO ─────────────────────────────────────────────────
+// Tabela de referência de horas por entregável
+var HORAS_REF = {
+  "PRO-001": {
+    fel1: {h:24, d:{"RT5": 20, "RT4": 40, "RT3": 30, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 15, "RT4": 35, "RT3": 35, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:80, d:{"RT5": 10, "RT4": 30, "RT3": 40, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:20, d:{"RT5": 5, "RT4": 20, "RT3": 40, "RT2": 30, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "PRO-002": {
+    fel1: {h:60, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:120, d:{"RT5": 15, "RT4": 35, "RT3": 35, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:240, d:{"RT5": 10, "RT4": 25, "RT3": 40, "RT2": 20, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:80, d:{"RT5": 5, "RT4": 20, "RT3": 40, "RT2": 25, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "PRO-003": {
+    fel1: {h:80, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:200, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:480, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 15, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:200, d:{"RT5": 10, "RT4": 25, "RT3": 40, "RT2": 20, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "PRO-004": {
+    fel1: {h:40, d:{"RT5": 25, "RT4": 40, "RT3": 30, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:80, d:{"RT5": 20, "RT4": 40, "RT3": 30, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:160, d:{"RT5": 15, "RT4": 35, "RT3": 35, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 10, "RT4": 30, "RT3": 40, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "PRO-005": {
+    fel1: {h:30, d:{"RT5": 30, "RT4": 40, "RT3": 20, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:100, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "PRO-006": {
+    fel1: {h:40, d:{"RT5": 30, "RT4": 40, "RT3": 20, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:100, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:200, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:80, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "PRO-007": {
+    fel1: {h:40, d:{"RT5": 35, "RT4": 45, "RT3": 15, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:80, d:{"RT5": 30, "RT4": 45, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:160, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 20, "RT4": 40, "RT3": 30, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "PRO-008": {
+    fel1: {h:20, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 10, "RT4": 25, "RT3": 40, "RT2": 25, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:80, d:{"RT5": 5, "RT4": 20, "RT3": 40, "RT2": 30, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 5, "RT4": 15, "RT3": 35, "RT2": 35, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "MEC-001": {
+    fel1: {h:20, d:{"RT5": 10, "RT4": 25, "RT3": 35, "RT2": 25, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 10, "RT4": 20, "RT3": 35, "RT2": 30, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:80, d:{"RT5": 5, "RT4": 15, "RT3": 35, "RT2": 35, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 5, "RT4": 10, "RT3": 30, "RT2": 40, "RT1": 15, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "MEC-002": {
+    fel1: {h:30, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:80, d:{"RT5": 15, "RT4": 35, "RT3": 35, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:160, d:{"RT5": 10, "RT4": 30, "RT3": 40, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:80, d:{"RT5": 5, "RT4": 25, "RT3": 40, "RT2": 25, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "MEC-003": {
+    fel1: {h:24, d:{"RT5": 30, "RT4": 40, "RT3": 20, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:120, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "MEC-004": {
+    fel1: {h:40, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:80, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:160, d:{"RT5": 10, "RT4": 25, "RT3": 40, "RT2": 20, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:80, d:{"RT5": 5, "RT4": 20, "RT3": 40, "RT2": 25, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "MEC-005": {
+    fel1: {h:16, d:{"RT5": 35, "RT4": 45, "RT3": 15, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:30, d:{"RT5": 30, "RT4": 45, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:60, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:30, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "MEC-006": {
+    fel1: {h:24, d:{"RT5": 30, "RT4": 40, "RT3": 25, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:140, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:80, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "MEC-007": {
+    fel1: {h:30, d:{"RT5": 30, "RT4": 40, "RT3": 25, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:80, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:160, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:80, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "TUB-001": {
+    fel1: {h:20, d:{"RT5": 30, "RT4": 40, "RT3": 25, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:80, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "TUB-002": {
+    fel1: {h:20, d:{"RT5": 15, "RT4": 25, "RT3": 35, "RT2": 25, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 10, "RT4": 20, "RT3": 35, "RT2": 30, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:100, d:{"RT5": 5, "RT4": 15, "RT3": 35, "RT2": 35, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 5, "RT4": 10, "RT3": 30, "RT2": 40, "RT1": 15, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "TUB-003": {
+    fel1: {h:40, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:100, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:240, d:{"RT5": 10, "RT4": 25, "RT3": 40, "RT2": 20, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:120, d:{"RT5": 5, "RT4": 20, "RT3": 40, "RT2": 25, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "TUB-004": {
+    fel1: {h:0, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 0, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 10, "RT4": 20, "RT3": 35, "RT2": 30, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:200, d:{"RT5": 5, "RT4": 15, "RT3": 35, "RT2": 35, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:300, d:{"RT5": 5, "RT4": 10, "RT3": 30, "RT2": 40, "RT1": 15, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "TUB-005": {
+    fel1: {h:16, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:80, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 10, "RT4": 25, "RT3": 40, "RT2": 25, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "TUB-006": {
+    fel1: {h:0, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 0, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:30, d:{"RT5": 15, "RT4": 25, "RT3": 35, "RT2": 25, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:100, d:{"RT5": 10, "RT4": 20, "RT3": 35, "RT2": 30, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:160, d:{"RT5": 5, "RT4": 15, "RT3": 35, "RT2": 35, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "TUB-007": {
+    fel1: {h:16, d:{"RT5": 30, "RT4": 40, "RT3": 25, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:100, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "ELE-001": {
+    fel1: {h:30, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:120, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 10, "RT4": 25, "RT3": 40, "RT2": 25, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "ELE-002": {
+    fel1: {h:20, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:80, d:{"RT5": 10, "RT4": 25, "RT3": 40, "RT2": 25, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 5, "RT4": 20, "RT3": 40, "RT2": 30, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "ELE-003": {
+    fel1: {h:24, d:{"RT5": 35, "RT4": 45, "RT3": 15, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:50, d:{"RT5": 30, "RT4": 45, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:100, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:50, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "ELE-004": {
+    fel1: {h:20, d:{"RT5": 30, "RT4": 40, "RT3": 20, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:50, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:100, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:50, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "ELE-005": {
+    fel1: {h:16, d:{"RT5": 30, "RT4": 40, "RT3": 25, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:30, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:60, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:30, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "ELE-006": {
+    fel1: {h:20, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:50, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:120, d:{"RT5": 10, "RT4": 25, "RT3": 40, "RT2": 20, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:80, d:{"RT5": 5, "RT4": 20, "RT3": 40, "RT2": 25, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "ELE-007": {
+    fel1: {h:16, d:{"RT5": 35, "RT4": 45, "RT3": 15, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:30, d:{"RT5": 30, "RT4": 45, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:60, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:30, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "AUT-001": {
+    fel1: {h:24, d:{"RT5": 35, "RT4": 45, "RT3": 15, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:50, d:{"RT5": 30, "RT4": 45, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:80, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "AUT-002": {
+    fel1: {h:16, d:{"RT5": 15, "RT4": 25, "RT3": 35, "RT2": 25, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 10, "RT4": 20, "RT3": 35, "RT2": 30, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:100, d:{"RT5": 5, "RT4": 15, "RT3": 35, "RT2": 35, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 5, "RT4": 10, "RT3": 30, "RT2": 40, "RT1": 15, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "AUT-003": {
+    fel1: {h:20, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:160, d:{"RT5": 10, "RT4": 25, "RT3": 40, "RT2": 25, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:100, d:{"RT5": 5, "RT4": 20, "RT3": 40, "RT2": 30, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "AUT-004": {
+    fel1: {h:24, d:{"RT5": 35, "RT4": 45, "RT3": 15, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 30, "RT4": 40, "RT3": 20, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:120, d:{"RT5": 25, "RT4": 35, "RT3": 25, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:80, d:{"RT5": 20, "RT4": 30, "RT3": 30, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "AUT-005": {
+    fel1: {h:16, d:{"RT5": 35, "RT4": 45, "RT3": 15, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:30, d:{"RT5": 30, "RT4": 45, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:60, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:30, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "AUT-006": {
+    fel1: {h:16, d:{"RT5": 30, "RT4": 45, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:100, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "EST-001": {
+    fel1: {h:16, d:{"RT5": 35, "RT4": 45, "RT3": 15, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:30, d:{"RT5": 30, "RT4": 45, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:60, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:30, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "EST-002": {
+    fel1: {h:20, d:{"RT5": 35, "RT4": 45, "RT3": 15, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 30, "RT4": 40, "RT3": 25, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:80, d:{"RT5": 25, "RT4": 35, "RT3": 30, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 20, "RT4": 30, "RT3": 35, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "EST-003": {
+    fel1: {h:30, d:{"RT5": 30, "RT4": 40, "RT3": 25, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:120, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "EST-004": {
+    fel1: {h:24, d:{"RT5": 35, "RT4": 40, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 30, "RT4": 40, "RT3": 20, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:160, d:{"RT5": 25, "RT4": 35, "RT3": 25, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:100, d:{"RT5": 20, "RT4": 30, "RT3": 30, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "EST-005": {
+    fel1: {h:20, d:{"RT5": 20, "RT4": 30, "RT3": 30, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 15, "RT4": 25, "RT3": 35, "RT2": 25, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:200, d:{"RT5": 10, "RT4": 20, "RT3": 40, "RT2": 25, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:300, d:{"RT5": 5, "RT4": 15, "RT3": 40, "RT2": 30, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "ARQ-001": {
+    fel1: {h:16, d:{"RT5": 30, "RT4": 40, "RT3": 25, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:30, d:{"RT5": 25, "RT4": 40, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:50, d:{"RT5": 20, "RT4": 35, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:24, d:{"RT5": 15, "RT4": 30, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "ARQ-002": {
+    fel1: {h:16, d:{"RT5": 20, "RT4": 30, "RT3": 35, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:30, d:{"RT5": 15, "RT4": 25, "RT3": 40, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:60, d:{"RT5": 10, "RT4": 20, "RT3": 40, "RT2": 25, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 5, "RT4": 15, "RT3": 40, "RT2": 30, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "ARQ-003": {
+    fel1: {h:20, d:{"RT5": 20, "RT4": 30, "RT3": 35, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:50, d:{"RT5": 15, "RT4": 25, "RT3": 40, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:120, d:{"RT5": 10, "RT4": 20, "RT3": 40, "RT2": 25, "RT1": 5, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:80, d:{"RT5": 5, "RT4": 15, "RT3": 40, "RT2": 30, "RT1": 10, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "PLA-001": {
+    fel1: {h:16, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 10, "RT1": 0, "GP3": 20, "GP2": 40, "GP1|Plan": 25}},
+    fel2: {h:30, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 10, "RT1": 0, "GP3": 15, "GP2": 40, "GP1|Plan": 30}},
+    fel3: {h:60, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 10, "RT1": 0, "GP3": 10, "GP2": 35, "GP1|Plan": 40}},
+    imp: {h:80, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 5, "RT1": 0, "GP3": 10, "GP2": 35, "GP1|Plan": 45}},
+  },
+  "PLA-002": {
+    fel1: {h:20, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 10, "RT1": 0, "GP3": 30, "GP2": 40, "GP1|Plan": 15}},
+    fel2: {h:40, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 10, "RT1": 0, "GP3": 25, "GP2": 40, "GP1|Plan": 20}},
+    fel3: {h:60, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 10, "RT1": 0, "GP3": 20, "GP2": 40, "GP1|Plan": 25}},
+    imp: {h:40, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 5, "RT1": 0, "GP3": 15, "GP2": 40, "GP1|Plan": 35}},
+  },
+  "PLA-003": {
+    fel1: {h:16, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 35, "GP2": 45, "GP1|Plan": 15}},
+    fel2: {h:24, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 30, "GP2": 45, "GP1|Plan": 20}},
+    fel3: {h:40, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 25, "GP2": 45, "GP1|Plan": 25}},
+    imp: {h:30, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 20, "GP2": 45, "GP1|Plan": 30}},
+  },
+  "PLA-004": {
+    fel1: {h:16, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 5, "RT1": 0, "GP3": 35, "GP2": 40, "GP1|Plan": 15}},
+    fel2: {h:30, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 5, "RT1": 0, "GP3": 30, "GP2": 40, "GP1|Plan": 20}},
+    fel3: {h:50, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 5, "RT1": 0, "GP3": 25, "GP2": 40, "GP1|Plan": 25}},
+    imp: {h:40, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 5, "RT1": 0, "GP3": 20, "GP2": 40, "GP1|Plan": 30}},
+  },
+  "PLA-005": {
+    fel1: {h:8, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 5, "RT1": 0, "GP3": 20, "GP2": 35, "GP1|Plan": 35}},
+    fel2: {h:12, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 5, "RT1": 0, "GP3": 15, "GP2": 35, "GP1|Plan": 40}},
+    fel3: {h:20, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 5, "RT1": 0, "GP3": 10, "GP2": 35, "GP1|Plan": 45}},
+    imp: {h:30, d:{"RT5": 0, "RT4": 0, "RT3": 5, "RT2": 5, "RT1": 0, "GP3": 10, "GP2": 30, "GP1|Plan": 50}},
+  },
+  "INV-001": {
+    fel1: {h:40, d:{"RT5": 0, "RT4": 5, "RT3": 10, "RT2": 15, "RT1": 0, "GP3": 20, "GP2": 30, "GP1|Plan": 20}},
+    fel2: {h:80, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 20, "RT1": 0, "GP3": 15, "GP2": 30, "GP1|Plan": 15}},
+    fel3: {h:120, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 25, "RT1": 0, "GP3": 10, "GP2": 25, "GP1|Plan": 15}},
+    imp: {h:80, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 30, "RT1": 0, "GP3": 5, "GP2": 25, "GP1|Plan": 15}},
+  },
+  "INV-002": {
+    fel1: {h:24, d:{"RT5": 0, "RT4": 5, "RT3": 10, "RT2": 15, "RT1": 0, "GP3": 25, "GP2": 30, "GP1|Plan": 15}},
+    fel2: {h:50, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 20, "RT1": 0, "GP3": 20, "GP2": 30, "GP1|Plan": 10}},
+    fel3: {h:80, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 25, "RT1": 0, "GP3": 15, "GP2": 25, "GP1|Plan": 10}},
+    imp: {h:60, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 30, "RT1": 0, "GP3": 10, "GP2": 25, "GP1|Plan": 10}},
+  },
+  "INV-003": {
+    fel1: {h:30, d:{"RT5": 0, "RT4": 10, "RT3": 15, "RT2": 10, "RT1": 0, "GP3": 25, "GP2": 30, "GP1|Plan": 10}},
+    fel2: {h:60, d:{"RT5": 0, "RT4": 10, "RT3": 20, "RT2": 15, "RT1": 0, "GP3": 20, "GP2": 25, "GP1|Plan": 10}},
+    fel3: {h:80, d:{"RT5": 0, "RT4": 10, "RT3": 25, "RT2": 15, "RT1": 0, "GP3": 15, "GP2": 25, "GP1|Plan": 10}},
+    imp: {h:40, d:{"RT5": 0, "RT4": 10, "RT3": 25, "RT2": 20, "RT1": 0, "GP3": 10, "GP2": 25, "GP1|Plan": 10}},
+  },
+  "INV-004": {
+    fel1: {h:20, d:{"RT5": 0, "RT4": 5, "RT3": 10, "RT2": 15, "RT1": 0, "GP3": 25, "GP2": 30, "GP1|Plan": 15}},
+    fel2: {h:40, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 20, "RT1": 0, "GP3": 20, "GP2": 25, "GP1|Plan": 15}},
+    fel3: {h:60, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 25, "RT1": 0, "GP3": 15, "GP2": 25, "GP1|Plan": 10}},
+    imp: {h:40, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 30, "RT1": 0, "GP3": 10, "GP2": 25, "GP1|Plan": 10}},
+  },
+  "INV-005": {
+    fel1: {h:20, d:{"RT5": 0, "RT4": 10, "RT3": 15, "RT2": 10, "RT1": 0, "GP3": 30, "GP2": 25, "GP1|Plan": 10}},
+    fel2: {h:40, d:{"RT5": 0, "RT4": 10, "RT3": 20, "RT2": 15, "RT1": 0, "GP3": 25, "GP2": 20, "GP1|Plan": 10}},
+    fel3: {h:60, d:{"RT5": 0, "RT4": 10, "RT3": 25, "RT2": 15, "RT1": 0, "GP3": 20, "GP2": 20, "GP1|Plan": 10}},
+    imp: {h:30, d:{"RT5": 0, "RT4": 10, "RT3": 25, "RT2": 20, "RT1": 0, "GP3": 15, "GP2": 20, "GP1|Plan": 10}},
+  },
+  "SEG-001": {
+    fel1: {h:24, d:{"RT5": 35, "RT4": 40, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:40, d:{"RT5": 30, "RT4": 40, "RT3": 20, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:60, d:{"RT5": 25, "RT4": 35, "RT3": 25, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:30, d:{"RT5": 20, "RT4": 30, "RT3": 30, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "SEG-002": {
+    fel1: {h:40, d:{"RT5": 35, "RT4": 40, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 30, "RT4": 40, "RT3": 20, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:80, d:{"RT5": 25, "RT4": 35, "RT3": 25, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 20, "RT4": 30, "RT3": 30, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "SEG-003": {
+    fel1: {h:0, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 0, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:80, d:{"RT5": 35, "RT4": 40, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:160, d:{"RT5": 30, "RT4": 40, "RT3": 20, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:80, d:{"RT5": 25, "RT4": 35, "RT3": 25, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "SEG-004": {
+    fel1: {h:0, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 0, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 40, "RT4": 40, "RT3": 15, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:120, d:{"RT5": 35, "RT4": 40, "RT3": 20, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 30, "RT4": 35, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "MEI-001": {
+    fel1: {h:24, d:{"RT5": 30, "RT4": 40, "RT3": 25, "RT2": 5, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:50, d:{"RT5": 25, "RT4": 35, "RT3": 30, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:80, d:{"RT5": 20, "RT4": 30, "RT3": 35, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:40, d:{"RT5": 15, "RT4": 25, "RT3": 40, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "MEI-002": {
+    fel1: {h:0, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 0, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:60, d:{"RT5": 30, "RT4": 35, "RT3": 25, "RT2": 10, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel3: {h:120, d:{"RT5": 25, "RT4": 30, "RT3": 30, "RT2": 15, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    imp: {h:60, d:{"RT5": 20, "RT4": 25, "RT3": 35, "RT2": 20, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+  },
+  "GES-001": {
+    fel1: {h:20, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 35, "GP2": 45, "GP1|Plan": 15}},
+    fel2: {h:30, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 30, "GP2": 45, "GP1|Plan": 20}},
+    fel3: {h:40, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 25, "GP2": 45, "GP1|Plan": 25}},
+    imp: {h:30, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 20, "GP2": 45, "GP1|Plan": 30}},
+  },
+  "GES-002": {
+    fel1: {h:12, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 30, "GP2": 40, "GP1|Plan": 25}},
+    fel2: {h:20, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 25, "GP2": 40, "GP1|Plan": 30}},
+    fel3: {h:30, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 20, "GP2": 40, "GP1|Plan": 35}},
+    imp: {h:20, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 15, "GP2": 40, "GP1|Plan": 40}},
+  },
+  "GES-003": {
+    fel1: {h:12, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 30, "GP2": 40, "GP1|Plan": 25}},
+    fel2: {h:20, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 25, "GP2": 40, "GP1|Plan": 30}},
+    fel3: {h:30, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 20, "GP2": 40, "GP1|Plan": 35}},
+    imp: {h:20, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 5, "RT1": 0, "GP3": 15, "GP2": 40, "GP1|Plan": 40}},
+  },
+  "AQU-001": {
+    fel1: {h:20, d:{"RT5": 0, "RT4": 10, "RT3": 20, "RT2": 15, "RT1": 0, "GP3": 10, "GP2": 25, "GP1|Plan": 20}},
+    fel2: {h:40, d:{"RT5": 0, "RT4": 10, "RT3": 25, "RT2": 15, "RT1": 0, "GP3": 8, "GP2": 22, "GP1|Plan": 20}},
+    fel3: {h:80, d:{"RT5": 0, "RT4": 10, "RT3": 25, "RT2": 20, "RT1": 0, "GP3": 5, "GP2": 20, "GP1|Plan": 20}},
+    imp: {h:60, d:{"RT5": 0, "RT4": 10, "RT3": 25, "RT2": 25, "RT1": 0, "GP3": 5, "GP2": 15, "GP1|Plan": 20}},
+  },
+  "AQU-002": {
+    fel1: {h:16, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 20, "RT1": 0, "GP3": 10, "GP2": 30, "GP1|Plan": 20}},
+    fel2: {h:30, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 20, "RT1": 0, "GP3": 8, "GP2": 27, "GP1|Plan": 20}},
+    fel3: {h:60, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 25, "RT1": 0, "GP3": 5, "GP2": 25, "GP1|Plan": 20}},
+    imp: {h:50, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 30, "RT1": 0, "GP3": 5, "GP2": 20, "GP1|Plan": 20}},
+  },
+  "AQU-003": {
+    fel1: {h:12, d:{"RT5": 0, "RT4": 5, "RT3": 10, "RT2": 20, "RT1": 0, "GP3": 10, "GP2": 30, "GP1|Plan": 25}},
+    fel2: {h:24, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 20, "RT1": 0, "GP3": 8, "GP2": 27, "GP1|Plan": 25}},
+    fel3: {h:50, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 25, "RT1": 0, "GP3": 5, "GP2": 25, "GP1|Plan": 25}},
+    imp: {h:40, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 30, "RT1": 0, "GP3": 5, "GP2": 20, "GP1|Plan": 25}},
+  },
+  "AQU-004": {
+    fel1: {h:16, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 15, "RT1": 0, "GP3": 10, "GP2": 30, "GP1|Plan": 25}},
+    fel2: {h:30, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 15, "RT1": 0, "GP3": 8, "GP2": 27, "GP1|Plan": 25}},
+    fel3: {h:50, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 20, "RT1": 0, "GP3": 5, "GP2": 25, "GP1|Plan": 25}},
+    imp: {h:40, d:{"RT5": 0, "RT4": 5, "RT3": 20, "RT2": 25, "RT1": 0, "GP3": 5, "GP2": 20, "GP1|Plan": 25}},
+  },
+  "AQU-005": {
+    fel1: {h:16, d:{"RT5": 0, "RT4": 10, "RT3": 20, "RT2": 20, "RT1": 0, "GP3": 5, "GP2": 25, "GP1|Plan": 20}},
+    fel2: {h:30, d:{"RT5": 0, "RT4": 10, "RT3": 25, "RT2": 20, "RT1": 0, "GP3": 5, "GP2": 20, "GP1|Plan": 20}},
+    fel3: {h:60, d:{"RT5": 0, "RT4": 10, "RT3": 25, "RT2": 25, "RT1": 0, "GP3": 5, "GP2": 15, "GP1|Plan": 20}},
+    imp: {h:50, d:{"RT5": 0, "RT4": 10, "RT3": 25, "RT2": 30, "RT1": 0, "GP3": 5, "GP2": 10, "GP1|Plan": 20}},
+  },
+  "AQU-006": {
+    fel1: {h:0, d:{"RT5": 0, "RT4": 0, "RT3": 0, "RT2": 0, "RT1": 0, "GP3": 0, "GP2": 0, "GP1|Plan": 0}},
+    fel2: {h:16, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 25, "RT1": 0, "GP3": 5, "GP2": 25, "GP1|Plan": 25}},
+    fel3: {h:30, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 30, "RT1": 0, "GP3": 5, "GP2": 20, "GP1|Plan": 25}},
+    imp: {h:60, d:{"RT5": 0, "RT4": 5, "RT3": 15, "RT2": 35, "RT1": 5, "GP3": 5, "GP2": 15, "GP1|Plan": 20}},
+  },
+  "AUT-007": {
+    fel1: {h:0,  d:{"RT5":0,"RT4":0,"RT3":0,"RT2":0,"RT1":0,"GP3":0,"GP2":0,"GP1|Plan":0}},
+    fel2: {h:60, d:{"RT5":35,"RT4":40,"RT3":20,"RT2":5,"RT1":0,"GP3":0,"GP2":0,"GP1|Plan":0}},
+    fel3: {h:120,d:{"RT5":30,"RT4":40,"RT3":22,"RT2":8,"RT1":0,"GP3":0,"GP2":0,"GP1|Plan":0}},
+    imp:  {h:60, d:{"RT5":25,"RT4":35,"RT3":27,"RT2":13,"RT1":0,"GP3":0,"GP2":0,"GP1|Plan":0}},
+  },
+  "PLA-006": {
+    fel1: {h:8,  d:{"RT5":0,"RT4":0,"RT3":0,"RT2":0,"RT1":0,"GP3":10,"GP2":30,"GP1|Plan":60}},
+    fel2: {h:16, d:{"RT5":0,"RT4":0,"RT3":0,"RT2":0,"RT1":0,"GP3":10,"GP2":30,"GP1|Plan":60}},
+    fel3: {h:30, d:{"RT5":0,"RT4":0,"RT3":0,"RT2":0,"RT1":0,"GP3":10,"GP2":30,"GP1|Plan":60}},
+    imp:  {h:40, d:{"RT5":0,"RT4":0,"RT3":0,"RT2":0,"RT1":0,"GP3":10,"GP2":25,"GP1|Plan":65}},
+  },
+};
+
+// Multiplicadores de cenário
+var CENARIO_MULT = {otimista: 0.75, realista: 1.0, pessimista: 1.4};
+
+var P={
+  tela:0,
+  cenario:null,
+  hCat:{},    // {cod:{RT5:n,RT4:n,...,GP1|Plan:n}} — entregáveis técnicos
+  hAtiv:{},   // {atv_id:{RT5:n,...}} — atividades de suporte
+  infConf:{}, // {cod:{o_0:bool,...}}
+  gest:{pct:10,hExtra:0},
+  reunPart:{}, reunH:{},
+  reunInt:{
+    ri1:{inc:true,qtd:1,part:3,h:4,f:"Por evento"},
+    ri2:{inc:true,qtd:4,part:4,h:2,f:"Quinzenal"},
+    ri3:{inc:true,qtd:4,part:3,h:2,f:"Quinzenal"},
+    ri4:{inc:false,qtd:1,part:4,h:3,f:"Por evento"}
+  },
+  visRealiza:null, visQtd:1, visPart:2, visDisciplinas:[], visHoras:8,
+  softPropList:[],
+  fornEquipe:2, fornHReun:3,
+  softsP:[],
+  valor:"",obs:"",filt:"Todas",busca:""
+};
+// Inicializar reuniões do owner
+for(var _ri=0;_ri<ESCOPO.reunioes.length;_ri++){
+  var _r=ESCOPO.reunioes[_ri];
+  P.reunPart[_r.id]=2;
+  P.reunH[_r.id]=(_r.h&&_r.h>0)?_r.h:2;
+}
+// Inicializar qtd reuniões internas baseadas na duração do projeto
+(function(){
+  var dur=ESCOPO.dur||16;
+  for(var rid in P.reunInt){
+    var ri=P.reunInt[rid];
+    var w=FW[ri.f]||0;
+    ri.qtd=w>0?Math.max(1,Math.round(dur/w)):1;
+  }
+})();
+
+// ── HELPERS ────────────────────────────────────────────────
+function getSt(cod,nv){
+  if(!ESCOPO.obj) return "NA";
+  var r=ST[cod];
+  return(r&&r[ESCOPO.obj.id]&&r[ESCOPO.obj.id][nv])||"NA";
+}
+function getPredList(){
+  var list=[];
+  var sugNv=NV_OBJ[ESCOPO.obj.id];
+  var sugIdx=NVS.indexOf(sugNv);
+  for(var cod in ESCOPO.sel){
+    var predConts=[];
+    for(var ni=0;ni<sugIdx;ni++){
+      if(getSt(cod,NVS[ni])==="PRED"){
+        var ct=(CONT[cod]&&CONT[cod][NVS[ni]])||"";
+        if(ct&&ct!=="—") predConts.push({nv:NVS[ni],ct:ct});
+      }
+    }
+    if(predConts.length){
+      var e=null;
+      for(var i=0;i<E.length;i++){if(E[i].c===cod){e=E[i];break;}}
+      if(e) list.push({e:e,conts:predConts});
+    }
+  }
+  return list;
+}
+function hTec(){
+  var t=0;
+  for(var cod in P.hCat) for(var c in P.hCat[cod]) t+=P.hCat[cod][c];
+  return t;
+}
+function hGest(){ return Math.round(hTec()*P.gest.pct/100)+(P.gest.hExtra||0); }
+function hReunOwner(){
+  var t=0;
+  for(var i=0;i<ESCOPO.reunioes.length;i++){
+    var r=ESCOPO.reunioes[i];
+    t+=(P.reunPart[r.id]||1)*(P.reunH[r.id]||0);
+  }
+  return t;
+}
+function hReunInt(){
+  var t=0;
+  for(var id in P.reunInt){
+    var ri=P.reunInt[id];
+    if(ri.inc) t+=ri.qtd*(ri.part||1)*ri.h;
+  }
+  return t;
+}
+function hVisitas(){
+  if(!ESCOPO.vis||!ESCOPO.vis.on) return 0;
+  if(ESCOPO.vis.modo==="opcional"&&!P.visRealiza) return 0;
+  return P.visHoras||0;
+}
+function hTotal(){ return hTec()+hGest()+hAtivTotal(); }
+
+// ── DRAWER ─────────────────────────────────────────────────
+var _drwCod=null;
+function openDrw(cod){
+  _drwCod=cod;
+  var e=null; for(var i=0;i<E.length;i++){if(E[i].c===cod){e=E[i];break;}}
+  var inf=INFO[cod]||{o:[],r:[]};
+  var nv=ESCOPO.sel[cod];
+  var conf=P.infConf[cod]||{};
+  var nvIdx=NVS.indexOf(nv);
+  var accLines=[];
+  for(var ai=0;ai<=nvIdx;ai++){
+    var ct=(CONT[cod]&&CONT[cod][NVS[ai]])||"";
+    if(ct&&ct!=="—") accLines.push(ct);
+  }
+  // Predecessoras do entregável
+  var predConts=[];
+  for(var pi=0;pi<nvIdx;pi++){
+    if(getSt(cod,NVS[pi])==="PRED"){
+      var pc=(CONT[cod]&&CONT[cod][NVS[pi]])||"";
+      if(pc&&pc!=="—") predConts.push(pc);
+    }
+  }
+  var dEl=document.getElementById("drw");
+  var h="";
+  h+="<button class='drw-close' onclick='closeDrw()'>✕</button>";
+  h+="<div style='font-size:10px;color:var(--tx3);margin-bottom:3px'>"+e.d+" · "+cod+"</div>";
+  h+="<div style='font-family:Syne,sans-serif;font-size:15px;font-weight:700;margin-bottom:8px;line-height:1.4'>"+e.n+"</div>";
+  h+="<span style='font-size:11px;background:var(--vd-bg);color:var(--vd2);border:1px solid var(--vd-bord);padding:2px 10px;border-radius:20px'>Nível "+nv+"</span>";
+  h+="<div style='background:var(--bg3);border:1px solid var(--bord);border-radius:8px;padding:12px;margin:12px 0'>";
+  h+="<div style='font-size:10px;font-weight:600;color:var(--px2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px'>Conteúdo mínimo</div>";
+  h+="<div style='font-size:12px;color:var(--tx2);line-height:1.6'>"+accLines.join(" + ")+"</div></div>";
+  if(predConts.length){
+    h+="<div style='background:var(--az-bg);border:1px solid var(--bord2);border-radius:8px;padding:12px;margin-bottom:12px'>";
+    h+="<div style='font-size:10px;font-weight:600;color:var(--az2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px'>↳ Informações predecessoras</div>";
+    h+="<div style='font-size:12px;color:var(--tx2);line-height:1.6'>"+predConts.join(" · ")+"</div></div>";
+  }
+  if(inf.o.length){
+    var confObr=0; for(var k in conf){if(k.startsWith("o_")&&conf[k]) confObr++;}
+    h+="<div style='margin-bottom:12px'>";
+    h+="<div style='font-size:10px;font-weight:600;color:var(--vd2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px'>Informações obrigatórias ("+confObr+"/"+inf.o.length+")</div>";
+    for(var oi=0;oi<inf.o.length;oi++){
+      var chk=(conf["o_"+oi])?"checked":"";
+      h+="<div class='inf-item'><input type='checkbox' class='inf-check' data-tipo='o' data-idx='"+oi+"' "+chk+" onchange='handleInfChk(this)'/>";
+      h+="<span style='font-size:12px;color:"+(conf["o_"+oi]?"var(--vd2)":"var(--tx2)")+";line-height:1.5'>"+inf.o[oi]+"</span></div>";
+    }
+    var pct=Math.round(confObr/inf.o.length*100);
+    h+="<div style='margin-top:8px;height:4px;background:var(--bord);border-radius:2px;overflow:hidden'>";
+    h+="<div style='height:100%;width:"+pct+"%;background:"+(pct===100?"var(--vd)":"var(--am)")+";border-radius:2px'></div></div></div>";
+  }
+  if(inf.r&&inf.r.length){
+    h+="<div><div style='font-size:10px;font-weight:600;color:var(--am2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px'>Informações recomendadas</div>";
+    for(var ri2=0;ri2<inf.r.length;ri2++){
+      var chk2=(conf["r_"+ri2])?"checked":"";
+      h+="<div class='inf-item'><input type='checkbox' class='inf-check' style='accent-color:var(--am)' data-tipo='r' data-idx='"+ri2+"' "+chk2+" onchange='handleInfChk(this)'/>";
+      h+="<span style='font-size:12px;color:"+(conf["r_"+ri2]?"var(--am2)":"var(--tx2)")+";line-height:1.5'>"+inf.r[ri2]+"</span></div>";
+    }
+    h+="</div>";
+  }
+  dEl.innerHTML=h;
+  document.getElementById("drw-ov").style.display="flex";
+}
+function closeDrw(){document.getElementById("drw-ov").style.display="none";}
+function handleInfChk(el){
+  if(!P.infConf[_drwCod]) P.infConf[_drwCod]={};
+  P.infConf[_drwCod][el.dataset.tipo+"_"+el.dataset.idx]=(el.checked);
+  openDrw(_drwCod);
+}
+function setCatAtiv(el){
+  var aid=el.dataset.a, cat=el.dataset.cat;
+  if(!P.hAtiv[aid]) P.hAtiv[aid]={};
+  P.hAtiv[aid][cat]=+el.value||0;
+  // Atualizar td total da linha em tempo real
+  var tdTot=document.getElementById('hatot-'+aid);
+  if(tdTot){
+    var tot=0; for(var c in P.hAtiv[aid]) tot+=P.hAtiv[aid][c];
+    tdTot.textContent=tot>0?tot+'h':'—';
+    tdTot.style.color=tot>0?'var(--am2)':'var(--tx3)';
+  }
+  updSum();
+}
+function hAtivTotal(){
+  var t=0;
+  for(var aid in P.hAtiv) for(var c in P.hAtiv[aid]) t+=P.hAtiv[aid][c];
+  return t;
+}
+function setCat(el){
+  var cod=el.dataset.c,cat=el.dataset.cat;
+  if(!P.hCat[cod]) P.hCat[cod]={};
+  P.hCat[cod][cat]=+el.value||0;
+  var tot=0; for(var c in P.hCat[cod]) tot+=P.hCat[cod][c];
+  // Atualizar td total da linha em tempo real
+  var tdTot=document.getElementById('htot-'+cod);
+  if(tdTot){
+    tdTot.textContent=tot>0?tot+'h':'—';
+    tdTot.style.color=tot>0?'var(--px2)':'var(--tx3)';
+  }
+  updSum();
+}
+function setD(el){
+  if(!P.hCat[el.dataset.c]) P.hCat[el.dataset.c]={};
+  P._disc=P._disc||{}; P._disc[el.dataset.c]=el.value;
+}
+function buildCatBarsHTML(){
+  var allCats=CATS_TEC.concat(CATS_GEST);
+  var maxH=0;
+  for(var ca=0;ca<allCats.length;ca++){
+    var cv=0; for(var cod in P.hCat){if(P.hCat[cod]&&P.hCat[cod][allCats[ca]])cv+=P.hCat[cod][allCats[ca]];}
+    if(cv>maxH)maxH=cv;
+  }
+  var gestH=hGest(); var gestPerCat=CATS_GEST.length>0?Math.round(gestH/CATS_GEST.length):0;
+  if(gestPerCat>maxH) maxH=gestPerCat;
+  var html='<div style="font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Distribuição de horas por categoria</div>';
+  html+='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px">';
+  for(var ca2=0;ca2<allCats.length;ca2++){
+    var cat4=allCats[ca2]; var isTec=CATS_TEC.indexOf(cat4)>=0;
+    var catV=0;
+    for(var cod2 in P.hCat){if(P.hCat[cod2]&&P.hCat[cod2][cat4])catV+=P.hCat[cod2][cat4];}
+    for(var aid2 in P.hAtiv){if(P.hAtiv[aid2]&&P.hAtiv[aid2][cat4])catV+=P.hAtiv[aid2][cat4];}
+    if(!isTec) catV+=gestPerCat;
+    var barH=maxH>0?Math.max(4,Math.round(catV/maxH*60)):0;
+    var barC=isTec?'var(--az2)':'var(--px2)';
+    html+='<div style="text-align:center">';
+    html+='<div style="font-size:10px;font-weight:700;color:'+(isTec?'var(--az2)':'var(--px2)')+';margin-bottom:4px">'+cat4+'</div>';
+    html+='<div style="display:flex;align-items:flex-end;justify-content:center;height:64px">';
+    html+='<div style="width:28px;background:'+barC+';border-radius:3px 3px 0 0;height:'+barH+'px;min-height:'+(catV>0?'4px':'0')+'">'+'</div></div>';
+    html+='<div style="font-size:11px;font-weight:700;color:var(--tx)">'+(catV>0?catV+'h':'—')+'</div></div>';
+  }
+  html+='</div>';
+  return html;
+}
+function updSum(){
+  var te=document.getElementById('sum-tec'); if(te) te.textContent=hTec()+'h';
+  var tg=document.getElementById('sum-gest'); if(tg) tg.textContent=hGest()+'h';
+  var tt=document.getElementById('sum-tot'); if(tt) tt.textContent=hTotal()+'h';
+  var cb=document.getElementById('cat-bars'); if(cb) cb.innerHTML=buildCatBarsHTML();
+}
+function setFilt(f){P.filt=f;render();}
+function setBusca(v){P.busca=v;render();}
+function setRP(el){P.reunPart[el.dataset.rid]=+el.value;render();}
+function setRH(el){P.reunH[el.dataset.rid]=+el.value;render();}
+function togRI(id){
+  P.reunInt[id].inc=!P.reunInt[id].inc;
+  if(P.reunInt[id].inc){
+    // Recalcular qtd com base na periodicidade e duração do projeto
+    var f=P.reunInt[id].f;
+    P.reunInt[id].qtd=calcRI(f);
+  }
+  render();
+}
+function setRIQ(el){P.reunInt[el.dataset.rid].qtd=+el.value;render();}
+function setRIPart(el){P.reunInt[el.dataset.rid].part=+el.value;render();}
+function setRIH(el){P.reunInt[el.dataset.rid].h=+el.value;render();}
+function setRIF(el){
+  P.reunInt[el.dataset.rid].f=el.value;
+  P.reunInt[el.dataset.rid].qtd=calcRI(el.value);
+  render();
+}
+
+// ── T0: LOGIN ──────────────────────────────────────────────
+function T0(){
+  return "<div class='login-wrap'><div class='login-box'>"
+    +"<div style='font-family:Syne,sans-serif;font-size:30px;font-weight:800;margin-bottom:6px'>Standard<span style='color:var(--px)'>X</span></div>"
+    +"<div style='font-size:13px;color:var(--tx3);margin-bottom:28px'>Módulo da Empresa Proponente</div>"
+    +"<input class='inp' type='email' placeholder='E-mail corporativo'/>"
+    +"<input class='inp' type='password' placeholder='Senha'/>"
+    +"<button class='btn' style='width:100%;padding:13px;font-size:14px' onclick='goT(1)'>Acessar →</button>"
+    +"<div style='margin-top:16px;font-size:11px;color:var(--tx3)'>Acesso fornecido pelo Owner do projeto</div>"
+    +"</div></div>";
+}
+
+// ── T1: ESCOPO RECEBIDO ────────────────────────────────────
+function T1(){
+  var o=ESCOPO.obj;
+  var nSel=Object.keys(ESCOPO.sel).length;
+  var nO=0,nOp=0;
+  for(var cod in ESCOPO.sel){
+    var st=getSt(cod,ESCOPO.sel[cod]);
+    if(st==="O") nO++; else nOp++;
+  }
+  var h="";
+  if(_viaLink) h+="<div style='background:var(--vd-bg);border:1px solid var(--vd-bord);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--vd2)'>✓ Escopo carregado via link do Owner</div>";
+  h+="<div class='titulo'>Escopo definido pelo Owner</div>";
+  h+="<div class='sub'>Revise todas as configurações do projeto antes de iniciar o dimensionamento da proposta.</div>";
+
+  // Grade de cards resumo
+  h+="<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px'>";
+  h+="<div class='card' style='margin-bottom:0'>";
+  h+="<div class='sec-l'>Objetivo</div>";
+  h+="<div style='font-size:14px;font-weight:600;line-height:1.3;color:var(--tx)'>"+o.l+"</div>";
+  h+="<div style='font-size:12px;color:var(--tx3);margin-top:4px'>"+o.p+"</div></div>";
+  h+="<div class='card' style='margin-bottom:0'>";
+  h+="<div class='sec-l'>Projeto</div>";
+  h+="<div style='font-size:14px;font-weight:600;color:"+(ESCOPO.tipo==="greenfield"?"var(--vd2)":"var(--am2)")+"'>"+(ESCOPO.tipo==="greenfield"?"🌱 Greenfield":"🏭 Brownfield")+"</div>";
+  if(ESCOPO.dur) h+="<div style='font-size:12px;color:var(--tx3);margin-top:6px'>⏱ "+ESCOPO.dur+" semanas</div>";
+  h+="</div>";
+  h+="<div class='card' style='margin-bottom:0'>";
+  h+="<div class='sec-l'>Entregáveis</div>";
+  h+="<div style='font-family:Syne,sans-serif;font-size:28px;font-weight:800;color:var(--px2)'>"+nSel+"</div>";
+  h+="<div style='font-size:11px;color:var(--tx3);margin-top:2px'>"+nO+" obrigatórios · "+nOp+" recomendados</div></div>";
+  h+="</div>";
+
+  // Modelamento 3D
+  if(ESCOPO.m3d){
+    h+="<div class='card'><div class='sec-l'>Modelamento 3D</div>";
+    h+="<div style='display:flex;gap:20px;flex-wrap:wrap;align-items:center'>";
+    h+="<div><div style='font-size:11px;color:var(--tx3);margin-bottom:2px'>Nível (LOD)</div>";
+    h+="<div style='font-family:Syne,sans-serif;font-size:16px;font-weight:700;color:var(--vd2)'>"+(ESCOPO.lod||"Não definido")+"</div></div>";
+    if(ESCOPO.defSoft==="owner"&&ESCOPO.softs&&ESCOPO.softs.length){
+      h+="<div><div style='font-size:11px;color:var(--tx3);margin-bottom:2px'>Software</div>";
+      h+="<div style='font-size:14px;font-weight:600;color:var(--tx)'>"+ESCOPO.softs.join(", ")+"</div></div>";
+    } else {
+      h+="<div><div style='font-size:11px;color:var(--tx3);margin-bottom:2px'>Software</div>";
+      h+="<div style='font-size:13px;color:var(--am2);font-style:italic'>A definir pela proponente</div></div>";
+    }
+    h+="</div></div>";
+  }
+
+  // Visitas técnicas
+  if(ESCOPO.vis&&ESCOPO.vis.on){
+    h+="<div class='card'><div class='sec-l'>Visitas técnicas</div>";
+    h+="<div style='font-size:13px;font-weight:600;color:"+(ESCOPO.vis.modo==="obrigatorio"?"var(--vd2)":"var(--am2)")+"'>"+(ESCOPO.vis.modo==="obrigatorio"?"Obrigatório — proponente deve realizar":"Opcional — proponente decide se realiza")+"</div>";
+    h+="<div style='font-size:11px;color:var(--tx3);margin-top:4px'>Quantidade e disciplinas a definir pela proponente</div></div>";
+  }
+
+  // Aquisições
+  var aqL={referencia:"📊 Preços de referência e índices",mercado:"🏪 Ir ao mercado para cotações",hibrido:"🔀 Híbrido — referências + mercado"};
+  h+="<div class='card'><div class='sec-l'>Aquisições</div>";
+  h+="<div style='font-size:13px;font-weight:600;color:var(--tx)'>"+aqL[ESCOPO.aqMode]+"</div>";
+  if(ESCOPO.aqMode!=="referencia"&&ESCOPO.aqItens){
+    var itens=[];
+    for(var k in ESCOPO.aqItens){if(ESCOPO.aqItens[k]) itens.push(AQ_LABEL[k]);}
+    if(itens.length) h+="<div style='font-size:11px;color:var(--tx3);margin-top:6px'>"+itens.join(" · ")+"</div>";
+    // BIDs por pacote
+    if(ESCOPO.aqItens){
+      h+="<div style='margin-top:10px;padding-top:10px;border-top:1px solid var(--bord)'>";
+      h+="<div style='font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px'>BIDs por pacote cotado</div>";
+      var aqNB={eq_princ:"Equip. principais",eq_aux:"Equip. auxiliares",mat:"Materiais",
+        sv_terra:"Terraplenagem",sv_infra:"Infraestrutura",sv_civil:"Construção civil",
+        sv_mec:"Mont. mecânica",sv_elet:"Mont. elétrica/Automação"};
+      for(var bk in aqNB){
+        if(!ESCOPO.aqItens[bk]) continue;
+        var nBid=(ESCOPO.aqBids&&ESCOPO.aqBids[bk])||1;
+        h+="<div style='display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bord)'>";
+        h+="<span style='font-size:12px;color:var(--tx2)'>"+ aqNB[bk]+"</span>";
+        var nFornB=(ESCOPO.aqReun&&ESCOPO.aqReun[bk])||1;
+        h+="<span class='badge' style='background:var(--bg3);color:var(--az2);border:1px solid var(--bord2)'>"+nBid+" lic. × "+nFornB+" forn.</span>";
+        h+="</div>";
+      }
+      h+="</div>";
+    }
+  }
+  h+="</div>";
+
+  // Normas
+  if(ESCOPO.normas&&ESCOPO.normas.length){
+    h+="<div class='card'><div class='sec-l'>Normas e padrões adotados</div>";
+    h+="<div style='display:flex;gap:8px;flex-wrap:wrap'>";
+    for(var ni=0;ni<ESCOPO.normas.length;ni++){
+      h+="<span class='badge' style='background:var(--az-bg);color:var(--az2);border:1px solid var(--bord2);padding:5px 14px;font-size:12px'>"+ NORMAS_LABEL[ESCOPO.normas[ni]]+"</span>";
+    }
+    h+="</div></div>";
+  }
+
+  // Reuniões
+  if(ESCOPO.reunioes&&ESCOPO.reunioes.length){
+    h+="<div class='card'><div class='sec-l'>Reuniões do projeto</div>";
+    h+="<div style='font-size:12px;color:var(--tx2);margin-bottom:12px'>Reuniões com participação do Owner.</div>";
+    for(var ri=0;ri<ESCOPO.reunioes.length;ri++){
+      var r=ESCOPO.reunioes[ri];
+      if(r.id==="r_forn") continue;
+      h+="<div style='display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bord)'>";
+      h+="<span style='font-size:12px;color:var(--tx2)'>"+ r.t+"</span>";
+      h+="<span style='font-size:12px;color:var(--tx3)'>"+ r.f+"</span></div>";
+    }
+    if(ESCOPO.aqMode&&ESCOPO.aqMode!=="referencia"&&ESCOPO.aqReunForn){
+      h+="<div style='display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bord)'>";
+      h+="<span style='font-size:12px;color:var(--tx2)'>Reunião com fornecedores<span style='font-size:10px;margin-left:6px;color:var(--am2);background:var(--am-bg);padding:1px 6px;border-radius:8px'>Aquisições</span></span>";
+      h+="<span style='font-size:12px;color:var(--tx3)'>Por evento</span></div>";
+    }
+    h+="</div>";
+  }
+
+  // Entregáveis por disciplina
+  h+="<div class='card'><div class='sec-l'>Entregáveis selecionados por disciplina</div>";
+  var discMap={};
+  for(var cod in ESCOPO.sel){
+    for(var i=0;i<E.length;i++){
+      if(E[i].c===cod){var d=E[i].d;if(!discMap[d])discMap[d]=0;discMap[d]++;break;}
+    }
+  }
+  for(var d in discMap){
+    h+="<div style='display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bord)'>";
+    h+="<span style='font-size:12px;color:var(--tx2)'>"+d+"</span>";
+    h+="<span class='badge' style='background:var(--px-bg);color:var(--px2);border:1px solid var(--px-bord)'>"+discMap[d]+"</span></div>";
+  }
+  h+="</div>";
+
+  h+="<div class='fnav'><div></div><button class='btn' onclick='goT(2)'>Ver informações predecessoras →</button></div>";
+  return h;
+}
+function T2(){
+  var predList=getPredList();
+  var predDisp=ESCOPO.predDisp||{};
+  var h="<div class='titulo'>Informações predecessoras</div>";
+  h+="<div class='sub'>Conteúdo de fases anteriores necessário para iniciar os entregáveis. O Owner indicou o status de cada item.</div>";
+  if(!predList.length){
+    h+="<div style='text-align:center;padding:40px;background:var(--bg2);border:1px solid var(--bord);border-radius:10px;color:var(--tx3)'>Nenhuma informação predecessora identificada.</div>";
+  } else {
+    var totP=0,dispP=0;
+    for(var p0=0;p0<predList.length;p0++)
+      for(var c0=0;c0<predList[p0].conts.length;c0++){
+        totP++;
+        var k0=predList[p0].e.c+"_"+predList[p0].conts[c0].nv;
+        if(predDisp[k0]) dispP++;
+      }
+    h+="<div style='display:flex;gap:16px;margin-bottom:16px;align-items:center'>";
+    h+="<div style='flex:1;height:5px;background:var(--bord);border-radius:3px;overflow:hidden'>";
+    h+="<div style='height:100%;width:"+Math.round(dispP/totP*100)+"%;background:"+(dispP===totP?"var(--vd)":"var(--am)")+";border-radius:3px'></div></div>";
+    h+="<span style='font-size:13px;font-weight:700;color:"+(dispP===totP?"var(--vd2)":"var(--am2)")+"'>"+dispP+"/"+totP+" disponíveis</span></div>";
+    var byD={};
+    for(var p1=0;p1<predList.length;p1++){var d=predList[p1].e.d;if(!byD[d])byD[d]=[];byD[d].push(predList[p1]);}
+    var tbody="";
+    for(var disc in byD){
+      tbody+="<tr class='tr-disc'><td colspan='4'>"+disc+"</td></tr>";
+      for(var p2=0;p2<byD[disc].length;p2++){
+        var item=byD[disc][p2];
+        var allD=true,anyS=false;
+        for(var cx=0;cx<item.conts.length;cx++){
+          var kx=item.e.c+"_"+item.conts[cx].nv;
+          if(!predDisp[kx]) allD=false;
+          if(predDisp[kx]!==undefined) anyS=true;
+        }
+        var rowBg=allD&&anyS?"var(--vd-bg)":anyS?"var(--vm-bg)":"var(--bg2)";
+        var rowBl=allD&&anyS?"var(--vd2)":anyS?"var(--vm2)":"var(--bord2)";
+        var ctHtml="";
+        for(var c2=0;c2<item.conts.length;c2++){
+          if(c2>0) ctHtml+="<div style='height:3px'></div>";
+          ctHtml+="<div style='font-size:12px;color:var(--tx2);line-height:1.5'>"+item.conts[c2].ct+"</div>";
+        }
+        var badge=allD&&anyS
+          ?"<span class='badge' style='background:var(--vd-bg);color:var(--vd2);border:1px solid var(--vd-bord)'>✓ Disponível</span>"
+          :anyS?"<span class='badge' style='background:var(--vm-bg);color:var(--vm2);border:1px solid var(--vm-bord)'>✗ Pendente</span>"
+          :"<span class='badge' style='background:var(--bg3);color:var(--tx3);border:1px solid var(--bord)'>— Não informado</span>";
+        tbody+="<tr style='border-bottom:1px solid var(--bord)'>";
+        tbody+="<td style='padding:10px;font-size:10px;color:var(--tx3);font-weight:600;width:86px;vertical-align:top;border-left:3px solid "+rowBl+";background:"+rowBg+"'>"+item.e.c+"</td>";
+        tbody+="<td style='padding:10px;font-size:12px;color:var(--tx2);font-weight:500;width:175px;vertical-align:top;background:"+rowBg+"'>"+item.e.n+"</td>";
+        tbody+="<td style='padding:10px;vertical-align:top;background:"+rowBg+"'>"+ctHtml+"</td>";
+        tbody+="<td style='padding:10px;vertical-align:middle;text-align:center;width:130px;background:"+rowBg+"'>"+badge+"</td></tr>";
+      }
+    }
+    h+="<div class='tbl-wrap'><table>";
+    h+="<colgroup><col style='width:86px'/><col style='width:175px'/><col/><col style='width:130px'/></colgroup>";
+    h+="<thead><tr>";
+    h+="<th style='text-align:left'>Código</th><th style='text-align:left'>Entregável</th>";
+    h+="<th style='text-align:left'>Conteúdo necessário</th><th style='text-align:center'>Status</th>";
+    h+="</tr></thead><tbody>"+tbody+"</tbody></table></div>";
+  }
+  h+="<div class='fnav'><button class='btn-s' onclick='goT(1)'>← Voltar</button><button class='btn' onclick='goT(3)'>Iniciar dimensionamento →</button></div>";
+  return h;
+}
+
+// ── T3: DIMENSIONAMENTO DE HORAS ───────────────────────────
+function T4(){
+  var h="<div class='titulo'>Reuniões e atividades</div>";
+  h+="<div class='sub'>Defina sua participação nas reuniões com o Owner e as reuniões internas da equipe.</div>";
+
+  // Visitas técnicas (se owner definiu)
+  if(ESCOPO.vis&&ESCOPO.vis.on){
+    h+="<div class='card'><div class='sec-l'>Visitas técnicas</div>";
+    h+="<div style='font-size:12px;color:var(--tx2);margin-bottom:12px'>Owner definiu como: <strong>"+(ESCOPO.vis.modo==="obrigatorio"?"Obrigatório":"Opcional")+"</strong></div>";
+    if(ESCOPO.vis.modo==="opcional"){
+      h+="<div class='gest-row'><span style='font-size:13px;font-weight:500'>Sua empresa realizará as visitas?</span>";
+      h+="<div style='display:flex;gap:8px'>";
+      h+="<button onclick='setVisRealiza(true)' style='padding:7px 16px;border-radius:7px;border:1px solid var(--vd-bord);background:"+(P.visRealiza===true?"var(--vd)":"var(--bg3)")+";color:"+(P.visRealiza===true?"#fff":"var(--vd2)")+";font-size:12px;font-weight:700;cursor:pointer'>Sim</button>";
+      h+="<button onclick='setVisRealiza(false)' style='padding:7px 16px;border-radius:7px;border:1px solid var(--vm-bord);background:"+(P.visRealiza===false?"var(--vm)":"var(--bg3)")+";color:"+(P.visRealiza===false?"#fff":"var(--vm2)")+";font-size:12px;font-weight:700;cursor:pointer'>Não</button>";
+      h+="</div></div>";
+    }
+    if(ESCOPO.vis.modo==="obrigatorio"||(ESCOPO.vis.modo==="opcional"&&P.visRealiza===true)){
+      h+="<div class='gest-row'><div style='flex:1'><div style='font-size:13px;font-weight:500'>Quantidade de visitas</div></div>";
+      h+="<div style='display:flex;align-items:center;gap:6px'><input type='number' class='gest-inp' min='1' value='"+(P.visQtd||1)+"' onchange='P.visQtd=+this.value;render()'/><span style='color:var(--tx3)'>visitas</span></div></div>";
+      h+="<div class='gest-row'><div style='flex:1'><div style='font-size:13px;font-weight:500'>Participantes por visita</div></div>";
+      h+="<div style='display:flex;align-items:center;gap:6px'><input type='number' class='gest-inp' min='1' value='"+(P.visPart||2)+"' onchange='P.visPart=+this.value;render()'/><span style='color:var(--tx3)'>pessoas</span></div></div>";
+      h+="<div style='font-size:13px;font-weight:500;margin-bottom:8px'>Disciplinas participantes</div>";
+      h+="<div style='display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px'>";
+      for(var dvi=0;dvi<DV.length;dvi++){
+        var dv=DV[dvi];
+        var dvon=P.visDisciplinas.indexOf(dv)>=0;
+        h+="<div class='"+(dvon?"filtro on":"filtro")+"' data-dv='"+dv+"' onclick='tVisDV(this.dataset.dv)' style='cursor:pointer'>"+dv+"</div>";
+      }
+      h+="</div>";
+      h+="<div class='gest-row'><span style='font-size:13px;font-weight:500'>Horas por visita</span>";
+      h+="<div style='display:flex;align-items:center;gap:6px'><input type='number' class='gest-inp' min='0' value='"+(P.visHoras||8)+"' onchange='P.visHoras=+this.value;render()'/><span style='color:var(--tx3)'>h/visita</span></div></div>";
+      var visTotal=(P.visQtd||1)*(P.visPart||2)*(P.visHoras||8);
+      h+="<div class='gest-row' style='padding-top:6px'><span style='font-size:12px;color:var(--tx3)'>Total: "+(P.visQtd||1)+" × "+(P.visPart||2)+" × "+(P.visHoras||8)+"h</span>";
+      h+="<span style='font-family:Syne,sans-serif;font-size:16px;font-weight:700;color:var(--az2)'>"+visTotal+"h</span></div>";
+    h+="</div>";
+    }
+  h+="</div>";
+  }
+
+  // Software 3D (se owner deixou para proponente definir)
+  if(ESCOPO.m3d&&ESCOPO.defSoft==="proponente"){
+    h+="<div class='card'><div class='sec-l'>Software de modelamento 3D</div>";
+    h+="<div style='font-size:12px;color:var(--tx2);margin-bottom:10px'>O Owner deixou a definição do software para a proponente.</div>";
+    h+="<div class='chips' style='margin-top:8px'>";
+    for(var ssi=0;ssi<SOFTS.length;ssi++){
+      var ssw=SOFTS[ssi];
+      var sson=P.softPropList&&P.softPropList.indexOf(ssw.id)>=0;
+      h+="<div class='filtro"+(sson?" on":"")+"' data-sid='"+ssw.id+"' onclick='tSoftProp(this.dataset.sid)'>";
+      h+=ssw.l+"<span style='font-size:10px;color:var(--tx3);margin-left:4px'>"+ssw.v+"</span></div>";
+    }
+    h+="</div>";
+    if(!P.softPropList||!P.softPropList.length) h+="<div style='font-size:11px;color:var(--am2);margin-top:6px'>Selecione ao menos um software.</div>";
+    h+="</div>";
+  }
+
+  // Reuniões com owner
+  h+="<div class='card'><div class='sec-l'>Reuniões com o Owner — equipe proponente</div>";
+  h+="<div style='font-size:12px;color:var(--tx2);margin-bottom:14px'>Defina quantos profissionais da sua equipe participarão e as horas por reunião.</div>";
+  var totRO=0;
+  for(var ri=0;ri<ESCOPO.reunioes.length;ri++){
+    var r=ESCOPO.reunioes[ri];
+    if(r.id==="r_forn") continue;
+    var part=P.reunPart[r.id]||1;
+    var rh=P.reunH[r.id]||0;
+    var nRO=(FW[r.f]&&FW[r.f]>0)?Math.max(1,Math.round((ESCOPO.dur||16)/FW[r.f])):1;
+    totRO+=nRO*part*rh;
+    h+="<div class='gest-row'><div style='flex:1'><div style='font-size:13px;font-weight:500'>"+ r.t+"</div>";
+    h+="<div style='font-size:11px;color:var(--tx3)'>"+r.f+" · "+nRO+" reun. × "+part+" rec. × "+rh+"h = "+(nRO*part*rh)+"h</div></div>";
+    h+="<div style='display:flex;align-items:center;gap:8px'>";
+    h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
+    h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Recursos</span>";
+    h+="<input type='number' class='gest-inp' style='width:58px' min='1' value='"+part+"' data-rid='"+r.id+"' onchange='setRP(this)'/></div>";
+    h+="<span style='font-size:14px;color:var(--tx3)'>×</span>";
+    h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
+    h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Horas/reun.</span>";
+    h+="<div style='width:58px;background:var(--bg3);border:1px solid var(--bord);border-radius:6px;padding:6px 4px;text-align:center;font-size:13px;font-weight:700;color:var(--vd2)'>"+rh+"h</div>";
+    h+="<span style='font-size:8px;color:var(--vd2);opacity:.8'>Owner</span>";
+    h+="</div>";
+    h+="<span style='font-size:11px;color:var(--tx3)'>/reun.</span></div></div>";
+  }
+  // Reunião com fornecedores por pacote
+  if(ESCOPO.aqMode&&ESCOPO.aqMode!=="referencia"&&ESCOPO.aqReunForn){
+    var aqNomesP2={eq_princ:"Equip. principais",eq_aux:"Equip. auxiliares",mat:"Materiais",
+      sv_terra:"Terraplenagem",sv_infra:"Infraestrutura",sv_civil:"Construção civil",
+      sv_mec:"Mont. mecânica",sv_elet:"Mont. elétrica/Automação"};
+    if(!P.fornEquipe) P.fornEquipe=2;
+    if(!P.fornHReun) P.fornHReun=3;
+    for(var fkp in aqNomesP2){
+      if(!ESCOPO.aqItens||!ESCOPO.aqItens[fkp]) continue;
+      var nFornP=(ESCOPO.aqReun&&ESCOPO.aqReun[fkp])||1;
+      var nBidsP=(ESCOPO.aqBids&&ESCOPO.aqBids[fkp])||1;
+      totRO+=P.fornEquipe*P.fornHReun*nFornP*nBidsP;
+      h+="<div class='gest-row'><div style='flex:1'>";
+      h+="<div style='font-size:13px;font-weight:500'>Reunião c/ fornecedores — "+aqNomesP2[fkp]+"</div>";
+      h+="<div style='font-size:11px;color:var(--tx3)'>"+nBidsP+" lic. × "+nFornP+" forn. · total: "+(P.fornEquipe*P.fornHReun*nFornP*nBidsP)+"h</div></div>";
+      h+="<div style='display:flex;align-items:center;gap:8px'>";
+      h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
+      h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Recursos</span>";
+      h+="<input type='number' class='gest-inp' style='width:55px' min='1' value='"+P.fornEquipe+"' onchange='P.fornEquipe=+this.value;render()'/></div>";
+      h+="<span style='font-size:14px;color:var(--tx3)'>×</span>";
+      h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
+      h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Horas</span>";
+      h+="<input type='number' class='gest-inp' style='width:55px' min='0' value='"+P.fornHReun+"' onchange='P.fornHReun=+this.value;render()'/></div>";
+      h+="<span style='font-size:11px;color:var(--tx3)'>/reun.</span></div></div>";
+    }
+  }
+  h+="<div class='gest-row'><span style='font-size:13px;font-weight:600'>Total reuniões owner</span>";
+  h+="<span style='font-family:Syne,sans-serif;font-size:18px;font-weight:700;color:var(--az2)'>"+totRO+"h</span></div></div>";
+
+  // Reuniões internas
+  h+="<div class='card'><div class='sec-l'>Reuniões internas da equipe</div>";
+  var totRI=0;
+  for(var ii=0;ii<REUN_INT.length;ii++){
+    var ri2=REUN_INT[ii];
+    var rc=P.reunInt[ri2.id];
+    if(rc.inc) totRI+=rc.qtd*(rc.part||1)*rc.h;
+    h+="<div class='rcard"+(rc.inc?" on":"")+"'><div class='rcard-top'>";
+    h+="<div class='tog"+(rc.inc?" on":"")+"' data-rid='"+ri2.id+"' onclick='togRI(this.dataset.rid)'></div>";
+    h+="<div style='flex:1'><div style='font-size:13px;font-weight:500;color:"+(rc.inc?"var(--tx)":"var(--tx3)")+"'>"+ri2.t+"</div></div>";
+    if(rc.inc){
+      h+="<div style='display:flex;align-items:center;gap:6px;flex-wrap:wrap'>";
+      h+="<select class='d-sel' style='width:auto' data-rid='"+ri2.id+"' onchange='setRIF(this)'>";
+      for(var fi=0;fi<FREQS.length;fi++) h+="<option"+(rc.f===FREQS[fi]?" selected":"")+">"+FREQS[fi]+"</option>";
+      h+="</select>";
+      h+="<input type='number' class='gest-inp' style='width:52px' min='1' value='"+rc.qtd+"' data-rid='"+ri2.id+"' onchange='setRIQ(this)' title='Qtd'/>";
+      h+="<span style='font-size:11px;color:var(--tx3)'>reun.";
+      if(FW[rc.f]>0) h+="<span style='font-size:9px;color:var(--vd2);display:block;margin-top:1px'>(calc. "+(ESCOPO.dur||16)+"/"+FW[rc.f]+" sem.)</span>";
+      h+="</span>";
+      h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
+      h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Recursos</span>";
+      h+="<input type='number' class='gest-inp' style='width:52px' min='1' value='"+(rc.part||1)+"' data-rid='"+ri2.id+"' onchange='setRIPart(this)'/></div>";
+      h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
+      h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Horas</span>";
+      h+="<input type='number' class='gest-inp' style='width:52px' min='0' value='"+rc.h+"' data-rid='"+ri2.id+"' onchange='setRIH(this)'/></div>";
+      h+="<span style='font-size:11px;color:var(--tx3)'>/reun. = <strong style='color:var(--vd2)'>"+(rc.qtd*(rc.part||1)*rc.h)+"h</strong></span></div>";
+    }
+    h+="</div></div>";
+  }
+  h+="<div style='display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--bord2);margin-top:4px'>";
+  h+="<span style='font-size:13px;font-weight:600'>Total reuniões internas</span>";
+  h+="<span style='font-family:Syne,sans-serif;font-size:18px;font-weight:700;color:var(--vd2)'>"+totRI+"h</span></div></div>";
+
+  // Resumo total
+  h+="<div style='background:var(--px-bg);border:1px solid var(--px-bord);border-radius:10px;padding:16px 20px'>";
+  h+="<div style='font-size:10px;color:var(--px2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px'>Total de horas da proposta</div>";
+  h+="<div style='display:grid;grid-template-columns:repeat(4,1fr);gap:12px'>";
+  var tots=[["Técnicas",hTec(),"var(--px2)"],["Gestão",hGest(),"var(--am2)"],["Reuniões",totRO+totRI,"var(--az2)"],["Total",hTotal(),"var(--vd2)"]];
+  for(var ti2=0;ti2<tots.length;ti2++){
+    h+="<div style='text-align:center'><div style='font-size:10px;color:var(--tx3);margin-bottom:3px'>"+tots[ti2][0]+"</div>";
+    h+="<div style='font-family:Syne,sans-serif;font-size:20px;font-weight:700;color:"+tots[ti2][2]+"'>"+tots[ti2][1]+"h</div></div>";
+  }
+  h+="</div></div>";
+  h+="<div class='fnav'><button class='btn-s' onclick='goT(2)'>← Voltar</button><button class='btn' onclick='goT(4)'>Distribuição de atividades → →</button></div>";
+  return h;
+}
+function T3b(){
+  var h="<div class='titulo'>Distribuição de horas — Atividades de suporte</div>";
+  h+="<div class='sub'>Distribua as horas de cada atividade pelas categorias de recurso · Gestão, reuniões e visitas</div>";
+
+  // Construir lista de atividades
+  var ativs=[];
+
+  // Gestão
+  var gest_ref=hGest();
+  ativs.push({id:"gestao", grp:"Gestão", l:"Gestão do projeto", sub:hTec()+"h técnicas × "+P.gest.pct+"%", ref:gest_ref});
+
+  // Reuniões com o Owner
+  for(var ri=0;ri<ESCOPO.reunioes.length;ri++){
+    var r=ESCOPO.reunioes[ri];
+    if(r.id==="r_forn") continue;
+    var part=P.reunPart[r.id]||1, rh=P.reunH[r.id]||0;
+    var nRO2=(FW[r.f]&&FW[r.f]>0)?Math.max(1,Math.round((ESCOPO.dur||16)/FW[r.f])):1;
+    var reun_tot=nRO2*part*rh;
+    ativs.push({id:"reun_"+r.id, grp:"Reuniões com Owner", l:r.t,
+      sub:nRO2+" reun. × "+part+" rec. × "+rh+"h/reun.",
+      ref:reun_tot});
+  }
+  // Reuniões com fornecedores
+  if(ESCOPO.aqMode&&ESCOPO.aqMode!=="referencia"&&ESCOPO.aqReunForn&&ESCOPO.aqItens){
+    var aqNLP={eq_princ:"Equip. principais",eq_aux:"Equip. auxiliares",mat:"Materiais",
+      sv_terra:"Terraplenagem",sv_infra:"Infraestrutura",sv_civil:"Construção civil",
+      sv_mec:"Mont. mecânica",sv_elet:"Mont. elétrica/Automação"};
+    for(var fk in aqNLP){
+      if(!ESCOPO.aqItens[fk]) continue;
+      var nB=(ESCOPO.aqBids&&ESCOPO.aqBids[fk])||1;
+      var nF=(ESCOPO.aqReun&&ESCOPO.aqReun[fk])||1;
+      var forn_tot=nB*nF*(P.fornEquipe||1)*P.fornHReun;
+      ativs.push({id:"forn_"+fk, grp:"Reuniões com Fornecedores", l:"Reun. forn. — "+aqNLP[fk], sub:nB+" lic. × "+nF+" forn. × "+(P.fornEquipe||1)+" rec. × "+P.fornHReun+"h", ref:forn_tot});
+    }
+  }
+  // Reuniões internas
+  for(var ii=0;ii<REUN_INT.length;ii++){
+    var ri2=REUN_INT[ii]; var rc=P.reunInt[ri2.id];
+    if(!rc.inc) continue;
+    var rint_tot=rc.qtd*(rc.part||1)*rc.h;
+    ativs.push({id:"rint_"+ri2.id, grp:"Reuniões Internas", l:ri2.t, sub:rc.qtd+" reun. × "+(rc.part||1)+" rec. × "+rc.h+"h", ref:rint_tot});
+  }
+  // Visitas
+  var visOk=ESCOPO.vis&&ESCOPO.vis.on&&(ESCOPO.vis.modo==="obrigatorio"||(ESCOPO.vis.modo==="opcional"&&P.visRealiza===true));
+  if(visOk){
+    var vis_tot=(P.visQtd||1)*(P.visPart||2)*(P.visHoras||8);
+    ativs.push({id:"visitas", grp:"Visitas", l:"Visitas técnicas",
+      sub:(P.visQtd||1)+" vis. × "+(P.visPart||2)+" part. × "+(P.visHoras||8)+"h",
+      ref:vis_tot});
+  }
+
+  // ── Tabela (mesma estrutura do T3) ────────────────────────
+  var tbody="";
+  var curGrp="";
+  for(var ai=0;ai<ativs.length;ai++){
+    var atv=ativs[ai];
+    if(atv.grp!==curGrp){
+      curGrp=atv.grp;
+      tbody+="<tr class='tr-disc'><td colspan='"+(3+CATS_TEC.length+CATS_GEST.length)+"'>"+curGrp+"</td></tr>";
+    }
+    if(!P.hAtiv[atv.id]) P.hAtiv[atv.id]={};
+    var aTot=0; for(var c in P.hAtiv[atv.id]) aTot+=P.hAtiv[atv.id][c];
+    var aTotColor=aTot>0?"var(--px2)":"var(--tx3)";
+    tbody+="<tr class='tr-e'>";
+    tbody+="<td style='padding:8px;font-size:12px;font-weight:500;color:var(--tx);vertical-align:top;width:180px'>"+atv.l+"</td>";
+    var refVal=atv.ref!==undefined?atv.ref:"";
+    tbody+="<td style='padding:8px;vertical-align:top;background:var(--bg3);border-left:3px solid var(--bord2)'>";
+    tbody+="<div style='font-size:10px;color:var(--tx3);line-height:1.5;margin-bottom:4px'>"+atv.sub+"</div>";
+    if(refVal!=="") tbody+="<div style='font-family:Syne,sans-serif;font-size:15px;font-weight:700;color:var(--az2)'>"+refVal+"h</div>";
+    tbody+="</td>";
+    for(var ci=0;ci<CATS_TEC.length;ci++){
+      var cat=CATS_TEC[ci], val=P.hAtiv[atv.id][cat]||"";
+      tbody+="<td style='padding:4px;text-align:center;vertical-align:middle;border-left:1px solid var(--bord)'>";
+      tbody+="<input type='number' min='0' value='"+val+"' placeholder='0' class='h-inp' data-a='"+atv.id+"' data-cat='"+cat+"' oninput='setCatAtiv(this)'/></td>";
+    }
+    for(var ci2=0;ci2<CATS_GEST.length;ci2++){
+      var cat2=CATS_GEST[ci2], val2=P.hAtiv[atv.id][cat2]||"";
+      tbody+="<td style='padding:4px;text-align:center;vertical-align:middle;border-left:1px solid var(--bord2);background:rgba(167,139,250,.04)'>";
+      tbody+="<input type='number' min='0' value='"+val2+"' placeholder='0' style='width:52px;background:var(--bg);border:1px solid var(--bord);border-radius:5px;padding:4px 5px;color:var(--px2);font-size:12px;text-align:center' data-a='"+atv.id+"' data-cat='"+cat2+"' oninput='setCatAtiv(this)'/></td>";
+    }
+    tbody+="<td id='hatot-"+atv.id+"' style='padding:6px;text-align:center;vertical-align:middle;border-left:1px solid var(--bord);font-family:Syne,sans-serif;font-weight:700;font-size:14px;color:"+aTotColor+"'>"+(aTot>0?aTot+"h":"—")+"</td>";
+    tbody+="</tr>";
+  }
+
+  h+="<div class='thead-fixed'><table style='table-layout:fixed'>";
+  var thTec2=""; for(var ti=0;ti<CATS_TEC.length;ti++) thTec2+="<th style='text-align:center;width:58px;color:var(--az2);border-left:1px solid var(--bord)'>"+CATS_TEC[ti]+"</th>";
+  var thGest2=""; for(var gi=0;gi<CATS_GEST.length;gi++) thGest2+="<th style='text-align:center;width:60px;color:var(--px2);border-left:1px solid var(--bord2);background:rgba(167,139,250,.06)'>"+CATS_GEST[gi]+"</th>";
+  h+="<thead>";
+  h+="<tr><th colspan='2'></th>";
+  h+="<th colspan='"+CATS_TEC.length+"' style='text-align:center;color:var(--az2);font-size:10px;border-left:1px solid var(--bord);border-bottom:1px solid var(--bord)'>TÉCNICO</th>";
+  h+="<th colspan='"+CATS_GEST.length+"' style='text-align:center;color:var(--px2);font-size:10px;border-left:1px solid var(--bord2);background:rgba(167,139,250,.06);border-bottom:1px solid var(--bord)'>GESTÃO</th>";
+  h+="<th style='border-bottom:1px solid var(--bord)'></th></tr>";
+  h+="<tr>";
+  h+="<th style='text-align:left;width:180px'>Atividade</th>";
+  h+="<th style='text-align:left'>Escopo / referência</th>";
+  h+=thTec2+thGest2;
+  h+="<th style='text-align:center;width:70px;color:var(--px2)'>Total</th>";
+  h+="</tr></thead></table></div>";
+  h+="<div class='tbody-scroll'><table style='table-layout:fixed'><tbody>"+tbody+"</tbody></table></div>";
+
+  // Sumário
+  h+="<div class='sumario'>";
+  h+="<div style='text-align:center'><div class='sum-n' style='color:var(--am2)'>"+hAtivTotal()+"h</div><div class='sum-l'>Horas atividades</div></div>";
+  h+="<div style='text-align:center'><div class='sum-n' style='color:var(--vd2)'>"+hTotal()+"h</div><div class='sum-l'>Total geral</div></div>";
+  h+="<div style='margin-left:auto'><button class='btn' onclick='goT(5)'>Dimensionamento de entregáveis →</button></div>";
+  h+="</div></div>";
+  h+="<div class='fnav'><button class='btn-s' onclick='goT(3)'>← Voltar</button></div>";
+  return h;
+}
+
+function T3(){
+  var h="<div class='titulo'>Distribuição de horas — Entregáveis</div>";
+  var cenarioLabel=P.cenario?{otimista:"🟢 Cenário Otimista",realista:"🔵 Cenário Realista",pessimista:"🟡 Cenário Pessimista"}[P.cenario]:"";
+  var subMsg=P.cenario?"Ajuste as horas por categoria se necessário":"Selecione um cenário acima para distribuir as horas automaticamente.";
+  h+="<div class='sub'>"+(cenarioLabel?cenarioLabel+" — ":"")+subMsg+"</div>";
+  var sel=ESCOPO.sel;
+  var busca=P.busca.toLowerCase();
+  // Botões de cenário
+  var cenarios=[
+    {id:"otimista", l:"Otimista", desc:"×0.75", c:"var(--vd2)", bg:"var(--vd-bg)", bord:"var(--vd-bord)"},
+    {id:"realista", l:"Realista", desc:"×1.00", c:"var(--az2)", bg:"var(--az-bg)", bord:"var(--bord2)"},
+    {id:"pessimista", l:"Pessimista", desc:"×1.40", c:"var(--am2)", bg:"var(--am-bg)", bord:"var(--am-bord)"}
+  ];
+  h+="<div style='display:flex;gap:10px;margin-bottom:16px;align-items:stretch'>";
+  for(var sci=0;sci<cenarios.length;sci++){
+    var sc=cenarios[sci];
+    var isOn=P.cenario===sc.id;
+    h+="<button onclick='aplicarCenario(\"" + sc.id + "\")' style='flex:1;padding:12px 10px;border-radius:10px;border:2px solid "+(isOn?sc.bord:"var(--bord)")+";background:"+(isOn?sc.bg:"var(--bg3)")+";cursor:pointer;text-align:center'>";
+    h+="<div style='font-size:12px;font-weight:700;color:"+(isOn?sc.c:"var(--tx3)")+";margin-bottom:3px'>"+sc.l+"</div>";
+    h+="<div style='font-size:10px;color:"+(isOn?sc.c:"var(--tx3)")+";opacity:.8'>"+sc.desc+" das horas base</div>";
+    h+="</button>";
+  }
+  h+="</div>";
+  var filtHtml="";
+  var filtList=["Todas"].concat(DISCS);
+  for(var fi=0;fi<filtList.length;fi++){
+    var fd=filtList[fi];
+    filtHtml+="<div class='filtro"+(P.filt===fd?" on":"")+"' data-f='"+fd+"' onclick='setFilt(this.dataset.f)'>"+(fd==="Todas"?"Todas":fd)+"</div>";
+  }
+  var tbody="";
+  for(var di=0;di<DISCS.length;di++){
+    var disc=DISCS[di];
+    if(P.filt!=="Todas"&&disc!==P.filt) continue;
+    var items=[];
+    for(var ei=0;ei<E.length;ei++){
+      if(E[ei].d!==disc||!sel[E[ei].c]) continue;
+      if(busca&&E[ei].n.toLowerCase().indexOf(busca)<0&&E[ei].c.toLowerCase().indexOf(busca)<0) continue;
+      items.push(E[ei]);
+    }
+    if(!items.length) continue;
+    tbody+="<tr class='tr-disc'><td colspan='"+(4+CATS_ALL.length)+"'>"+disc+"</td></tr>";
+    for(var ii=0;ii<items.length;ii++){
+      var e2=items[ii];
+      var nv=sel[e2.c];
+      var nvIdx=NVS.indexOf(nv);
+      var accLines=[];
+      for(var ai=0;ai<=nvIdx;ai++){
+        var ct=(CONT[e2.c]&&CONT[e2.c][NVS[ai]])||"";
+        if(ct&&ct!=="—") accLines.push(ct);
+      }
+      var ctHtml=accLines.length?accLines.join("<br>"):"<span style='opacity:.3'>—</span>";
+      var hCod=P.hCat[e2.c]||{};
+      var hTot=0; for(var cc in hCod) hTot+=hCod[cc];
+      var inf2=INFO[e2.c]||{o:[]};
+      var conf2=P.infConf[e2.c]||{};
+      var confObr2=0; for(var k2 in conf2){if(k2.startsWith("o_")&&conf2[k2]) confObr2++;}
+      var prontPct=inf2.o.length>0?Math.round(confObr2/inf2.o.length*100):100;
+      var prontColor=prontPct===100?"var(--vd2)":prontPct>50?"var(--am2)":"var(--vm2)";
+      tbody+="<tr class='tr-e'>";
+      tbody+="<td style='padding:8px;font-size:10px;color:var(--tx3);font-weight:600;width:80px;vertical-align:top'>"+e2.c+"</td>";
+      tbody+="<td style='padding:8px;font-size:12px;color:var(--tx2);width:155px;vertical-align:top;cursor:pointer' data-c='"+e2.c+"' onclick='openDrw(this.dataset.c)'>"+e2.n
+        +"<br><span style='font-size:10px;color:"+prontColor+"'>"+prontPct+"% pronto</span>"
+        +(hTot>0?"<br><span style='font-size:10px;color:var(--px2);font-weight:600'>"+hTot+"h</span>":"")+"</td>";
+      tbody+="<td style='padding:6px 8px;font-size:11px;color:var(--tx2);line-height:1.4;background:var(--vd-bg);border-left:3px solid var(--vd2);vertical-align:top'>"
+        +"<div style='font-size:9px;font-weight:700;color:var(--vd2);margin-bottom:3px'>NÍV. "+nv+"</div>"+ctHtml+"</td>";
+      // Técnicas
+      for(var ci=0;ci<CATS_TEC.length;ci++){
+        var cat=CATS_TEC[ci];
+        var val=hCod[cat]||"";
+        tbody+="<td style='padding:4px;text-align:center;vertical-align:middle;border-left:1px solid var(--bord)'>";
+        tbody+="<input type='number' min='0' value='"+val+"' placeholder='0' class='h-inp' data-c='"+e2.c+"' data-cat='"+cat+"' oninput='setCat(this)'/></td>";
+      }
+      // Gestão
+      for(var ci2=0;ci2<CATS_GEST.length;ci2++){
+        var cat2=CATS_GEST[ci2];
+        var val2=hCod[cat2]||"";
+        tbody+="<td style='padding:4px;text-align:center;vertical-align:middle;border-left:1px solid var(--bord2);background:rgba(167,139,250,.04)'>";
+        tbody+="<input type='number' min='0' value='"+val2+"' placeholder='0' style='width:52px;background:var(--bg);border:1px solid var(--bord);border-radius:5px;padding:4px 5px;color:var(--px2);font-size:12px;text-align:center' data-c='"+e2.c+"' data-cat='"+cat2+"' oninput='setCat(this)'/></td>";
+      }
+      var htotColor=hTot>0?"var(--px2)":"var(--tx3)";
+      var htotVal=hTot>0?hTot+"h":"\u2014";
+      tbody+="<td id='htot-"+e2.c+"' style=\"text-align:center;padding:6px;border-left:1px solid var(--bord);font-family:Syne,sans-serif;font-size:13px;font-weight:700;color:"+htotColor+"\">"+ htotVal+"</td>";
+      tbody+="</tr>";
+    }
+  }
+  h+="<input class='search' placeholder='Buscar...' value='"+P.busca+"' oninput='setBusca(this.value)'/>";
+  h+="<div class='filtros'>"+filtHtml+"</div>";
+    h+="<div class='thead-fixed'><table style='table-layout:fixed'>";
+var thTec=""; for(var ti=0;ti<CATS_TEC.length;ti++) thTec+="<th style='text-align:center;width:58px;color:var(--az2);border-left:1px solid var(--bord)'>"+CATS_TEC[ti]+"</th>";
+  var thGest=""; for(var gi=0;gi<CATS_GEST.length;gi++) thGest+="<th style='text-align:center;width:60px;color:var(--px2);border-left:1px solid var(--bord2);background:rgba(167,139,250,.06)'>"+CATS_GEST[gi]+"</th>";
+  h+="<thead>";
+  h+="<tr><th colspan='3'></th>";
+  h+="<th colspan='"+CATS_TEC.length+"' style='text-align:center;color:var(--az2);font-size:10px;border-left:1px solid var(--bord);border-bottom:1px solid var(--bord)'>TÉCNICO</th>";
+  h+="<th colspan='"+CATS_GEST.length+"' style='text-align:center;color:var(--px2);font-size:10px;border-left:1px solid var(--bord2);background:rgba(167,139,250,.06);border-bottom:1px solid var(--bord)'>GESTÃO</th>";
+  h+="<th style='border-bottom:1px solid var(--bord)'></th></tr>";
+  h+="<tr>";
+  h+="<th style='text-align:left;width:80px'>Cód.</th>";
+  h+="<th style='text-align:left;width:155px'>Entregável</th>";
+  h+="<th style='text-align:left'>Conteúdo</th>";
+  h+=thTec+thGest;
+  h+="<th style='text-align:center;width:80px;color:var(--px2)'>Total h</th>";
+  h+="</tr></thead></table></div>";
+  h+="<div class='tbody-scroll'><table style='table-layout:fixed'>";
+  tbody+=totCatRow;
+  h+="<tbody>"+tbody+"</tbody></table></div>";
+  // Linha de totais por categoria
+  var totCatRow="";
+  totCatRow+="<tr style='background:var(--bg3);font-weight:700;border-top:2px solid var(--bord2)'>";
+  totCatRow+="<td colspan='3' style='padding:8px 10px;font-size:11px;color:var(--tx2);font-weight:600'>TOTAIS POR CATEGORIA</td>";
+  for(var tci=0;tci<CATS_TEC.length;tci++){
+    var cat=CATS_TEC[tci]; var tot=0;
+    for(var cod in P.hCat){tot+=(P.hCat[cod][cat]||0);}
+    totCatRow+="<td style='padding:8px 4px;text-align:center;font-family:Syne,sans-serif;font-size:12px;color:var(--az2);border-left:1px solid var(--bord)'>"+(tot||"—")+"</td>";
+  }
+  for(var tgi=0;tgi<CATS_GEST.length;tgi++){
+    var catg=CATS_GEST[tgi]; var totg=0;
+    for(var cod in P.hCat){totg+=(P.hCat[cod][catg]||0);}
+    totCatRow+="<td style='padding:8px 4px;text-align:center;font-family:Syne,sans-serif;font-size:12px;color:var(--px2);border-left:1px solid var(--bord2);background:rgba(167,139,250,.06)'>"+(totg||"—")+"</td>";
+  }
+  var totAll=0; for(var cod in P.hCat){for(var c in P.hCat[cod]) totAll+=P.hCat[cod][c];}
+  totCatRow+="<td style='padding:8px 4px;text-align:center;font-family:Syne,sans-serif;font-size:13px;font-weight:800;color:var(--px2);border-left:1px solid var(--bord)'>"+totAll+"h</td>";
+  totCatRow+="</tr>";
+  // Gráfico de distribuição por categoria
+
+  h+="<div class='sumario'>";
+
+  h+="<div style='text-align:center'><div class='sum-n' style='color:var(--px2)' id='sum-tec'>"+hTec()+"h</div><div class='sum-l'>Horas técnicas</div></div>";
+  h+="<div style='text-align:center'><div class='sum-n' style='color:var(--am2)'>"+hGest()+"h</div><div class='sum-l'>Gestão (est.)</div></div>";
+  h+="<div style='text-align:center'><div class='sum-n' id='sum-tot'>"+hTotal()+"h</div><div class='sum-l'>Total estimado</div></div>";
+    h+="<div class='fnav'><button class='btn-s' onclick='goT(4)'>← Voltar</button><button class='btn' onclick='goT(6)'>Resumo →</button></div>";
+  return h;
+}
+
+
+
+// ── T3b: DISTRIBUIÇÃO ATIVIDADES ────────────────────────
+function T6(){
+  var h="<div class='titulo'>Resumo</div>";
+  h+="<div class='sub'>Consolidado de horas, distribuição por categoria e prontidão das informações</div>";
+
+  // ── Gráfico barras por categoria (técnicas + atividades) ───────────
+  h+="<div class='card'><div class='sec-l'>Distribuição de horas por categoria de recurso</div>";
+  var allCats=CATS_TEC.concat(CATS_GEST);
+  var catTots={};
+  for(var ci=0;ci<allCats.length;ci++) catTots[allCats[ci]]=0;
+  // Entregáveis técnicos
+  for(var cod in P.hCat) for(var c in P.hCat[cod]) if(catTots[c]!==undefined) catTots[c]+=P.hCat[cod][c];
+  // Atividades
+  for(var aid in P.hAtiv) for(var c2 in P.hAtiv[aid]) if(catTots[c2]!==undefined) catTots[c2]+=P.hAtiv[aid][c2];
+  var maxCat=0; for(var c3 in catTots) if(catTots[c3]>maxCat) maxCat=catTots[c3];
+  h+="<div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:10px;margin-bottom:14px'>";
+  for(var ci2=0;ci2<allCats.length;ci2++){
+    var cat=allCats[ci2]; var isTec=CATS_TEC.indexOf(cat)>=0;
+    var val=catTots[cat]||0;
+    var barH=maxCat>0?Math.max(val>0?4:0,Math.round(val/maxCat*80)):0;
+    var barC=isTec?"var(--az2)":"var(--px2)";
+    var pct=hTotal()>0?Math.round(val/hTotal()*100):0;
+    h+="<div style='text-align:center;background:var(--bg3);border:1px solid var(--bord);border-radius:8px;padding:10px 6px'>";
+    h+="<div style='font-size:10px;font-weight:700;color:"+barC+";margin-bottom:8px'>"+cat+"</div>";
+    h+="<div style='display:flex;align-items:flex-end;justify-content:center;height:80px;margin-bottom:6px'>";
+    h+="<div style='width:32px;background:"+barC+";border-radius:4px 4px 0 0;height:"+barH+"px;min-height:"+(val>0?"4px":"0")+"'></div></div>";
+    h+="<div style='font-family:Syne,sans-serif;font-size:15px;font-weight:700;color:var(--tx)'>"+(val>0?val+"h":"—")+"</div>";
+    h+="<div style='font-size:10px;color:var(--tx3);margin-top:2px'>"+(pct>0?pct+"%":"")+"</div></div>";
+  }
+  h+="</div></div>";
+
+  // ── Totais por bloco ───────────────────────────────────────────────
+  h+="<div class='card'><div class='sec-l'>Consolidado de horas</div>";
+  var blocks=[
+    ["Entregáveis técnicos", hTec(), "var(--px2)"],
+    ["Gestão", hGest(), "var(--am2)"],
+    ["Reuniões com Owner", hReunOwner(), "var(--az2)"],
+    ["Reuniões internas", hReunInt(), "var(--vd2)"],
+    ["Visitas técnicas", hVisitas(), "var(--bord2)"],
+    ["Atividades (alocadas)", hAtivTotal(), "var(--px2)"]
+  ];
+  var grandTotal=hTotal();
+  for(var bi=0;bi<blocks.length;bi++){
+    var blk=blocks[bi];
+    if(blk[1]===0) continue;
+    var pctBlk=grandTotal>0?Math.round(blk[1]/grandTotal*100):0;
+    h+="<div style='display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bord)'>";
+    h+="<span style='font-size:13px;color:var(--tx2)'>"+blk[0]+"</span>";
+    h+="<div style='display:flex;align-items:center;gap:10px'>";
+    h+="<div style='width:80px;height:5px;background:var(--bord);border-radius:3px;overflow:hidden'>";
+    h+="<div style='height:100%;width:"+pctBlk+"%;background:"+blk[2]+";border-radius:3px'></div></div>";
+    h+="<span style='font-size:12px;color:var(--tx3);min-width:30px;text-align:right'>"+pctBlk+"%</span>";
+    h+="<span style='font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:"+blk[2]+";min-width:55px;text-align:right'>"+blk[1]+"h</span>";
+    h+="</div></div>";
+  }
+  h+="<div style='display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:2px solid var(--bord2);margin-top:4px'>";
+  h+="<span style='font-size:14px;font-weight:700;color:var(--tx)'>Total geral</span>";
+  h+="<span style='font-family:Syne,sans-serif;font-size:22px;font-weight:800;color:var(--vd2)'>"+grandTotal+"h</span></div>";
+  h+="</div>";
+
+  // ── Top 10 entregáveis por horas ──────────────────────────────────
+  var entHoras=[];
+  for(var cod2 in P.hCat){
+    var ht=0; for(var cx in P.hCat[cod2]) ht+=P.hCat[cod2][cx];
+    if(ht>0){
+      var en=null; for(var ei=0;ei<E.length;ei++){if(E[ei].c===cod2){en=E[ei];break;}}
+      if(en) entHoras.push({cod:cod2,n:en.n,h:ht});
+    }
+  }
+  entHoras.sort(function(a,b){return b.h-a.h;});
+  if(entHoras.length){
+    var maxH=entHoras[0].h;
+    h+="<div class='card'><div class='sec-l'>Top "+Math.min(entHoras.length,15)+" entregáveis por horas</div>";
+    for(var ei2=0;ei2<Math.min(entHoras.length,15);ei2++){
+      var en2=entHoras[ei2];
+      var bw=Math.round(en2.h/maxH*100);
+      h+="<div style='margin-bottom:8px'>";
+      h+="<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:3px'>";
+      h+="<span style='font-size:11px;color:var(--tx2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:65%'>"+en2.cod+" — "+en2.n+"</span>";
+      h+="<span style='font-size:11px;font-weight:700;color:var(--px2);margin-left:8px'>"+en2.h+"h</span></div>";
+      h+="<div style='height:5px;background:var(--bord);border-radius:3px;overflow:hidden'>";
+      h+="<div style='height:100%;width:"+bw+"%;background:var(--px);border-radius:3px'></div></div></div>";
+    }
+    h+="</div>";
+  }
+
+  // ── Prontidão informações ─────────────────────────────────────────
+  var totalObr=0,totalConf=0;
+  for(var cod3 in ESCOPO.sel){
+    var inf3=INFO[cod3]||{o:[]};
+    totalObr+=inf3.o.length;
+    var conf3=P.infConf[cod3]||{};
+    for(var k3 in conf3){if(k3.startsWith("o_")&&conf3[k3]) totalConf++;}
+  }
+  var prontGeral=totalObr>0?Math.round(totalConf/totalObr*100):100;
+  h+="<div class='card'><div class='sec-l'>Prontidão das informações de entrada</div>";
+  h+="<div style='display:flex;align-items:center;gap:12px;margin-bottom:8px'>";
+  h+="<div style='flex:1;height:8px;background:var(--bord);border-radius:4px;overflow:hidden'>";
+  h+="<div style='height:100%;width:"+prontGeral+"%;background:"+(prontGeral===100?"var(--vd)":prontGeral>60?"var(--am)":"var(--vm)")+";border-radius:4px'></div></div>";
+  h+="<span style='font-family:Syne,sans-serif;font-size:20px;font-weight:700;color:"+(prontGeral===100?"var(--vd2)":prontGeral>60?"var(--am2)":"var(--vm2)")+"'>"+prontGeral+"%</span></div>";
+  h+="<div style='font-size:12px;color:var(--tx3)'>"+totalConf+"/"+totalObr+" informações obrigatórias confirmadas</div>";
+  if(prontGeral<100) h+="<div style='margin-top:10px;font-size:12px;color:var(--am2);background:var(--am-bg);border:1px solid var(--am-bord);border-radius:6px;padding:8px 12px'>⚠ Verifique as informações predecessoras pendentes antes de finalizar.</div>";
+  h+="</div>";
+
+  h+="<div class='fnav'><button class='btn-s' onclick='goT(5)'>← Voltar</button><button class='btn btn-g' onclick='goT(7)'>Montar proposta →</button></div>";
+  return h;
+}
+
+function T5(){
+  // Calcular totais de reuniões (igual ao T4)
+  var totRO=0;
+  for(var ri=0;ri<ESCOPO.reunioes.length;ri++){
+    var r2=ESCOPO.reunioes[ri]; if(r2.id==="r_forn") continue;
+    var nRO_t5=(FW[r2.f]&&FW[r2.f]>0)?Math.max(1,Math.round((ESCOPO.dur||16)/FW[r2.f])):1;
+    totRO+=nRO_t5*(P.reunPart[r2.id]||1)*(P.reunH[r2.id]||0);
+  }
+  if(ESCOPO.aqMode&&ESCOPO.aqMode!=="referencia"&&ESCOPO.aqReunForn&&ESCOPO.aqItens){
+    for(var fkx in ESCOPO.aqItens){
+      if(!ESCOPO.aqItens[fkx]) continue;
+      totRO+=(P.fornEquipe||1)*(P.fornHReun||0)*((ESCOPO.aqReun&&ESCOPO.aqReun[fkx])||1)*((ESCOPO.aqBids&&ESCOPO.aqBids[fkx])||1);
+    }
+  }
+  var totRI=0;
+  for(var ii2=0;ii2<REUN_INT.length;ii2++){
+    var rc2=P.reunInt[REUN_INT[ii2].id];
+    if(rc2.inc) totRI+=rc2.qtd*(rc2.part||1)*rc2.h;
+  }
+  var totalObr=0,totalConf=0;
+  for(var cod in ESCOPO.sel){
+    var inf3=INFO[cod]||{o:[]};
+    totalObr+=inf3.o.length;
+    var conf3=P.infConf[cod]||{};
+    for(var k3 in conf3){if(k3.startsWith("o_")&&conf3[k3]) totalConf++;}
+  }
+  var prontGeral=totalObr>0?Math.round(totalConf/totalObr*100):100;
+  var discMap={};
+  for(var cod2 in ESCOPO.sel){
+    var h2=(P.hCat[cod2]&&(function(c){var t=0;for(var x in P.hCat[c])t+=P.hCat[c][x];return t;})(cod2))||0;
+    var d2=(P._disc&&P._disc[cod2])||"Não definida";
+    if(!discMap[d2]) discMap[d2]=0;
+    discMap[d2]+=h2;
+  }
+  var h="<div class='titulo'>Proposta técnica e comercial</div>";
+  h+="<div class='sub'>Revise o dimensionamento, informe o valor e exporte a proposta</div>";
+  // Horas
+  h+="<div class='card'><div class='sec-l'>Resumo de horas</div>";
+  h+="<div style='display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px'>";
+  var hItems=[["Técnicas",hTec(),"var(--px2)"],["Gestão",hGest(),"var(--am2)"],["Reuniões",hReunOwner()+hReunInt(),"var(--az2)"],["Total",hTotal(),"var(--vd2)"]];
+  for(var i=0;i<hItems.length;i++){
+    h+="<div style='background:var(--bg3);border:1px solid var(--bord);border-radius:8px;padding:14px;text-align:center'>";
+    h+="<div style='font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px'>"+hItems[i][0]+"</div>";
+    h+="<div style='font-family:Syne,sans-serif;font-size:22px;font-weight:700;color:"+hItems[i][2]+"'>"+hItems[i][1]+"h</div></div>";
+  }
+  h+="</div>";
+  for(var d3 in discMap){
+    var pct3=hTec()>0?Math.round(discMap[d3]/hTec()*100):0;
+    h+="<div class='prop-row'><span style='font-size:12px;color:var(--tx2)'>"+d3+"</span>";
+    h+="<div style='display:flex;align-items:center;gap:10px'>";
+    h+="<div class='pbar'><div class='pbar-f' style='width:"+pct3+"%;background:var(--px)'></div></div>";
+    h+="<span style='font-size:12px;color:var(--px2);min-width:48px;text-align:right'>"+discMap[d3]+"h</span></div></div>";
+  }
+  h+="</div>";
+  // Gráfico de horas por categoria
+  h+="<div class='card'><div class='sec-l'>Distribuição de horas por categoria de recurso</div>";
+  var catTotals={}; for(var ci=0;ci<CATS_ALL.length;ci++) catTotals[CATS_ALL[ci]]=0;
+  for(var cod in P.hCat){ for(var cat in P.hCat[cod]) if(catTotals[cat]!==undefined) catTotals[cat]+=P.hCat[cod][cat]; }
+  var hTecTotal=hTec(); var maxCat=0;
+  for(var c in catTotals) if(catTotals[c]>maxCat) maxCat=catTotals[c];
+  h+="<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:14px'>";
+  for(var ci2=0;ci2<CATS_ALL.length;ci2++){
+    var cat3=CATS_ALL[ci2];
+    var val3=catTotals[cat3]||0;
+    var pct3=hTecTotal>0?Math.round(val3/hTecTotal*100):0;
+    var isTec=CATS_TEC.indexOf(cat3)>=0;
+    var barColor=isTec?"var(--az2)":"var(--px2)";
+    h+="<div style='background:var(--bg3);border:1px solid var(--bord);border-radius:8px;padding:12px;text-align:center'>";
+    h+="<div style='font-size:11px;font-weight:700;color:"+(isTec?"var(--az2)":"var(--px2)")+";margin-bottom:8px'>"+cat3+"</div>";
+    h+="<div style='height:80px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px'>";
+    h+="<div style='width:32px;background:"+barColor+";border-radius:4px 4px 0 0;height:"+(maxCat>0?Math.round(val3/maxCat*80):0)+"px;min-height:"+(val3>0?"4px":"0")+";transition:height .3s'></div></div>";
+    h+="<div style='font-family:Syne,sans-serif;font-size:16px;font-weight:700;color:var(--tx)'>"+(val3>0?val3+"h":"—")+"</div>";
+    h+="<div style='font-size:10px;color:var(--tx3);margin-top:2px'>"+(pct3>0?pct3+"%":"")+"</div></div>";
+  }
+  h+="</div>";
+  // Horas por entregável — top 10
+  var entHoras=[]; for(var cod3 in P.hCat){var ht3=0;for(var c3 in P.hCat[cod3])ht3+=P.hCat[cod3][c3];if(ht3>0){var en3=null;for(var ei3=0;ei3<E.length;ei3++){if(E[ei3].c===cod3){en3=E[ei3];break;}}if(en3)entHoras.push({cod:cod3,n:en3.n,h:ht3,d:en3.d});}}
+  entHoras.sort(function(a,b){return b.h-a.h;});
+  if(entHoras.length){
+    var maxH=entHoras[0].h;
+    h+="<div class='sec-l' style='margin-top:4px'>Horas por entregável (top "+Math.min(entHoras.length,15)+")</div>";
+    for(var ei4=0;ei4<Math.min(entHoras.length,15);ei4++){
+      var en4=entHoras[ei4];
+      var barW=Math.round(en4.h/maxH*100);
+      h+="<div style='margin-bottom:6px'>";
+      h+="<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:3px'>";
+      h+="<span style='font-size:11px;color:var(--tx2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%'>"+en4.cod+" — "+en4.n+"</span>";
+      h+="<span style='font-size:11px;font-weight:700;color:var(--px2);margin-left:8px'>"+en4.h+"h</span></div>";
+      h+="<div style='height:6px;background:var(--bord);border-radius:3px;overflow:hidden'>";
+      h+="<div style='height:100%;width:"+barW+"%;background:var(--px);border-radius:3px'></div></div></div>";
+    }
+  }
+  h+="</div>";
+  // Prontidão
+  // Gráfico de participação por categoria
+  h+="<div class='card'><div class='sec-l'>Distribuição de horas por categoria</div>";
+  var catData=[];
+  for(var ci=0;ci<CATS_ALL.length;ci++){
+    var cat=CATS_ALL[ci]; var tot=0;
+    for(var cod in P.hCat) tot+=(P.hCat[cod][cat]||0);
+    if(tot>0) catData.push({cat:cat,tot:tot});
+  }
+  var hTecTot=hTec();
+  if(catData.length&&hTecTot>0){
+    var colors={RT5:"#5B97FF",RT4:"#4ade80",RT3:"#fbbf24",RT2:"#f97316",RT1:"#ef4444",GP3:"#A78BFA",GP2:"#c084fc","GP1|Plan":"#e879f9"};
+    h+="<div style='margin-bottom:14px'>";
+    // Barra empilhada
+    h+="<div style='display:flex;height:32px;border-radius:8px;overflow:hidden;margin-bottom:10px'>";
+    for(var bi=0;bi<catData.length;bi++){
+      var pct=Math.round(catData[bi].tot/hTecTot*100);
+      var col=colors[catData[bi].cat]||"#94A3B8";
+      h+="<div style='width:"+pct+"%;background:"+col+";position:relative' title='"+catData[bi].cat+": "+catData[bi].tot+"h ("+pct+"%)'>";
+      if(pct>5) h+="<span style='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff'>"+pct+"%</span>";
+      h+="</div>";
+    }
+    h+="</div>";
+    // Legenda
+    h+="<div style='display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px'>";
+    for(var li=0;li<catData.length;li++){
+      var col2=colors[catData[li].cat]||"#94A3B8";
+      var pct2=Math.round(catData[li].tot/hTecTot*100);
+      h+="<div style='display:flex;align-items:center;gap:5px'>";
+      h+="<div style='width:12px;height:12px;border-radius:3px;background:"+col2+";flex-shrink:0'></div>";
+      h+="<span style='font-size:11px;color:var(--tx2)'>"+catData[li].cat+" — "+catData[li].tot+"h ("+pct2+"%)</span></div>";
+    }
+    h+="</div></div>";
+  } else {
+    h+="<div style='font-size:12px;color:var(--tx3);padding:12px 0'>Preencha as horas na tela de dimensionamento para ver a distribuição.</div>";
+  }
+  // Horas por entregável (top 10)
+  var entHoras=[];
+  for(var cod in ESCOPO.sel){
+    var hc=P.hCat[cod]||{}; var htot=0; for(var c in hc) htot+=hc[c];
+    if(htot>0){
+      var en=null; for(var ei=0;ei<E.length;ei++){if(E[ei].c===cod){en=E[ei];break;}}
+      if(en) entHoras.push({cod:cod,n:en.n,d:en.d,h:htot});
+    }
+  }
+  entHoras.sort(function(a,b){return b.h-a.h;});
+  if(entHoras.length){
+    var maxH=entHoras[0].h;
+    h+="<div class='sec-l' style='margin-top:16px'>Horas por entregável</div>";
+    h+="<div style='max-height:280px;overflow-y:auto'>";
+    for(var ei2=0;ei2<entHoras.length;ei2++){
+      var pctE=Math.round(entHoras[ei2].h/maxH*100);
+      h+="<div style='display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--bord)'>";
+      h+="<div style='width:80px;flex-shrink:0;font-size:10px;color:var(--tx3)'>"+ entHoras[ei2].cod+"</div>";
+      h+="<div style='flex:1;font-size:11px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>"+ entHoras[ei2].n+"</div>";
+      h+="<div style='width:120px;flex-shrink:0'>";
+      h+="<div style='height:6px;background:var(--bord);border-radius:3px;overflow:hidden;margin-bottom:2px'>";
+      h+="<div style='height:100%;width:"+pctE+"%;background:var(--px);border-radius:3px'></div></div>";
+      h+="<div style='font-size:11px;color:var(--px2);font-weight:600;text-align:right'>"+entHoras[ei2].h+"h</div></div></div>";
+    }
+    h+="</div>";
+  }
+  h+="</div>";
+  h+="<div class='card'><div class='sec-l'>Prontidão das informações de entrada</div>";
+  h+="<div style='display:flex;align-items:center;gap:12px;margin-bottom:8px'>";
+  h+="<div style='flex:1;height:8px;background:var(--bord);border-radius:4px;overflow:hidden'>";
+  h+="<div style='height:100%;width:"+prontGeral+"%;background:"+(prontGeral===100?"var(--vd)":prontGeral>60?"var(--am)":"var(--vm)")+";border-radius:4px'></div></div>";
+  h+="<span style='font-family:Syne,sans-serif;font-size:18px;font-weight:700;color:"+(prontGeral===100?"var(--vd2)":prontGeral>60?"var(--am2)":"var(--vm2)")+"'>"+prontGeral+"%</span></div>";
+  h+="<div style='font-size:12px;color:var(--tx3)'>"+totalConf+"/"+totalObr+" informações obrigatórias confirmadas</div>";
+  if(prontGeral<100) h+="<div style='margin-top:10px;font-size:12px;color:var(--am2);background:var(--am-bg);border:1px solid var(--am-bord);border-radius:6px;padding:8px 12px'>⚠ Verifique informações predecessoras pendentes com o Owner antes de iniciar.</div>";
+  h+="</div>";
+  // Valor
+  h+="<div class='card'><div class='sec-l'>Valor comercial</div>";
+  h+="<div style='font-size:12px;color:var(--tx2);margin-bottom:14px'>Informe o valor total incluindo impostos e BDI.</div>";
+  h+="<input type='text' style='background:var(--bg);border:1px solid var(--bord);border-radius:8px;padding:12px 16px;color:var(--tx);font-size:16px;font-family:Syne,sans-serif;font-weight:700;width:100%;outline:none' placeholder='R$ 0,00' value='"+P.valor+"' oninput='P.valor=this.value'/></div>";
+  // Obs
+  h+="<div class='card'><div class='sec-l'>Observações e premissas</div>";
+  h+="<textarea style='background:var(--bg);border:1px solid var(--bord);border-radius:8px;padding:12px 14px;color:var(--tx);font-size:13px;font-family:DM Sans,sans-serif;width:100%;min-height:90px;outline:none;resize:vertical' placeholder='Premissas, exclusões, condicionantes...'>"+P.obs+"</textarea></div>";
+  h+="<div style='display:flex;gap:12px;justify-content:center'>";
+  h+="<button class='btn btn-g' style='font-size:14px;padding:13px 28px'>⬇ Exportar proposta (.docx)</button>";
+  h+="<button class='btn-s' onclick='goT(6)' style='padding:13px 20px'>← Revisar</button></div>";
+  // Reunião com fornecedores
+  if(ESCOPO.aqMode!=="referencia"&&ESCOPO.aqReunForn){
+    if(!P.reunH["r_forn"]) P.reunH["r_forn"]=2;
+    if(!P.reunPart["r_forn"]) P.reunPart["r_forn"]=1;
+    if(!P.fornPacote) P.fornPacote={};
+    var rfP=P.reunPart["r_forn"]||1, rfH=P.reunH["r_forn"]||2;
+    totRO+=rfP*rfH;
+    var aqNomes={eq_princ:"Equip. principais",eq_aux:"Equip. auxiliares",mat:"Materiais",sv_terra:"Terraplenagem",sv_infra:"Infraestrutura",sv_civil:"Construção civil",sv_mec:"Mont. mecânica",sv_elet:"Mont. elétrica/Automação"};
+    var pacotes=[];
+    if(ESCOPO.aqItens) for(var pk in ESCOPO.aqItens){if(ESCOPO.aqItens[pk]) pacotes.push({id:pk,l:aqNomes[pk]});}
+    h+="<div style='background:var(--am-bg);border:1px solid var(--am-bord);border-radius:8px;padding:14px;margin-bottom:8px'>";
+    h+="<div style='font-size:13px;font-weight:600;color:var(--am2);margin-bottom:10px'>📋 Reunião com fornecedores</div>";
+    h+="<div class='gest-row'><div style='flex:1'><div style='font-size:13px;font-weight:500'>Equipe proponente</div><div style='font-size:11px;color:var(--tx3)'>Total: "+(rfP*rfH)+"h</div></div>";
+    h+="<div style='display:flex;align-items:center;gap:8px'>";
+    h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'><span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Recursos</span>";
+    h+="<input type='number' class='gest-inp' style='width:58px' min='1' value='"+(P.reunPart["r_forn"]||1)+"' data-rid='r_forn' onchange='setRP(this)'/></div>";
+    h+="<span style='font-size:14px;color:var(--tx3)'>×</span>";
+    h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'><span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Horas</span>";
+    h+="<input type='number' class='gest-inp' style='width:58px' min='0' value='"+(P.reunH["r_forn"]||2)+"' data-rid='r_forn' onchange='setRH(this)'/></div>";
+    h+="<span style='font-size:11px;color:var(--tx3)'>/reun.</span></div></div>";
+    if(pacotes.length){
+      h+="<div style='font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 8px'>Fornecedores por pacote</div>";
+      for(var pi=0;pi<pacotes.length;pi++){
+        var pac=pacotes[pi];
+        h+="<div class='gest-row'><span style='font-size:12px;color:var(--tx2)'>"+ pac.l+"</span>";
+        h+="<div style='display:flex;align-items:center;gap:6px'>";
+        h+="<input type='number' class='gest-inp' style='width:58px' min='1' value='"+(P.fornPacote[pac.id]||(ESCOPO.aqForn||3))+"' data-pid='"+ pac.id+"' onchange='setFornPacote(this)'/>";
+        h+="<span style='font-size:11px;color:var(--tx3)'>fornecedores</span></div></div>";
+      }
+    }
+    h+="</div>";
+  }
+  h+="<div style='display:flex;gap:12px;margin-top:24px;flex-wrap:wrap'>";
+  h+="<button onclick='gerarProposta()' style='flex:1;min-width:180px;background:var(--vd);color:#07090F;border:none;border-radius:10px;padding:16px;font-size:14px;font-weight:700;cursor:pointer'>📄 Gerar Proposta (PDF)</button>";
+  h+="</div>";
+  return h;
+}
+
+
+function gerarProposta(){
+  var doc=gerarHTMLProposta();
+  var w=window.open("","_blank");
+  if(!w){alert("Permita popups para gerar a proposta.");return;}
+  w.document.write(doc);
+  w.document.close();
+  setTimeout(function(){w.print();},600);
+}
+function gerarHTMLProposta(){
+  var o=ESCOPO.obj;
+  var cenarioLabel={otimista:"Otimista (×0.75)",realista:"Realista (×1.00)",pessimista:"Pessimista (×1.40)"}[P.cenario]||"—";
+  var dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
+  var CATS_ALL=CATS_TEC.concat(CATS_GEST);
+
+  var h="<!DOCTYPE html><html lang='pt-BR'><head><meta charset='UTF-8'/>";
+  h+="<title>Proposta — "+o.l+"</title>";
+  h+="<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;font-size:9.5pt;color:#111}";
+  h+="@page{size:A4 landscape;margin:14mm 12mm}@media print{.no-print{display:none}}";
+  h+=".pg{max-width:277mm;margin:0 auto;padding:14mm 12mm}";
+  h+="h1{font-size:17pt;font-weight:700;color:#0D1F3C;margin-bottom:4px}";
+  h+="h2{font-size:11pt;font-weight:700;color:#0D1F3C;border-bottom:2px solid #0D1F3C;padding-bottom:3px;margin:18px 0 8px}";
+  h+="h3{font-size:9.5pt;font-weight:700;color:#1E3A6E;margin:10px 0 3px}";
+  h+="table{width:100%;border-collapse:collapse;font-size:8pt;margin-bottom:8px}";
+  h+="th{background:#0D1F3C;color:#fff;padding:5px 6px;text-align:center;font-size:7.5pt}";
+  h+="th.left{text-align:left}td{padding:3px 6px;border-bottom:1px solid #E2E8F0}";
+  h+="td.num{text-align:center;font-family:monospace}";
+  h+="tr:nth-child(even) td{background:#F8FAFC}";
+  h+=".tr-disc td{background:#EFF6FF;font-weight:700;color:#1E3A6E;padding:5px 6px}";
+  h+=".header{border-bottom:3px solid #0D1F3C;padding-bottom:10px;margin-bottom:16px}";
+  h+=".sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}";
+  h+=".sum-box{background:#F0F4FF;border-radius:5px;padding:8px;text-align:center}";
+  h+=".sum-n{font-size:18pt;font-weight:700}";
+  h+=".sum-l{font-size:7.5pt;color:#666;margin-top:1px}";
+  h+=".footer{margin-top:20px;padding-top:8px;border-top:1px solid #E2E8F0;font-size:8pt;color:#666;text-align:center}";
+  h+="</style></head><body><div class='pg'>";
+
+  // Cabeçalho
+  h+="<div class='header'>";
+  h+="<div style='font-size:8pt;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px'>Proposta Técnica e Comercial — StandardX</div>";
+  h+="<h1>"+o.l+"</h1>";
+  h+="<div style='font-size:9.5pt;color:#1E3A6E;margin-bottom:4px'>"+o.p+"</div>";
+  h+="<div style='font-size:8pt;color:#666'>"+dt+" &nbsp;|&nbsp; Prazo: "+(ESCOPO.dur||16)+" sem. &nbsp;|&nbsp; "+(ESCOPO.tipo==="greenfield"?"Greenfield":"Brownfield")+" &nbsp;|&nbsp; Cenário: "+cenarioLabel+"</div>";
+  h+="</div>";
+
+  // Resumo de horas
+  h+="<h2>1. Resumo de Horas</h2>";
+  h+="<div class='sum-grid'>";
+  var hItems=[["Técnicas",hTec(),"#1E3A6E"],["Gestão",hGest(),"#92400E"],["Atividades",hAtivTotal(),"#065F46"],["Total Geral",hTotal(),"#0D4F2E"]];
+  for(var i=0;i<hItems.length;i++){
+    h+="<div class='sum-box'><div class='sum-n' style='color:"+hItems[i][2]+"'>"+hItems[i][1]+"h</div><div class='sum-l'>"+hItems[i][0]+"</div></div>";
+  }
+  h+="</div>";
+  if(P.valor) h+="<div style='background:#FFFBEB;border:1px solid #D97706;border-radius:5px;padding:8px 12px;margin-bottom:12px'><span style='font-size:8.5pt;color:#666'>Valor proposto: </span><strong style='font-size:13pt;color:#92400E'>"+P.valor+"</strong></div>";
+
+  // Distribuição por categoria
+  h+="<h2>2. Distribuição de Horas por Categoria</h2>";
+  h+="<table><tr>";
+  var catTots={};
+  for(var ci=0;ci<CATS_ALL.length;ci++){
+    catTots[CATS_ALL[ci]]=0;
+    var isTec=CATS_TEC.indexOf(CATS_ALL[ci])>=0;
+    h+="<th style='background:"+(isTec?"#1E3A6E":"#4C1D95")+"'>"+CATS_ALL[ci]+"</th>";
+  }
+  h+="<th>Total</th></tr><tr>";
+  for(var cod in P.hCat) for(var c in P.hCat[cod]) if(catTots[c]!==undefined) catTots[c]+=P.hCat[cod][c];
+  for(var aid in P.hAtiv) for(var c2 in P.hAtiv[aid]) if(catTots[c2]!==undefined) catTots[c2]+=P.hAtiv[aid][c2];
+  var gtot=0;
+  for(var ci2=0;ci2<CATS_ALL.length;ci2++){var v=catTots[CATS_ALL[ci2]]||0;h+="<td class='num'>"+(v||"—")+"</td>";gtot+=v;}
+  h+="<td class='num' style='font-weight:700'>"+gtot+"h</td></tr></table>";
+
+  // Horas por entregável
+  h+="<h2>3. Horas por Entregável</h2>";
+  h+="<table><tr><th class='left' style='width:70px'>Cód.</th><th class='left'>Entregável</th>";
+  for(var ci3=0;ci3<CATS_ALL.length;ci3++){
+    var isTec2=CATS_TEC.indexOf(CATS_ALL[ci3])>=0;
+    h+="<th style='background:"+(isTec2?"#1E3A6E":"#4C1D95")+"'>"+CATS_ALL[ci3]+"</th>";
+  }
+  h+="<th>Total</th></tr>";
+  var curDisc="";
+  for(var ei=0;ei<E.length;ei++){
+    var e2=E[ei]; if(!ESCOPO.sel[e2.c]) continue;
+    if(e2.d!==curDisc){curDisc=e2.d;h+="<tr class='tr-disc'><td colspan='"+(3+CATS_ALL.length)+"'>"+curDisc+"</td></tr>";}
+    var cats=P.hCat[e2.c]||{}; var eTot=0; for(var c3 in cats) eTot+=cats[c3];
+    h+="<tr><td style='font-family:monospace;font-size:7.5pt'>"+e2.c+"</td><td>"+e2.n+"</td>";
+    for(var ci4=0;ci4<CATS_ALL.length;ci4++){var cv=cats[CATS_ALL[ci4]]||0;h+="<td class='num'>"+(cv||"—")+"</td>";}
+    h+="<td class='num' style='font-weight:700'>"+(eTot||"—")+"</td></tr>";
+  }
+  h+="</table>";
+
+  // Horas por atividade
+  var hasAtiv=false; for(var a in P.hAtiv){var t2=0;for(var c4 in P.hAtiv[a])t2+=P.hAtiv[a][c4];if(t2>0){hasAtiv=true;break;}}
+  if(hasAtiv){
+    h+="<h2>4. Horas por Atividade de Suporte</h2>";
+    h+="<table><tr><th class='left'>Atividade</th>";
+    for(var ci5=0;ci5<CATS_ALL.length;ci5++){
+      var isTec3=CATS_TEC.indexOf(CATS_ALL[ci5])>=0;
+      h+="<th style='background:"+(isTec3?"#1E3A6E":"#4C1D95")+"'>"+CATS_ALL[ci5]+"</th>";
+    }
+    h+="<th>Total</th></tr>";
+    var aLabels={gestao:"Gestão"};
+    for(var ri=0;ri<ESCOPO.reunioes.length;ri++) aLabels["reun_"+ESCOPO.reunioes[ri].id]=ESCOPO.reunioes[ri].t;
+    for(var ii=0;ii<REUN_INT.length;ii++) aLabels["rint_"+REUN_INT[ii].id]=REUN_INT[ii].t;
+    aLabels["visitas"]="Visitas técnicas";
+    for(var aid2 in P.hAtiv){
+      var acat=P.hAtiv[aid2]; var aT=0; for(var c5 in acat) aT+=acat[c5];
+      if(!aT) continue;
+      h+="<tr><td>"+(aLabels[aid2]||aid2)+"</td>";
+      for(var ci6=0;ci6<CATS_ALL.length;ci6++){var av=acat[CATS_ALL[ci6]]||0;h+="<td class='num'>"+(av||"—")+"</td>";}
+      h+="<td class='num' style='font-weight:700'>"+aT+"h</td></tr>";
+    }
+    h+="</table>";
+  }
+
+  if(P.obs) h+="<h2>5. Observações</h2><p style='line-height:1.7;white-space:pre-wrap'>"+P.obs+"</p>";
+
+  h+="<div class='footer'>StandardX · Proposta Técnica e Comercial · "+dt+"</div></div>";
+  h+="<div class='no-print' style='text-align:center;padding:18px;background:#f5f5f5'>";
+  h+="<button onclick='window.print()' style='background:#0D1F3C;color:#fff;border:none;padding:11px 26px;border-radius:8px;font-size:14px;cursor:pointer;margin-right:10px'>🖨️ Imprimir / Salvar PDF</button>";
+  h+="<button onclick='window.close()' style='background:#eee;border:none;padding:11px 18px;border-radius:8px;font-size:14px;cursor:pointer'>Fechar</button></div>";
+  h+="</body></html>";
+  return h;
+}
+
+// ── RENDER ─────────────────────────────────────────────────
+var Ts=[T0,T1,T2,T4,T3b,T3,T6,T5];
+function render(){
+  var _sc=0, _el=document.querySelector('.tbl-wrap');
+  if(_el) _sc=_el.scrollTop;
+  var sHtml="";
+  for(var i=1;i<8;i++){
+    var cls=i<P.tela?"done":i===P.tela?"cur":"";
+    var clk=i<P.tela?"onclick='goT("+i+")'":"";
+    sHtml+="<div class='stp"+(" "+cls).trim()+"' "+clk+"></div>";
+  }
+  document.getElementById("steps").innerHTML=sHtml;
+  var sc=document.getElementById("scr");
+  sc.className="scr fade";
+  sc.innerHTML=Ts[P.tela]();
+  void sc.offsetWidth;
+  if(_sc>0){var _el2=document.querySelector('.tbl-wrap');if(_el2)_el2.scrollTop=_sc;}
+}
+function setVisRealiza(v){P.visRealiza=v;render();}
+function tSoftProp(id){if(!P.softPropList)P.softPropList=[];var i=P.softPropList.indexOf(id);if(i>=0)P.softPropList.splice(i,1);else P.softPropList.push(id);render();}
+function setFornPac(el){if(!P.fornPac)P.fornPac={};P.fornPac[el.dataset.fk]=+el.value;render();}
+function setFornH(el){if(!P.fornH)P.fornH={};P.fornH[el.dataset.fk]=+el.value;render();}
+function calcRI(f){
+  var dur=ESCOPO.dur||16;
+  var w=FW[f]||0;
+  if(!w) return 1; // Por evento = 1
+  return Math.max(1,Math.round(dur/w));
+}
+
+function aplicarCenario(c){
+  P.cenario=c;
+  var rawId=ESCOPO.obj&&ESCOPO.obj.id||"fel2";
+  // Mapear id do objetivo para chave da tabela HORAS_REF
+  var felKey={fel1:"fel1",fel2:"fel2",fel3:"fel3",imp:"imp",implantacao:"imp"}[rawId]||"fel2";
+  var mult={otimista:0.75,realista:1.0,pessimista:1.4}[c]||1.0;
+  // Prefixos de disciplinas técnicas vs gestão
+  var GEST_PREFIX=["GES","PLA","INV","AQU"];
+  var CATS_TEC_LIST=["RT5","RT4","RT3","RT2","RT1"];
+  var CATS_GEST_LIST=["GP3","GP2","GP1|Plan"];
+  for(var cod in ESCOPO.sel){
+    var refAll=HORAS_REF[cod];
+    if(!refAll) continue;
+    var ref=refAll[felKey];
+    if(!ref||ref.h===0) continue; // entregável não aplicável neste objetivo
+    var totalH=Math.round(ref.h * mult);
+    if(!P.hCat[cod]) P.hCat[cod]={};
+    // Zerar todas as categorias primeiro
+    var allCats=CATS_TEC_LIST.concat(CATS_GEST_LIST);
+    for(var zc=0;zc<allCats.length;zc++) P.hCat[cod][allCats[zc]]=0;
+    // Determinar se é entregável de gestão pelo prefixo
+    var prefix=cod.substring(0,3);
+    var isGest=GEST_PREFIX.indexOf(prefix)>=0;
+    var activeCats=isGest?CATS_GEST_LIST:CATS_TEC_LIST;
+    // Pegar apenas as distribuições das categorias ativas
+    var dist=ref.d;
+    var totalPct=0;
+    for(var ai=0;ai<activeCats.length;ai++) totalPct+=(dist[activeCats[ai]]||0);
+    if(totalPct===0){
+      // Distribuir igualmente se não há percentuais definidos
+      var eq=Math.round(totalH/activeCats.length);
+      for(var ai2=0;ai2<activeCats.length;ai2++) P.hCat[cod][activeCats[ai2]]=eq;
+      P.hCat[cod][activeCats[activeCats.length-1]]=Math.max(0,totalH-eq*(activeCats.length-1));
+    } else {
+      var allocated=0;
+      for(var ai3=0;ai3<activeCats.length-1;ai3++){
+        var cat=activeCats[ai3];
+        var pct=(dist[cat]||0)/totalPct;
+        P.hCat[cod][cat]=Math.round(totalH*pct);
+        allocated+=P.hCat[cod][cat];
+      }
+      // Última categoria absorve arredondamento
+      P.hCat[cod][activeCats[activeCats.length-1]]=Math.max(0,totalH-allocated);
+    }
+  }
+  render();
+}
+
+function goT(t){P.tela=t;render();}
+function setFornPacote(el){if(!P.fornPacote)P.fornPacote={};P.fornPacote[el.dataset.pid]=+el.value;render();}
+function tSoftP(id){if(!P.softsP)P.softsP=[];var i=P.softsP.indexOf(id);if(i>=0)P.softsP.splice(i,1);else P.softsP.push(id);render();}
+function setVisRealiza(v){P.visRealiza=v;render();}
+function tVisDV(dv){var i=P.visDisciplinas.indexOf(dv);if(i>=0)P.visDisciplinas.splice(i,1);else P.visDisciplinas.push(dv);render();}
+render();
+</script>
+</body>
+</html>

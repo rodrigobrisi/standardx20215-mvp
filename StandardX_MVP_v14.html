@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>StandardX — MVP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07090F;--bg2:#0F1520;--bg3:#141E2E;
+  --bord:#1B2840;--bord2:#243352;
+  --az:#3B7BF6;--az2:#5B97FF;
+  --vd:#0FB981;--vd2:#16D98A;--vd-bg:#031a0e;--vd-bord:#084D26;
+  --am:#F5A623;--am2:#FFBA45;--am-bg:#1a0f00;--am-bord:#4A2D00;
+  --vm:#EF4444;--vm2:#FF6B6B;--vm-bg:#180404;--vm-bord:#5C1414;
+  --tx:#EEF2FF;--tx2:#94A3B8;--tx3:#475569;--r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px}
+body{min-height:100vh;display:flex;justify-content:center}
+.shell{width:100%;max-width:1200px;padding:24px 20px;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--bord);margin-bottom:24px}
+.logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.5px}
+.logo em{color:var(--az);font-style:normal}
+.tag{font-size:11px;color:var(--tx3);background:var(--bg2);border:1px solid var(--bord);border-radius:20px;padding:3px 10px}
+.steps{display:flex;gap:6px;margin-left:auto;align-items:center}
+.stp{width:8px;height:8px;border-radius:50%;background:var(--bord2);transition:all .3s}
+.stp.cur{background:var(--az);width:24px;border-radius:4px}
+.stp.done{background:var(--vd);cursor:pointer}
+.scr{flex:1}
+.titulo{font-family:'Syne',sans-serif;font-size:23px;font-weight:700;margin-bottom:5px;letter-spacing:-.3px}
+.sub{color:var(--tx2);font-size:13px;margin-bottom:22px;line-height:1.6}
+.fnav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:16px;border-top:1px solid var(--bord)}
+.btn{background:var(--az);color:#fff;border:none;border-radius:8px;padding:11px 24px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .18s}
+.btn:hover{background:var(--az2);transform:translateY(-1px)}
+.btn:disabled{background:var(--bg3);color:var(--tx3);cursor:not-allowed;transform:none}
+.btn-g{background:var(--vd)}.btn-g:hover{background:var(--vd2)}
+.btn-s{background:transparent;color:var(--tx2);border:1px solid var(--bord);border-radius:8px;padding:10px 20px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .18s}
+.btn-s:hover{border-color:var(--az);color:var(--az)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+.obj{background:var(--bg2);border:1.5px solid var(--bord);border-radius:12px;padding:20px;cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+.obj:hover{border-color:var(--bord2);transform:translateY(-2px)}
+.obj.sel{border-color:var(--az);background:#0A1528}
+.card{background:var(--bg2);border:1px solid var(--bord);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.sec-l{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);margin-bottom:12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.chip{background:var(--bg3);border:1px solid var(--bord);border-radius:20px;padding:6px 16px;font-size:12px;color:var(--tx2);cursor:pointer;transition:all .18s}
+.chip:hover{border-color:var(--az);color:var(--az2)}
+.chip.on{background:#0A1528;border-color:var(--az);color:var(--az2)}
+.chip.on-g{background:var(--vd-bg);border-color:var(--vd-bord);color:var(--vd2)}
+.warn{background:var(--am-bg);border:1px solid var(--am-bord);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--am);margin-top:8px}
+.tog{width:40px;height:22px;border-radius:11px;background:var(--bord2);position:relative;transition:all .2s;cursor:pointer;flex-shrink:0}
+.tog::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:3px;left:3px;transition:all .2s}
+.tog.on{background:var(--vd)}.tog.on::after{left:21px}
+.calc-row{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--bord);border-radius:8px;padding:12px 16px}
+.calc-v{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+.rcard{background:var(--bg3);border:1px solid var(--bord);border-radius:8px;padding:14px;margin-bottom:8px}
+.rcard.on{border-color:var(--bord2);background:var(--bg2)}
+.rcard-top{display:flex;align-items:center;gap:10px}
+.rcard-cfg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--bord)}
+.sel-i{background:var(--bg);border:1px solid var(--bord);border-radius:6px;padding:7px 10px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif;width:100%}
+.atas-tag{background:#0A1528;border:1px solid var(--bord2);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--az2);text-align:center}
+/* Tabela de entregáveis */
+.tbl-wrap{border:1px solid var(--bord);border-radius:var(--r);overflow:auto;max-height:500px}
+.tbl-wrap::-webkit-scrollbar{width:5px;height:5px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:3px}
+table{border-collapse:collapse;width:100%;table-layout:fixed}
+table th{position:sticky;top:0;z-index:2;background:var(--bg);padding:10px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tx2);border-bottom:2px solid var(--bord2);white-space:nowrap}
+.th-cod{text-align:left;width:90px}
+.th-nome{text-align:left;width:200px}
+.th-nv{text-align:center;min-width:170px}
+.tr-disc td{background:var(--bg3);padding:7px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);border-top:2px solid var(--bord2)}
+.tr-e{border-bottom:1px solid var(--bord)}
+.tr-e:hover td{filter:brightness(1.08)}
+.td-cod{padding:10px 10px;font-size:10px;color:var(--tx3);font-weight:600;vertical-align:top;white-space:nowrap}
+.td-nome{padding:10px 10px;font-size:12px;color:var(--tx2);vertical-align:top;line-height:1.4;cursor:pointer}
+.td-nome:hover{color:var(--az2)}
+.td-nv{padding:8px 10px;vertical-align:top;cursor:pointer;min-width:170px;transition:filter .15s}
+.td-nv:hover{filter:brightness(1.2)}
+/* Sumário */
+.sumario{background:var(--bg2);border-top:1px solid var(--bord2);padding:10px 16px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;border-radius:0 0 var(--r) var(--r)}
+.sum-item{text-align:center}
+.sum-n{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;line-height:1}
+.sum-l{font-size:10px;color:var(--tx3);margin-top:2px}
+/* Legenda */
+.leg{display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--tx2)}
+.leg-d{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+/* Busca e filtros */
+.search{background:var(--bg2);border:1px solid var(--bord);border-radius:8px;padding:9px 14px;color:var(--tx);font-size:13px;font-family:'DM Sans',sans-serif;width:100%;margin-bottom:10px;outline:none}
+.search:focus{border-color:var(--az)}.search::placeholder{color:var(--tx3)}
+.filtros{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.filtro{background:var(--bg2);border:1px solid var(--bord);border-radius:20px;padding:4px 14px;font-size:11px;color:var(--tx3);cursor:pointer;transition:all .18s;white-space:nowrap}
+.filtro:hover,.filtro.on{background:#0A1528;border-color:var(--az);color:var(--az2)}
+/* Revisão */
+.res-r{display:flex;justify-content:space-between;align-items:center;padding:8px 16px}
+.pbar{height:4px;background:var(--bord);border-radius:2px;overflow:hidden;width:80px}
+.pbar-f{height:100%;border-radius:2px}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+/* Drawer */
+.drw-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:flex;justify-content:flex-end}
+.drw{background:var(--bg2);border-left:1px solid var(--bord);width:380px;max-width:100vw;height:100%;overflow-y:auto;padding:24px}
+.drw::-webkit-scrollbar{width:4px}
+.drw::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:2px}
+.drw-close{width:30px;height:30px;background:var(--bg3);border:1px solid var(--bord);border-radius:6px;color:var(--tx2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-family:'DM Sans',sans-serif}
+.inf-item{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--bord)}
+.inf-item:last-child{border-bottom:none}
+.inf-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+/* Cards finais */
+.fim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;max-width:520px;margin:0 auto 28px}
+.fim-card{background:var(--bg2);border:1px solid var(--bord);border-radius:10px;padding:16px}
+input[type=number]{background:var(--bg);border:1px solid var(--bord);border-radius:6px;padding:5px 10px;color:var(--tx);font-size:13px;font-family:'DM Sans',sans-serif;width:68px;text-align:center}
+input[type=number]:focus{outline:none;border-color:var(--az)}
+.fade{animation:fi .25s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.login-overlay{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center}
+.login-box{background:var(--bg2);border:1px solid var(--bord);border-radius:16px;padding:40px 36px;max-width:360px;width:100%;text-align:center}
+.login-logo{font-family:Syne,sans-serif;font-size:26px;font-weight:800;color:var(--px2);margin-bottom:4px}
+.login-sub{font-size:12px;color:var(--tx3);margin-bottom:28px}
+.login-inp{width:100%;background:var(--bg3);border:1px solid var(--bord);border-radius:8px;padding:12px;color:var(--tx);font-size:15px;text-align:center;letter-spacing:3px;outline:none;margin-bottom:12px}
+.login-btn{width:100%;background:var(--px);color:#07090F;border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
+.login-err{font-size:12px;color:#F87171;min-height:18px;margin-top:4px}
+.watermark{position:fixed;bottom:10px;right:14px;font-size:10px;color:rgba(255,255,255,.1);pointer-events:none;z-index:998;font-family:Syne,sans-serif;user-select:none}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div class="logo">Standard<em>X</em></div>
+    <div class="tag">Owner</div>
+    <div class="steps" id="steps"></div>
+  </div>
+  <div class="scr fade" id="scr"></div>
+</div>
+<div class="drw-ov" id="drw-ov" style="display:none" onclick="closeDrw()">
+  <div class="drw" onclick="event.stopPropagation()" id="drw"></div>
+</div>
+<script>
+// ── DADOS (gerados automaticamente) ────────────────────────
+const E=[
+  {c:"PRO-001",d:"Processo",n:"BFD — Block flow diagram"},
+  {c:"PRO-002",d:"Processo",n:"PFD — Process flow diagram"},
+  {c:"PRO-003",d:"Processo",n:"P&amp;ID — Piping &amp; instrumentation diagram"},
+  {c:"PRO-004",d:"Processo",n:"Balanço de massa e energia"},
+  {c:"PRO-005",d:"Processo",n:"Filosofia de operação"},
+  {c:"PRO-006",d:"Processo",n:"Lista de fluidos de processo"},
+  {c:"PRO-007",d:"Processo",n:"Simulação de processo"},
+  {c:"PRO-008",d:"Processo",n:"Critérios de projeto de processo"},
+  {c:"MEC-001",d:"Mecânica",n:"Lista de equipamentos"},
+  {c:"MEC-002",d:"Mecânica",n:"Datasheet de equipamentos"},
+  {c:"MEC-003",d:"Mecânica",n:"Especificação técnica de equipamentos"},
+  {c:"MEC-004",d:"Mecânica",n:"Arranjo geral de equipamentos (layout)"},
+  {c:"MEC-005",d:"Mecânica",n:"Memória de cálculo — sizing"},
+  {c:"MEC-006",d:"Mecânica",n:"Plano de inspeção e manutenção"},
+  {c:"MEC-007",d:"Mecânica",n:"Requisição de materiais — equipamentos"},
+  {c:"TUB-001",d:"Tubulação",n:"Especificação de tubulação (pipe class)"},
+  {c:"TUB-002",d:"Tubulação",n:"Lista de linhas"},
+  {c:"TUB-003",d:"Tubulação",n:"Arranjo de tubulação (plant layout)"},
+  {c:"TUB-004",d:"Tubulação",n:"Estudo de flexibilidade"},
+  {c:"TUB-005",d:"Tubulação",n:"Especificação de válvulas e acessórios"},
+  {c:"TUB-006",d:"Tubulação",n:"Cálculo hidráulico"},
+  {c:"TUB-007",d:"Tubulação",n:"Requisição de materiais — tubulação"},
+  {c:"ELE-001",d:"Elétrica",n:"Diagrama unifilar geral"},
+  {c:"ELE-002",d:"Elétrica",n:"Balanço de carga (load list)"},
+  {c:"ELE-003",d:"Elétrica",n:"Estudo de curto-circuito"},
+  {c:"ELE-004",d:"Elétrica",n:"Especificação de equipamentos elétricos"},
+  {c:"ELE-007",d:"Elétrica",n:"Classificação de áreas (hazardous area)"},
+  {c:"AUT-001",d:"Automação / Instrumentação",n:"Filosofia de controle e automação"},
+  {c:"AUT-002",d:"Automação / Instrumentação",n:"Lista de instrumentos (instrument index)"},
+  {c:"AUT-003",d:"Automação / Instrumentação",n:"Datasheet de instrumentos"},
+  {c:"AUT-004",d:"Automação / Instrumentação",n:"Arquitetura do sistema de controle"},
+  {c:"AUT-005",d:"Automação / Instrumentação",n:"Diagramas lógicos / cause &amp; effect"},
+  {c:"AUT-007",d:"Automação / Instrumentação",n:"SIL / análise LOPA"},
+  {c:"EST-001",d:"Estruturas",n:"Critérios de projeto estrutural"},
+  {c:"EST-002",d:"Estruturas",n:"Sondagem e estudo geotécnico"},
+  {c:"EST-003",d:"Estruturas",n:"Concepção estrutural"},
+  {c:"EST-004",d:"Estruturas",n:"Fundações"},
+  {c:"EST-005",d:"Estruturas",n:"Estruturas metálicas / concreto"},
+  {c:"ARQ-001",d:"Arquitetura",n:"Programa arquitetônico"},
+  {c:"ARQ-002",d:"Arquitetura",n:"Planta de situação e locação"},
+  {c:"ARQ-003",d:"Arquitetura",n:"Plantas baixas"},
+  {c:"PLA-001",d:"Planejamento",n:"Cronograma do projeto"},
+  {c:"PLA-002",d:"Planejamento",n:"Plano de execução do projeto (PEP)"},
+  {c:"PLA-003",d:"Planejamento",n:"Estratégia de contratação"},
+  {c:"PLA-005",d:"Planejamento",n:"Plano de gerenciamento de riscos"},
+  {c:"PLA-006",d:"Planejamento",n:"Curva S do projeto"},
+  {c:"INV-001",d:"Estimativa de Investimentos",n:"Estimativa de custos do projeto"},
+  {c:"INV-002",d:"Estimativa de Investimentos",n:"Breakdown do investimento (CAPEX)"},
+  {c:"INV-003",d:"Estimativa de Investimentos",n:"Análise econômica (VPL / TIR / Payback)"},
+  {c:"INV-004",d:"Estimativa de Investimentos",n:"Estimativa de OPEX"},
+  {c:"INV-005",d:"Estimativa de Investimentos",n:"Bases de estimativa"},
+  {c:"SEG-001",d:"Segurança de Processo",n:"Filosofia de segurança de processo"},
+  {c:"SEG-002",d:"Segurança de Processo",n:"HAZID"},
+  {c:"SEG-003",d:"Segurança de Processo",n:"HAZOP"},
+  {c:"SEG-004",d:"Segurança de Processo",n:"Estudo de dispersão e explosão"},
+  {c:"MEI-001",d:"Meio Ambiente",n:"Diagnóstico ambiental"},
+  {c:"MEI-002",d:"Meio Ambiente",n:"EIA/RIMA (quando aplicável)"},
+  {c:"GES-001",d:"Gestão de Projetos",n:"Escopo do projeto"},
+  {c:"GES-002",d:"Gestão de Projetos",n:"WBS"},
+  {c:"GES-003",d:"Gestão de Projetos",n:"Matriz de responsabilidades (RACI)"},
+  {c:"AQU-001",d:"Aquisições",n:"Análise técnica de propostas de fornecedores"},
+  {c:"AQU-002",d:"Aquisições",n:"Comparativo técnico-comercial de propostas"},
+  {c:"AQU-003",d:"Aquisições",n:"Relatório de equalização de propostas"},
+  {c:"AQU-004",d:"Aquisições",n:"Recomendação técnica de fornecedor"},
+  {c:"AQU-005",d:"Aquisições",n:"Acompanhamento de fabricação (FAT/expediting)"},
+  {c:"AQU-006",d:"Aquisições",n:"Inspeção técnica em fábrica (ITP)"},
+];
+const DISCS=["Processo","Mecânica","Tubulação","Elétrica","Automação / Instrumentação","Estruturas","Arquitetura","Planejamento","Estimativa de Investimentos","Segurança de Processo","Meio Ambiente","Gestão de Projetos","Aquisições"];
+const ST={
+  "PRO-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-004":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-005":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-006":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-007":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PRO-008":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-002":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-004":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-005":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-006":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEC-007":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-001":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-002":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-004":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-005":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-006":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "TUB-007":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ELE-001":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ELE-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ELE-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ELE-004":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ELE-007":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-002":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-004":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-005":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AUT-007":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "EST-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "EST-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "EST-003":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "EST-004":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "EST-005":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ARQ-001":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ARQ-002":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "ARQ-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PLA-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PLA-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PLA-003":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PLA-005":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "PLA-006":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "INV-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "INV-002":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "INV-003":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"Op"},
+  },
+  "INV-004":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"Op"},
+  },
+  "INV-005":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "SEG-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "SEG-002":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "SEG-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "SEG-004":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEI-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "MEI-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"Op"},
+  },
+  "GES-001":{
+    "fel1":{"A":"O","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "GES-002":{
+    "fel1":{"A":"Op","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "GES-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"O","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-001":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-002":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-003":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-004":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"Op","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"O","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-005":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+  "AQU-006":{
+    "fel1":{"A":"NA","B":"NA","C":"NA","D":"NA"},
+    "fel2":{"A":"PRED","B":"NA","C":"NA","D":"NA"},
+    "fel3":{"A":"PRED","B":"PRED","C":"Op","D":"NA"},
+    "det":{"A":"PRED","B":"PRED","C":"PRED","D":"O"},
+  },
+};
+const CONT={
+  "PRO-001":{A:"Blocos principais e fluxo macro do processo",B:"Correntes principais identificadas entre os blocos",C:"Balanço de massa simplificado por corrente",D:"Balanço completo com composições e propriedades físico-químicas"},
+  "PRO-002":{A:"Equipamentos principais e fluxo geral",B:"Instrumentação primária de controle indicada",C:"Correntes numeradas com dados de processo",D:"Dados completos de engenharia por corrente e equipamento"},
+  "PRO-003":{A:"—",B:"Esboço preliminar de P&ID",C:"P&ID básico com tags de equipamentos e instrumentos",D:"P&ID completo revisado e aprovado para construção"},
+  "PRO-004":{A:"Estimativa de ordem de grandeza das vazões",B:"Balanço por área de processo com dados principais",C:"Balanço consolidado por unidade de processo",D:"Balanço completo com variações operacionais"},
+  "PRO-005":{A:"Conceito operacional geral e modos de operação",B:"Modos de operação identificados e descritos",C:"Descrição detalhada de operação por sistema",D:"Procedimentos operacionais básicos por modo de operação"},
+  "PRO-006":{A:"—",B:"Fluidos principais com propriedades básicas",C:"Propriedades físico-químicas principais por fluido",D:"Datasheet completo de todos os fluidos do processo"},
+  "PRO-007":{A:"—",B:"Simulação conceitual em regime permanente",C:"Simulação validada com casos de projeto",D:"Simulação completa com casos transientes e variações"},
+  "PRO-008":{A:"Premissas gerais e objetivo do processo",B:"Parâmetros de projeto por sistema",C:"Critérios completos por equipamento e sistema",D:"Critérios detalhados com bases de cálculo documentadas"},
+  "MEC-001":{A:"Equipamentos principais listados com tipo e função",B:"Capacidade e dados de processo por equipamento",C:"Tag, especificação resumida e dados de processo",D:"Datasheet completo aprovado pelo fabricante"},
+  "MEC-002":{A:"—",B:"Datasheet conceitual com dados principais",C:"Datasheet básico com condições de operação e projeto",D:"Datasheet completo com requisição de compra aprovada"},
+  "MEC-003":{A:"Requisitos gerais de processo e segurança",B:"Especificação preliminar com dados principais",C:"Especificação básica com materiais e normas",D:"Especificação executiva completa para aquisição"},
+  "MEC-004":{A:"Arranjo conceitual — posicionamento relativo",B:"Dimensões principais dos equipamentos indicadas",C:"Posicionamento com cotas gerais e acessos",D:"Detalhamento completo de instalação e manutenção"},
+  "MEC-005":{A:"—",B:"Sizing conceitual por método simplificado",C:"Cálculo básico de dimensionamento conforme normas",D:"Cálculo detalhado completo conforme normas aplicáveis"},
+  "MEC-006":{A:"—",B:"—",C:"Requisitos gerais de manutenção por equipamento",D:"Plano detalhado com periodicidade e recursos"},
+  "MEC-007":{A:"—",B:"—",C:"Requisição preliminar para cotação de preço",D:"Requisição executiva completa para compra"},
+  "TUB-001":{A:"Classes de tubulação identificadas por serviço",B:"Pipe class conceitual com materiais básicos",C:"Pipe class básica por classe de pressão e temperatura",D:"Pipe class completa com todos os componentes"},
+  "TUB-002":{A:"—",B:"Linhas principais com serviço e diâmetro estimado",C:"Lista de linhas com dados de processo e pipe class",D:"Lista completa com especificação, isolamento e traçagem"},
+  "TUB-003":{A:"Rotas principais identificadas conceitualmente",B:"Layout conceitual com roteamento das linhas principais",C:"Layout básico com interferências resolvidas",D:"Isométricos e detalhes completos de instalação"},
+  "TUB-004":{A:"—",B:"—",C:"Análise qualitativa das linhas críticas",D:"Análise computacional completa (Caesar II ou similar)"},
+  "TUB-005":{A:"Tipos principais de válvulas por serviço",B:"Especificação por serviço com materiais básicos",C:"Especificação básica com tag e condições de projeto",D:"Especificação executiva completa com datasheet"},
+  "TUB-006":{A:"Estimativa de perdas de carga por sistema",B:"Cálculo simplificado por sistema de processo",C:"Cálculo básico das linhas principais",D:"Cálculo detalhado completo de todas as linhas"},
+  "TUB-007":{A:"—",B:"—",C:"Estimativa de materiais a granel para orçamento",D:"Requisição executiva completa com MTO detalhado"},
+  "ELE-001":{A:"Diagrama unifilar conceitual com tensões principais",B:"Níveis de tensão, potência instalada e topologia",C:"Proteções, seccionamentos e dados de curto-circuito",D:"Diagrama unifilar completo e detalhado para construção"},
+  "ELE-002":{A:"Estimativa de demanda total de energia elétrica",B:"Load list preliminar por área com fatores de demanda",C:"Load list básica por centro de controle (MCC)",D:"Load list completa com fator de demanda e potência"},
+  "ELE-003":{A:"—",B:"Estimativa de nível de curto-circuito",C:"Estudo preliminar para especificação de equipamentos",D:"Estudo completo com coordenação e seletividade"},
+  "ELE-004":{A:"—",B:"Especificação por tipo com dados básicos",C:"Especificação básica com tag e condições de instalação",D:"Especificação executiva completa com datasheet"},
+  "ELE-007":{A:"Áreas críticas com gases inflamáveis identificadas",B:"Classificação preliminar por zona e grupo",C:"Documento de classificação completo por zona",D:"Desenhos de classificação aprovados para construção"},
+  "AUT-001":{A:"Conceito geral de automação e nível definido",B:"Filosofia de controle por sistema de processo",C:"Filosofia detalhada com estratégias de controle",D:"Filosofia executiva completa com lógicas de controle"},
+  "AUT-002":{A:"Estimativa de quantidade de instrumentos por tipo",B:"Lista preliminar com tag e função",C:"Lista básica com tag, função e condições de processo",D:"Lista completa com especificação técnica"},
+  "AUT-003":{A:"—",B:"Datasheet conceitual por tipo de instrumento",C:"Datasheet básico com condições de processo",D:"Datasheet completo aprovado para compra"},
+  "AUT-004":{A:"Conceito de plataforma de controle definido",B:"Arquitetura conceitual (DCS / SCADA / CLP)",C:"Arquitetura básica com hardware e quantidade de I/O",D:"Projeto executivo completo do sistema de controle"},
+  "AUT-005":{A:"—",B:"Matriz C&E preliminar com intertravamentos principais",C:"Matriz C&E básica com todos os intertravamentos",D:"Diagramas lógicos completos aprovados para construção"},
+  "AUT-007":{A:"—",B:"Identificação dos loops que requerem SIL",C:"Determinação dos níveis SIL requeridos",D:"Verificação de SIL com projeto detalhado"},
+  "EST-001":{A:"Normas estruturais aplicáveis e cargas gerais",B:"Critérios de projeto por tipo de estrutura",C:"Critérios completos com combinações de carga",D:"Bases de cálculo detalhadas com memória de cálculo"},
+  "EST-002":{A:"Dados geológicos ou estimativa de capacidade de carga",B:"Campanha de sondagem definida",C:"Laudo geotécnico básico com caracterização do solo",D:"Laudo completo com recomendações de fundação"},
+  "EST-003":{A:"Conceito do sistema estrutural definido",B:"Pré-dimensionamento com seções estimadas",C:"Anteprojeto estrutural com desenhos gerais",D:"Projeto estrutural executivo completo para construção"},
+  "EST-004":{A:"Tipo de fundação indicado preliminarmente",B:"Estimativa de capacidade de carga e tipo",C:"Projeto básico de fundações com dimensionamento",D:"Projeto executivo completo de fundações"},
+  "EST-005":{A:"—",B:"Pré-dimensionamento de seções principais",C:"Projeto básico com desenhos gerais",D:"Projeto executivo com detalhes de montagem e fabricação"},
+  "ARQ-001":{A:"Necessidades funcionais e áreas estimadas",B:"Programa detalhado com requisitos por ambiente",C:"Programa aprovado com fluxograma de circulação",D:"Programa executivo completo com todos os requisitos"},
+  "ARQ-002":{A:"Localização conceitual na área do empreendimento",B:"Implantação com áreas principais e acessos",C:"Planta de locação com cotas gerais e orientação",D:"Planta de locação executiva completa"},
+  "ARQ-003":{A:"—",B:"Planta baixa esquemática com zoneamento",C:"Planta básica com dimensões e layout",D:"Plantas executivas completas para construção"},
+  "PLA-001":{A:"Cronograma de marcos principais (milestones)",B:"Cronograma nível 2 por fase com durações",C:"Cronograma nível 3 por disciplina com recursos",D:"Cronograma nível 4 detalhado com baseline aprovado"},
+  "PLA-002":{A:"Conceito de execução e estratégia geral",B:"PEP preliminar com estratégia de execução",C:"PEP básico com organograma e planos subsidiários",D:"PEP completo com todos os planos de gerenciamento"},
+  "PLA-003":{A:"Conceito make-or-buy por pacote principal",B:"Pacotes de contratação identificados",C:"Estratégia de contratação detalhada por pacote",D:"Plano de aquisições completo com cronograma de compras"},
+  "PLA-005":{A:"Riscos principais do projeto identificados",B:"Matriz de riscos preliminar com probabilidade e impacto",C:"Plano de gerenciamento com respostas definidas",D:"Registro de riscos completo atualizado"},
+  "PLA-006":{A:"Estimativa de curva S baseada em projetos similares",B:"Curva S preliminar por fase do projeto",C:"Curva S por disciplina com baseline físico",D:"Curva S detalhada com baseline de custo e físico"},
+  "INV-001":{A:"Estimativa de ordem de grandeza ±40% (fatorial)",B:"Estimativa fatorial ±25% com curvas de Lang / Hand",C:"Estimativa de orçamento ±15% com quantitativos básicos",D:"Estimativa definitiva ±10% com quantitativos detalhados"},
+  "INV-002":{A:"CAPEX total estimado por analogia",B:"CAPEX por área de processo ou sistema",C:"CAPEX por disciplina e pacote de contratação",D:"CAPEX detalhado por conta de controle e pacote"},
+  "INV-003":{A:"Análise de viabilidade macro com indicadores estimados",B:"Análise econômica preliminar com VPL, TIR e Payback",C:"Análise econômica básica com sensibilidades principais",D:"Análise econômica completa com múltiplos cenários"},
+  "INV-004":{A:"OPEX estimado por analogia com plantas similares",B:"OPEX por categoria (utilidades, mão de obra, manutenção)",C:"OPEX básico por sistema com memória de cálculo",D:"OPEX detalhado com memória de cálculo completa"},
+  "INV-005":{A:"Premissas gerais e metodologia de estimativa",B:"Bases de estimativa preliminares com índices utilizados",C:"Bases de estimativa básicas com dados de referência",D:"Documento completo de bases de estimativa aprovado"},
+  "SEG-001":{A:"Conceito geral de segurança e normas aplicáveis",B:"Filosofia preliminar de PSM com requisitos principais",C:"Filosofia básica por sistema com critérios de projeto",D:"Filosofia executiva completa com todos os programas PSM"},
+  "SEG-002":{A:"—",B:"HAZID conceitual com cenários de perigo identificados",C:"HAZID completo por área com recomendações",D:"HAZID detalhado com todas as ações implementadas"},
+  "SEG-003":{A:"—",B:"—",C:"HAZOP preliminar dos nós críticos do processo",D:"HAZOP completo com planilhas aprovadas e ações fechadas"},
+  "SEG-004":{A:"—",B:"Estudo qualitativo de dispersão e explosão",C:"Estudo quantitativo simplificado dos cenários críticos",D:"Modelagem completa com QRA/FERA aprovado"},
+  "MEI-001":{A:"Identificação de passivos ambientais potenciais",B:"Diagnóstico ambiental preliminar com dados secundários",C:"Diagnóstico básico completo com dados primários",D:"Diagnóstico executivo com estudos de campo detalhados"},
+  "MEI-002":{A:"Necessidade de EIA/RIMA identificada",B:"Escopo do EIA definido com termo de referência",C:"EIA em elaboração com estudos complementares",D:"EIA/RIMA completo protocolado no órgão ambiental"},
+  "GES-001":{A:"Escopo conceitual com objetivo e premissas",B:"Escopo preliminar com exclusões e restrições",C:"Escopo básico aprovado com WBS de alto nível",D:"Escopo executivo completo com WBS detalhada"},
+  "GES-002":{A:"WBS com 2 níveis (fase e área)",B:"WBS com 3 níveis (fase, área e disciplina)",C:"WBS com 4 níveis por disciplina e pacote",D:"WBS completa com dicionário de pacotes de trabalho"},
+  "GES-003":{A:"—",B:"RACI por fase e disciplina com responsáveis",C:"RACI básico completo por entregável e função",D:"RACI detalhado por entregável com matriz de aprovação"},
+  "AQU-001":{A:"—",B:"Análise técnica conceitual das alternativas",C:"Análise técnica completa com matriz de critérios",D:"Análise completa com recomendação documentada"},
+  "AQU-002":{A:"—",B:"Comparativo conceitual com critérios básicos",C:"Comparativo técnico-comercial com equalização de escopo",D:"Comparativo completo equalizado para tomada de decisão"},
+  "AQU-003":{A:"—",B:"Equalização conceitual com premissas básicas",C:"Equalização técnica com escopo e condições alinhados",D:"Relatório completo de equalização aprovado"},
+  "AQU-004":{A:"—",B:"Recomendação preliminar com justificativa técnica",C:"Recomendação técnica fundamentada com análise de risco",D:"Recomendação técnica completa aprovada para contratação"},
+  "AQU-005":{A:"—",B:"—",C:"Acompanhamento básico de marcos de fabricação",D:"Expediting completo com relatórios periódicos e FAT"},
+  "AQU-006":{A:"—",B:"—",C:"Inspeção básica em pontos de hold do ITP",D:"Inspeção completa conforme ITP aprovado com relatório final"},
+};
+const INFO={
+  "PRO-001":{o:["Definição do conceito e objetivo do processo","Capacidade de produção e throughput esperado","Matérias-primas e produtos principais","Restrições e premissas do processo"],r:["Estudos de viabilidade econômica","Dados de processos similares existentes"]},
+  "PRO-002":{o:["BFD aprovado com fluxo macro definido","Capacidade nominal e turndown ratio","Condições operacionais principais (T, P, vazão)","Critérios de projeto de processo"],r:["Dados de simulação conceitual","Propriedades dos fluidos principais"]},
+  "PRO-003":{o:["PFD aprovado com correntes numeradas","Balanço de massa e energia por sistema","Filosofia de controle e automação","Lista de fluidos com propriedades físico-químicas"],r:["Resultados de simulação de processo","Normas aplicáveis (ISA, IEC 61511)"]},
+  "PRO-004":{o:["PFD com correntes e equipamentos identificados","Composição das correntes de alimentação","Condições operacionais por sistema","Capacidade nominal de projeto"],r:["Dados cinéticos e termodinâmicos","Variações operacionais previstas"]},
+  "PRO-005":{o:["Conceito e objetivo do processo definido","Modos de operação previstos","Requisitos de segurança operacional"],r:["Experiência operacional em plantas similares"]},
+  "PRO-006":{o:["PFD com todas as correntes identificadas","Balanço de massa com composição por corrente","Dados físico-químicos dos componentes"],r:["Resultados de simulação de processo"]},
+  "PRO-007":{o:["PFD aprovado","Composição e condições das correntes","Dados termodinâmicos e cinéticos"],r:["Licenças de pacotes de simulação (Aspen, HYSYS)"]},
+  "PRO-008":{o:["Objetivo e capacidade do processo","Dados do local do projeto","Normas e códigos aplicáveis"],r:["Dados históricos de plantas similares"]},
+  "MEC-001":{o:["PFD com todos os equipamentos identificados","Balanço de massa e energia por equipamento","Capacidade nominal de projeto"],r:["Dados de simulação de processo"]},
+  "MEC-002":{o:["Lista de equipamentos aprovada","Condições de operação e projeto","Lista de fluidos com propriedades","Normas de projeto (ASME, API)"],r:["Dados de equipamentos similares em operação"]},
+  "MEC-003":{o:["Datasheets aprovados","Normas técnicas aplicáveis (ASME, API, NR-13)","Requisitos de material"],r:["Memória de cálculo de sizing"]},
+  "MEC-004":{o:["Lista de equipamentos com dimensões e pesos","Planta de situação e locação","Requisitos de acesso para operação e manutenção","Classificação de áreas"],r:["Conceito estrutural preliminar"]},
+  "MEC-005":{o:["Lista de equipamentos com dados de processo","Balanço de massa e energia","Normas de dimensionamento"],r:["Catálogos e curvas de fornecedores"]},
+  "MEC-006":{o:["Especificações técnicas dos equipamentos","Normas de inspeção (API 510, 570, 653, NR-13)"],r:["Histórico de manutenção de equipamentos similares"]},
+  "MEC-007":{o:["Especificação técnica aprovada","Datasheet completo","Prazo de entrega requerido"],r:["Lista de fornecedores aprovados"]},
+  "TUB-001":{o:["Lista de fluidos com pressão, temperatura e composição","Critérios de projeto de processo","Normas aplicáveis (ASME B31.3)"],r:["Dados de corrosão dos fluidos"]},
+  "TUB-002":{o:["P&ID aprovado com todas as linhas","Pipe class definida por serviço","Condições operacionais e de projeto por linha"],r:["Layout de equipamentos aprovado"]},
+  "TUB-003":{o:["Layout de equipamentos aprovado com cotas","Lista de linhas completa","Concepção estrutural com posições de suportes"],r:["Estudo de flexibilidade preliminar"]},
+  "TUB-004":{o:["Arranjo de tubulação com roteamento definido","Temperaturas de operação e projeto","Cargas permitidas nos bocais dos equipamentos"],r:["Dados de vibração e cargas dinâmicas"]},
+  "TUB-005":{o:["Pipe class por serviço","P&ID com tipos de válvulas identificados","Lista de fluidos com propriedades"],r:["Requisitos de atuação (manual, elétrica, pneumática)"]},
+  "TUB-006":{o:["Lista de linhas com diâmetros e comprimentos","Balanço de massa com vazões por linha","Curvas características de bombas e compressores"],r:["Coeficientes de perda de carga de válvulas"]},
+  "TUB-007":{o:["Arranjo de tubulação aprovado","Especificação de válvulas aprovada","MTO extraído do modelo"],r:["Lista de fornecedores aprovados"]},
+  "ELE-001":{o:["Lista de equipamentos com potências instaladas","Dados da concessionária de energia","Normas aplicáveis (NBR 14039, IEC 61936)"],r:["Requisitos de confiabilidade e redundância"]},
+  "ELE-002":{o:["Lista de equipamentos com potências elétricas","Lista de instrumentos com consumos","Fatores de demanda e serviço"],r:["Projeção de expansão futura"]},
+  "ELE-003":{o:["Diagrama unifilar aprovado","Impedâncias dos transformadores e geradores","Dados da concessionária"],r:["Requisitos de seletividade e coordenação"]},
+  "ELE-004":{o:["Balanço de carga aprovado","Classificação de áreas","Estudo de curto-circuito","Normas (IEC, NBR, ATEX/IECEx)"],r:["Requisitos de eficiência energética"]},
+  "ELE-007":{o:["P&ID com fontes de vazamento identificadas","Lista de fluidos com ponto de fulgor, LIE e LSE","Taxa de ventilação das áreas"],r:["Dados meteorológicos locais"]},
+  "AUT-001":{o:["Conceito e objetivo do processo","Critérios de projeto de processo","Requisitos de segurança operacional","Nível de automação desejado"],r:["Normas aplicáveis (ISA-5.1, IEC 61511)"]},
+  "AUT-002":{o:["P&ID aprovado com todos os tags","Filosofia de controle e automação","Lista de fluidos de processo"],r:["Requisitos de comunicação (protocolos industriais)"]},
+  "AUT-003":{o:["Lista de instrumentos completa","Lista de fluidos com propriedades","Condições de operação por instrumento","Classificação de áreas"],r:["Requisitos de SIL para loops críticos"]},
+  "AUT-004":{o:["Filosofia de controle aprovada","Lista de instrumentos com contagem de I/O","Requisitos de redundância"],r:["Política do cliente para plataformas (DCS, SCADA, CLP)"]},
+  "AUT-005":{o:["P&ID aprovado com intertravamentos","Filosofia de controle com estratégias de shutdown","Estados seguros dos equipamentos"],r:["Requisitos de SIL para funções de segurança"]},
+  "AUT-007":{o:["P&ID aprovado","Diagramas de causa e efeito aprovados","Frequências de eventos iniciadores"],r:["Resultados completos do HAZOP"]},
+  "EST-001":{o:["Dados do local (vento, sismo, altitude)","Normas estruturais aplicáveis","Cargas de processo previstas"],r:["Dados climáticos históricos da região"]},
+  "EST-002":{o:["Planta de situação e locação aprovada","Normas de sondagem (NBR 6484, NBR 6502)","Profundidade estimada de fundação"],r:["Dados geológicos regionais disponíveis"]},
+  "EST-003":{o:["Layout de equipamentos com dimensões e pesos","Critérios de projeto estrutural aprovados","Resultado do estudo geotécnico"],r:["Arranjo de tubulação preliminar"]},
+  "EST-004":{o:["Laudo geotécnico completo","Concepção estrutural com cargas de projeto","Pesos e dimensões dos equipamentos"],r:["Dados de interferências subterrâneas"]},
+  "EST-005":{o:["Concepção estrutural aprovada","Fundações aprovadas","Cargas de projeto completas","Normas de cálculo estrutural"],r:["Requisitos de proteção contra incêndio"]},
+  "ARQ-001":{o:["Requisitos funcionais por ambiente","Fluxos de pessoal e materiais","Normas de acessibilidade e segurança (NRs, ABNT)"],r:["Política do cliente para padrões de acabamento"]},
+  "ARQ-002":{o:["Levantamento topográfico do terreno","Legislação municipal de uso e ocupação do solo","Afastamentos legais obrigatórios"],r:["Dados de ventos predominantes"]},
+  "ARQ-003":{o:["Programa arquitetônico aprovado","Planta de locação aprovada","Dimensões mínimas por ambiente"],r:["Requisitos de instalações prediais"]},
+  "PLA-001":{o:["Escopo do projeto com lista de entregáveis","Durações estimadas por disciplina","Marcos contratuais e datas obrigatórias"],r:["Lead times de equipamentos críticos"]},
+  "PLA-002":{o:["Escopo do projeto aprovado","Organograma da equipe de projeto","Estratégia de contratação definida"],r:["Requisitos de reporte ao cliente"]},
+  "PLA-003":{o:["Escopo do projeto com WBS definida","Estimativa de custos por pacote","Calendário de contratações requerido"],r:["Lead times críticos de aquisição"]},
+  "PLA-005":{o:["Escopo do projeto definido","Identificação preliminar de riscos","Lições aprendidas de projetos similares"],r:["Apetite ao risco do cliente"]},
+  "PLA-006":{o:["Cronograma físico aprovado","Estimativa de custos por período","Distribuição de horas por disciplina e fase"],r:["Condições de pagamento contratuais"]},
+  "INV-001":{o:["Lista de equipamentos com tamanho e capacidade","Bases de estimativa definidas","Índices de custo de mercado atualizados"],r:["Dados de projetos similares concluídos"]},
+  "INV-002":{o:["Estimativa de custos total aprovada","WBS com contas de controle","Estratégia de contratação com pacotes definidos"],r:["Cronograma de desembolso previsto"]},
+  "INV-003":{o:["Estimativa de CAPEX aprovada","Estimativa de OPEX aprovada","Taxa mínima de atratividade (TMA)"],r:["Cenários de sensibilidade definidos"]},
+  "INV-004":{o:["Lista de equipamentos com consumo de utilidades","Filosofia de operação (operadores, turnos)","Dados de custo de utilidades"],r:["Histórico de OPEX de plantas similares"]},
+  "INV-005":{o:["Objetivo e escopo do projeto definidos","Metodologia de estimativa adotada","Dados de referência utilizados"],r:["Premissas de câmbio e inflação"]},
+  "SEG-001":{o:["Conceito e objetivo do processo","Critérios de projeto de processo","Normas aplicáveis (NR-13, API RP, IEC 61511)"],r:["Dados de periculosidade dos fluidos (FISPQ)"]},
+  "SEG-002":{o:["PFD aprovado com sistemas identificados","Filosofia de segurança de processo","Lista de equipamentos e fluidos perigosos","Equipe multidisciplinar disponível"],r:["Layout preliminar de equipamentos"]},
+  "SEG-003":{o:["P&ID completo e aprovado","Filosofia de operação aprovada","Resultados do HAZID","Equipe multidisciplinar com facilitador certificado"],r:["Normas de HAZOP aplicáveis (IEC 61882)"]},
+  "SEG-004":{o:["Lista de fluidos com propriedades de dispersão","Classificação de áreas com zonas definidas","Layout de equipamentos com cotas","Dados meteorológicos locais"],r:["Softwares de modelagem (Phast, SAFETI, ALOHA)"]},
+  "MEI-001":{o:["Planta de locação do empreendimento","Legislação ambiental aplicável","Dados secundários disponíveis (IBGE, INPE, ANA)"],r:["Estudos ambientais anteriores na área"]},
+  "MEI-002":{o:["Diagnóstico ambiental completo","PFD com dados de emissões e efluentes","Termo de referência do órgão ambiental"],r:["Estudos de impacto de projetos similares"]},
+  "GES-001":{o:["BFD ou conceito do processo aprovado","Requisitos e expectativas do cliente","Premissas e exclusões acordadas"],r:["Lições aprendidas de projetos similares"]},
+  "GES-002":{o:["Escopo do projeto com todos os entregáveis","Estratégia de execução e contratação definida"],r:["Templates de WBS da empresa"]},
+  "GES-003":{o:["Escopo do projeto aprovado","Organograma da equipe de projeto","Papéis e responsabilidades de cada função"],r:["Requisitos contratuais de responsabilidade"]},
+  "AQU-001":{o:["Requisição de compra ou especificação emitida","Propostas técnicas recebidas","Critérios de avaliação técnica definidos"],r:["Histórico de fornecedores homologados"]},
+  "AQU-002":{o:["Análise técnica de cada proposta concluída","Propostas comerciais recebidas","Matriz de critérios definida"],r:["Condições de pagamento e prazo por fornecedor"]},
+  "AQU-003":{o:["Análise técnica e comparativo comercial realizados","Condições equalizadas (impostos, frete, Incoterm)"],r:["Dados de lead time por fornecedor"]},
+  "AQU-004":{o:["Relatório de equalização aprovado","Critérios de seleção definidos e aprovados"],r:["Histórico de desempenho dos fornecedores candidatos"]},
+  "AQU-005":{o:["Pedido de compra emitido e aceito","Plano de fabricação aprovado pelo fornecedor","ITP aprovado"],r:["Cronograma de marcos de fabricação"]},
+  "AQU-006":{o:["ITP aprovado","Procedimentos de teste e inspeção do fornecedor","Certificações e qualificações requeridas"],r:["Normas de inspeção aplicáveis (API, ASME, AWS)"]},
+};
+
+// ── LOD 3D ─────────────────────────────────────────────────
+var NORMAS=[
+  {id:"abnt",l:"ABNT",desc:"Associação Brasileira de Normas Técnicas — normas nacionais brasileiras"},
+  {id:"asme",l:"ASME / API / IEEE",desc:"Normas americanas de engenharia mecânica, petróleo e elétrica"},
+  {id:"iso",l:"ISO",desc:"International Organization for Standardization — normas internacionais"},
+  {id:"en",l:"EN (Europeu)",desc:"European Norm — normas europeias harmonizadas"},
+  {id:"nr",l:"Normas Regulamentadoras (NR)",desc:"Normas do Ministério do Trabalho — saúde e segurança ocupacional"}
+];
+var LODS=["LOD 100","LOD 200","LOD 300","LOD 400"];
+var LOD_CONT={
+  "LOD 100":"Modelo esquemático com posicionamento conceitual dos principais sistemas e equipamentos. Geometria simplificada (blocos), sem detalhamento construtivo. Suficiente para estudos de layout macro e análise de conflitos de espaço.",
+  "LOD 200":"Modelo com geometria aproximada dos sistemas principais: equipamentos, estruturas e tubulações representados com dimensões estimadas e posicionamento preliminar. Permite revisões de layout, análise de acesso e interferências grosseiras.",
+  "LOD 300":"Modelo com geometria precisa e posicionamento definitivo de todos os sistemas: tubulação conforme P&ID, equipamentos com dimensões reais, estruturas com seções definidas. Permite extração de quantitativos, clash detection e revisão de engenharia.",
+  "LOD 400":"Modelo completo com nível de detalhe para fabricação e montagem: suportes de tubulação, detalhes de conexão, especificações de materiais, spool drawings e informações de instalação. Base para construção e montagem em campo."
+};
+// ── CONSTANTES ─────────────────────────────────────────────
+var OBJS=[
+  {id:"fel1",l:"Estudo de Viabilidade",p:"Estimativa de Investimento ±40%",ic:"🔍",nv:"A",n:26},
+  {id:"fel2",l:"Desenvolvimento de Escopo e Seleção de Alternativas",p:"Estimativa de Investimento ±25%",ic:"⚖️",nv:"B",n:46},
+  {id:"fel3",l:"Planejamento de Execução",p:"Estimativa de Investimento ±10%",ic:"📊",nv:"C",n:76},
+  {id:"det",l:"Implantação",p:"",ic:"🏗️",nv:"D",n:87}
+];
+var NVS=["A","B","C","D"];
+var NV_OBJ={fel1:"A",fel2:"B",fel3:"C",det:"D"};
+var DUR={fel1:10,fel2:16,fel3:22,det:36};
+var FW={"Semanal":1,"Quinzenal":2,"Mensal":4,"Por evento":0,"Por emissão":0};
+var SOFTS=[
+  {id:"e3d",l:"E3D",v:"Aveva"},{id:"p3d",l:"Plant 3D",v:"Aveva"},{id:"pdms",l:"PDMS",v:"Aveva"},
+  {id:"rvt",l:"Revit",v:"Autodesk"},{id:"nvs",l:"Navisworks",v:"Autodesk"},{id:"op",l:"OpenPlant",v:"Bentley"}
+];
+var DV=["Processo","Mecânica","Tubulação","Elétrica","Automação e Instrumentação",
+        "Estruturas","Arquitetura","Planejamento","Estimativa de Investimentos","Segurança de Processo"];
+var REUN=[
+  {id:"r1",t:"Kick off",df:"Por evento"},
+  {id:"r2",t:"Coordenação técnica",df:"Quinzenal"},
+  {id:"r3",t:"Reunião de progresso",df:"Quinzenal"},
+  {id:"r4",t:"Project Review",df:"Mensal",req3d:true},
+  {id:"r5",t:"Steering committee",df:"Mensal"},
+  {id:"r6",t:"Lessons Learned",df:"Por evento"}
+];
+// ── ESTADO ─────────────────────────────────────────────────
+var S={
+  tela:0,obj:null,tipo:"greenfield",
+  vis:{on:false,modo:"obrigatorio"},dur:0,
+  m3d:false,defSoft:"owner",softs:[],lod:null,
+  normas:[],
+  aqMode:"referencia",aqForn:3,aqReunForn:true,aqBids:{},aqReun:{},aqItens:{eq_princ:false,eq_aux:false,mat:false,
+    sv_terra:false,sv_infra:false,sv_civil:false,sv_mec:false,sv_elet:false},
+  reun:{},sel:{},filt:"Todas",busca:"",tab2:"ent",predDisp:{}
+};
+// Inicializar reuniões
+for(var ri=0;ri<REUN.length;ri++){
+  S.reun[REUN[ri].id]={inc:true,f:REUN[ri].df};
+}
+// ── HELPERS ────────────────────────────────────────────────
+// Retorna lista de entregáveis com status PRED no objetivo atual
+function getPredList(){
+  if(!S.obj) return [];
+  var list=[];
+  var sugNv=NV_OBJ[S.obj.id]; // nível do objetivo (ex: "B" para fel2)
+  var sugIdx=NVS.indexOf(sugNv);
+  for(var i=0;i<E.length;i++){
+    var e=E[i];
+    if(!S.sel[e.c]) continue; // apenas entregáveis selecionados
+    // Predecessoras = níveis ABAIXO do objetivo que existiam antes (PRED)
+    var predConts=[];
+    for(var ni=0;ni<sugIdx;ni++){ // apenas níveis anteriores ao objetivo
+      var st=getSt(e.c,NVS[ni]);
+      if(st==="PRED"){
+        var ct=(CONT[e.c]&&CONT[e.c][NVS[ni]])||"";
+        if(ct&&ct!=="—") predConts.push({nv:NVS[ni],ct:ct});
+      }
+    }
+    if(predConts.length){
+      list.push({e:e,conts:predConts});
+    }
+  }
+  return list;
+}
+// Verifica se o entregavel está selecionado
+function ESCOPO_SEL(cod){ return !!S.sel[cod]; }
+function getSt(cod,nv){
+  if(!S.obj||!nv)return"NA";
+  var r=ST[cod];
+  return(r&&r[S.obj.id]&&r[S.obj.id][nv])||"NA";
+}
+function initSel(){
+  S.sel={};
+  if(!S.obj)return;
+  var sugNv=NV_OBJ[S.obj.id];
+  for(var i=0;i<E.length;i++){
+    var st=getSt(E[i].c,sugNv);
+    if(st==="O") S.sel[E[i].c]=sugNv; // apenas obrigatórios — Op fica a critério do owner
+  }
+}
+function calcA(f){
+  var w=FW[f]||0;
+  if(!w)return(f==="Por evento")?1:0;
+  var durSem=(S.dur&&S.dur>0)?S.dur:(S.obj?DUR[S.obj.id]:16);
+  return Math.max(1,Math.round(durSem/w));
+}
+function reunInc(){
+  var r=[];
+  for(var i=0;i<REUN.length;i++){if(S.reun[REUN[i].id].inc) r.push(REUN[i]);}
+  return r;
+}
+function totAtas(){
+  var t=0;
+  for(var i=0;i<REUN.length;i++){
+    var c=S.reun[REUN[i].id];
+    if(!c.inc)continue;
+    var a=calcA(c.f);
+    t+=(typeof a==="number")?a:(a==="1"?1:0);
+  }
+  return t;
+}
+
+function toggleNv(cod,nv){
+  if(S.sel[cod]===nv) delete S.sel[cod];
+  else S.sel[cod]=nv;
+  render();
+}
+// ── DRAWER ─────────────────────────────────────────────────
+function openDrw(cod){
+  var e=null;
+  for(var i=0;i<E.length;i++){if(E[i].c===cod){e=E[i];break;}}
+  var inf=INFO[cod]||{o:[],r:[]};
+  var selNv=S.sel[cod]||null;
+  var sugNv=S.obj?NV_OBJ[S.obj.id]:null;
+  var h="";
+  h+="<button class='drw-close' onclick='closeDrw()'>✕</button>";
+  h+="<div style='margin-bottom:16px'>";
+  h+="<div style='font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px'>"+e.d+" · "+cod+"</div>";
+  h+="<div style='font-family:\"Syne\",sans-serif;font-size:15px;font-weight:700;margin-bottom:8px;line-height:1.4'>"+e.n+"</div>";
+  h+="<div style='font-size:12px;color:"+(selNv?"var(--vd2)":"var(--tx3)")+"'>"+(selNv?"✓ Incluído — Nível "+selNv:"✗ Não incluído")+"</div>";
+  h+="</div>";
+  // Conteúdo por nível — clicável
+  h+="<div style='margin-bottom:18px'>";
+  h+="<div style='font-size:10px;font-weight:600;color:var(--az2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px'>Conteúdo mínimo por nível</div>";
+  for(var ni=0;ni<NVS.length;ni++){
+    var nv=NVS[ni];
+    var stNv=getSt(cod,nv);
+    var isSel=selNv===nv;
+    var isSug=(sugNv===nv&&!selNv);
+    var bgC={O:"var(--vd-bg)",Op:"var(--am-bg)",NA:"var(--vm-bg)",PRED:"var(--bg3)"};
+    var txC={O:"var(--vd2)",Op:"var(--am2)",NA:"var(--vm2)",PRED:"var(--tx3)"};
+    // conteúdo acumulado
+    var lines=[];
+    for(var ai=0;ai<=ni;ai++){
+      var ct=(CONT[cod]&&CONT[cod][NVS[ai]])||"";
+      if(ct&&ct!=="—") lines.push({nv:NVS[ai],txt:ct});
+    }
+    var ctHtml="";
+    for(var li=0;li<lines.length;li++){
+      ctHtml+="<div style='margin-bottom:"+(li<lines.length-1?"5px":"0")+";padding-bottom:"+(li<lines.length-1?"5px":"0")+";border-bottom:"+(li<lines.length-1?"1px solid rgba(255,255,255,.06)":"none")+"'>";
+      ctHtml+="<span style='font-size:9px;opacity:.5;display:block'>Nível "+lines[li].nv+"</span>";
+      ctHtml+="<span style='font-size:12px'>"+lines[li].txt+"</span></div>";
+    }
+    if(!ctHtml) ctHtml="<span style='opacity:.3;font-style:italic'>—</span>";
+    h+="<div style='padding:10px 12px;margin-bottom:6px;border-radius:8px;cursor:pointer;";
+    h+="background:"+(isSel?"#0d2a4a":(bgC[stNv]||"var(--bg3)"))+";";
+    h+="border:"+(isSel?"2px solid #fff":"1px solid var(--bord)")+"' ";
+    h+="onclick='toggleNv(\""+cod+"\",\""+nv+"\");openDrw(\""+cod+"\")'>";
+    h+="<div style='display:flex;align-items:center;gap:8px;margin-bottom:6px'>";
+    h+="<span style='font-size:11px;font-weight:700;color:var(--tx)'>Nível "+nv+"</span>";
+    h+="<span style='font-size:10px;font-weight:600;color:"+(txC[stNv]||"var(--tx3)")+"'>";
+    h+=({O:"Obrigatório",Op:"Opcional",NA:"N/A",PRED:"Predecessor"}[stNv]||"N/A")+"</span>";
+    if(isSug) h+="<span style='font-size:9px;background:#1a2a1a;color:var(--vd2);padding:1px 6px;border-radius:4px'>● sugerido</span>";
+    if(isSel) h+="<span style='font-size:9px;background:rgba(255,255,255,.15);color:#fff;padding:1px 6px;border-radius:4px'>✓ selecionado</span>";
+    h+="</div>";
+    h+="<div style='font-size:11px;color:var(--tx2);line-height:1.5'>"+ctHtml+"</div></div>";
+  }
+  h+="</div>";
+  // Informações de entrada
+  if(inf.o.length){
+    h+="<div style='margin-bottom:14px'>";
+    h+="<div style='font-size:10px;font-weight:600;color:var(--vd2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px'>Informações obrigatórias de entrada</div>";
+    for(var oi=0;oi<inf.o.length;oi++){
+      h+="<div class='inf-item'><div class='inf-dot' style='background:var(--vd2)'></div>";
+      h+="<span style='font-size:12px;color:var(--tx2);line-height:1.5'>"+inf.o[oi]+"</span></div>";
+    }
+    h+="</div>";
+  }
+  if(inf.r&&inf.r.length){
+    h+="<div>";
+    h+="<div style='font-size:10px;font-weight:600;color:var(--am2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px'>Informações recomendadas</div>";
+    for(var ri2=0;ri2<inf.r.length;ri2++){
+      h+="<div class='inf-item'><div class='inf-dot' style='background:var(--am2)'></div>";
+      h+="<span style='font-size:12px;color:var(--tx3);line-height:1.5'>"+inf.r[ri2]+"</span></div>";
+    }
+    h+="</div>";
+  }
+  h+="<div style='margin-top:16px;padding-top:12px;border-top:1px solid var(--bord);font-size:11px;color:var(--tx3);text-align:center;line-height:1.6'>Informações podem ser fornecidas pelo Owner, obtidas em estudos anteriores ou levantadas em campo.</div>";
+  document.getElementById("drw").innerHTML=h;
+  document.getElementById("drw-ov").style.display="flex";
+}
+function closeDrw(){document.getElementById("drw-ov").style.display="none";}
+// ── TELAS ──────────────────────────────────────────────────
+function T0(){
+  var h="<div class='titulo'>Qual é o objetivo do projeto?</div>";
+  h+="<div class='sub'>Selecione o objetivo — a plataforma sugere os entregáveis e o nível de desenvolvimento. Tudo pode ser ajustado livremente.</div>";
+  h+="<div class='grid2'>";
+  for(var i=0;i<OBJS.length;i++){
+    var o=OBJS[i];
+    var sel=(S.obj&&S.obj.id===o.id)?" sel":"";
+    h+="<div class='obj"+sel+"' onclick='selObjAdv(\""+o.id+"\")'>";
+    h+="<div style='font-size:26px;margin-bottom:12px'>"+o.ic+"</div>";
+    h+="<div style='font-family:\"Syne\",sans-serif;font-size:16px;font-weight:700;margin-bottom:8px'>"+o.l+"</div>";
+    h+="<div style='font-size:12px;color:var(--tx2);background:var(--bg);padding:4px 10px;border-radius:20px;display:inline-block;margin-bottom:10px'>"+o.p+"</div>";
+    h+="<div style='font-size:11px;color:var(--tx3)'>"+o.n+" entregáveis sugeridos</div>";
+    h+="</div>";
+  }
+  h+="</div>";
+  return h;
+}
+function T1(){
+  var o=S.obj;
+  var h="<div class='titulo'>Configurações do projeto</div>";
+  h+="<div class='sub'>Tipo de projeto, visitas técnicas, modelamento 3D, aquisições, reuniões e normas</div>";
+
+  // Tipo de projeto
+  h+="<div class='card'><div class='sec-l'>Tipo de projeto</div><div class='chips'>";
+  h+="<div class='chip"+(S.tipo==="greenfield"?" on":"")+"' onclick='S.tipo=\"greenfield\";render()'>🌱 Greenfield — nova instalação</div>";
+  h+="<div class='chip"+(S.tipo==="brownfield"?" on":"")+"' onclick='S.tipo=\"brownfield\";render()'>🏭 Brownfield — instalação existente</div>";
+  h+="</div></div>";
+
+  // Prazo estimado do projeto
+  var durPadrao=S.obj?DUR[S.obj.id]:16;
+  var durAtual=(S.dur&&S.dur>0)?S.dur:durPadrao;
+  h+="<div class='card'><div class='sec-l'>Prazo estimado do projeto</div>";
+  h+="<div style='display:flex;align-items:center;gap:16px'>";
+  h+="<div style='flex:1;font-size:12px;color:var(--tx2)'>Prazo de referência para a fase selecionada. Ajuste conforme as necessidades do projeto — será usado para calcular a quantidade estimada de reuniões.</div>";
+  h+="<div style='display:flex;align-items:center;gap:8px;flex-shrink:0'>";
+  h+="<input type='number' min='1' max='200' value='"+durAtual+"' ";
+  h+="style='width:70px;background:var(--bg);border:1px solid var(--bord);border-radius:8px;padding:8px;color:var(--tx);font-size:16px;font-family:Syne,sans-serif;font-weight:700;text-align:center' ";
+  h+="onchange='S.dur=+this.value;render()'/>";
+  h+="<span style='font-size:13px;color:var(--tx3)'>semanas</span></div></div>";
+  if(durAtual!==durPadrao) h+="<div style='margin-top:8px;font-size:11px;color:var(--am2)'>Padrão: "+durPadrao+" semanas. <span style='cursor:pointer;text-decoration:underline' onclick='S.dur=0;render()'>Restaurar</span></div>";
+  h+="</div>";
+
+  // Visitas técnicas
+  h+="<div class='card'>";
+  h+="<div style='display:flex;align-items:center;gap:10px;margin-bottom:14px'>";
+  h+="<div style='flex:1'><div style='font-size:13px;font-weight:500'>Visitas técnicas ao local</div>";
+  h+="<div style='font-size:11px;color:var(--tx3);margin-top:2px'>A proponente definirá disciplinas e quantidade de horas</div></div>";
+  h+="<div class='tog"+(S.vis.on?" on":"")+"' onclick='S.vis.on=!S.vis.on;render()'></div></div>";
+  if(S.vis.on){
+    h+="<div style='padding-top:12px;border-top:1px solid var(--bord)'>";
+    h+="<div class='sec-l'>Aplicação</div><div class='chips' style='margin-bottom:0'>";
+    h+="<div class='chip"+(S.vis.modo==="obrigatorio"?" on":"")+"' onclick='S.vis.modo=\"obrigatorio\";render()'>Obrigatório — proponente deve realizar</div>";
+    h+="<div class='chip"+(S.vis.modo==="opcional"?" on":"")+"' onclick='S.vis.modo=\"opcional\";render()'>Opcional — proponente decide se realiza</div>";
+    h+="</div></div>";
+  }
+  h+="</div>";
+
+  // Modelamento 3D
+  h+="<div class='card'>";
+  h+="<div style='display:flex;align-items:center;gap:10px;margin-bottom:"+(S.m3d?"14px":"0")+"'>";
+  h+="<div style='flex:1'><div style='font-size:13px;font-weight:500'>Modelamento 3D</div>";
+  h+="<div style='font-size:11px;color:var(--tx3);margin-top:2px'>LOD e software — habilita também a reunião de Project Review</div></div>";
+  h+="<div class='tog"+(S.m3d?" on":"")+"' onclick='S.m3d=!S.m3d;if(!S.m3d){S.lod=null;}render()'></div></div>";
+  if(S.m3d){
+    h+="<div style='padding-top:12px;border-top:1px solid var(--bord)'>";
+    // Software: owner define ou proponente define
+    h+="<div class='sec-l'>Definição do software</div><div class='chips' style='margin-bottom:14px'>";
+    h+="<div class='chip"+(S.defSoft==="owner"?" on":"")+"' onclick='S.defSoft=\"owner\";render()'>Owner define o software</div>";
+    h+="<div class='chip"+(S.defSoft==="proponente"?" on":"")+"' onclick='S.defSoft=\"proponente\";render()'>Proponente define o software</div>";
+    h+="</div>";
+    if(S.defSoft==="owner"){
+      h+="<div class='sec-l'>Software de modelamento</div><div class='chips' style='margin-bottom:14px'>";
+      for(var si=0;si<SOFTS.length;si++){
+        var sw=SOFTS[si];
+        var swon=S.softs.indexOf(sw.id)>=0?" on":"";
+        h+="<div class='chip"+swon+"' onclick='tSoft(\""+sw.id+"\")'>";
+        h+=sw.l+"<span style='font-size:10px;color:var(--tx3);margin-left:4px'>"+sw.v+"</span></div>";
+      }
+      h+="</div>";
+      if(!S.softs.length) h+="<div class='warn' style='margin-bottom:12px'>Selecione ao menos um software.</div>";
+    } else {
+      h+="<div style='font-size:12px;color:var(--tx2);margin-bottom:14px;padding:8px 12px;background:var(--bg3);border-radius:8px'>A proponente irá indicar o software que utilizará na proposta.</div>";
+    }
+    // LOD
+    h+="<div class='sec-l'>Nível de desenvolvimento do modelo (LOD)</div>";
+    h+="<div style='border:1px solid var(--bord);border-radius:8px;overflow:hidden'>";
+    for(var li=0;li<LODS.length;li++){
+      var lv=LODS[li];
+      var isSel=(S.lod===lv);
+      var accCt="";
+      for(var ai=0;ai<=li;ai++){
+        var ct=LOD_CONT[LODS[ai]]||"";
+        if(ct){
+          var isLast=(ai===li);
+          accCt+="<div style='margin-bottom:"+(isLast?"0":"6px")+";padding-bottom:"+(isLast?"0":"6px")+";border-bottom:"+(isLast?"none":"1px solid rgba(255,255,255,.06)")+"'>";
+          accCt+="<span style='font-size:12px;opacity:1'>"+ct+"</span></div>";
+        }
+      }
+      var bg=isSel?"var(--vd-bg)":"var(--bg)";
+      var bord=isSel?"border-left:3px solid var(--vd2)":"border-left:3px solid transparent";
+      var selLbl=isSel?"<span style='font-size:10px;font-weight:700;color:var(--vd2);margin-left:8px'>✓ SELECIONADO</span>":"";
+      h+="<div style='padding:12px 14px;cursor:pointer;background:"+bg+";"+bord+";border-bottom:"+(li<LODS.length-1?"1px solid var(--bord)":"none")+"' onclick='S.lod=\""+lv+"\";render()'>";
+      h+="<div style='display:flex;align-items:center;margin-bottom:6px'>";
+      h+="<span style='font-family:\"Syne\",sans-serif;font-size:13px;font-weight:700;color:"+(isSel?"var(--vd2)":"var(--tx)")+"'>"+lv+"</span>"+selLbl+"</div>";
+      h+="<div style='font-size:12px;color:var(--tx2);line-height:1.5'>"+accCt+"</div></div>";
+    }
+    h+="</div></div>";
+  }
+  h+="</div>";
+
+  // Aquisições
+  h+="<div class='card'><div class='sec-l'>Aquisições</div>";
+  h+="<div style='font-size:12px;color:var(--tx2);margin-bottom:12px'>Defina como a proponente deverá tratar os preços na estimativa de investimento</div>";
+  h+="<div class='chips' style='margin-bottom:"+(S.aqMode!=="referencia"?"14px":"0")+"'>";
+  h+="<div class='chip"+(S.aqMode==="referencia"?" on":"")+"' onclick='S.aqMode=\"referencia\";render()'>📊 Referências e índices</div>";
+  h+="<div class='chip"+(S.aqMode==="mercado"?" on":"")+"' onclick='S.aqMode=\"mercado\";render()'>🏪 Ir ao mercado</div>";
+  h+="<div class='chip"+(S.aqMode==="hibrido"?" on":"")+"' onclick='S.aqMode=\"hibrido\";render()'>🔀 Híbrido</div>";
+  h+="</div>";
+  if(S.aqMode==="mercado"||S.aqMode==="hibrido"){
+    h+="<div style='font-size:11px;color:var(--tx3);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;font-weight:600'>Selecione o que será cotado</div>";
+    var aqItens=[
+      {id:"eq_princ",l:"Sistemas / Equipamentos principais"},
+      {id:"eq_aux",l:"Sistemas / Equipamentos auxiliares"},
+      {id:"mat",l:"Materiais"},
+      {id:"sv_terra",l:"Serviços — Terraplenagem"},
+      {id:"sv_infra",l:"Serviços — Infraestrutura"},
+      {id:"sv_civil",l:"Serviços — Construção civil"},
+      {id:"sv_mec",l:"Serviços — Montagem mecânica"},
+      {id:"sv_elet",l:"Serviços — Montagem elétrica / Automação"}
+    ];
+    for(var ai2=0;ai2<aqItens.length;ai2++){
+      var aq=aqItens[ai2];
+      var aon=S.aqItens[aq.id];
+      if(!S.aqBids[aq.id]) S.aqBids[aq.id]=1;
+      if(!S.aqReun[aq.id]) S.aqReun[aq.id]=3;
+      var nTotReun=S.aqBids[aq.id]*(S.aqReun[aq.id]||1);
+      h+="<div style='display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bord)'>";
+      h+="<div class='tog"+(aon?" on":"")+"' style='width:32px;height:18px' onclick='S.aqItens[\""+aq.id+"\"]=!S.aqItens[\""+aq.id+"\"];render()'></div>";
+      h+="<span style='font-size:12px;color:"+(aon?"var(--tx)":"var(--tx3)")+";flex:1'>"+aq.l+"</span>";
+      if(aon){
+        h+="<div style='display:flex;align-items:center;gap:8px;flex-shrink:0'>";
+        h+="<div style='display:flex;flex-direction:column;align-items:center;gap:1px'>";
+        h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px'>Licitações</span>";
+        h+="<input type='number' min='1' max='10' value='"+S.aqBids[aq.id]+"' data-aid='"+aq.id+"' onchange='setAqBids(this)' style='width:46px;background:var(--bg);border:1px solid var(--bord);border-radius:6px;padding:4px;color:var(--tx);font-size:13px;font-weight:700;text-align:center'/>";
+        h+="</div>";
+        h+="<span style='font-size:12px;color:var(--tx3)'>×</span>";
+        h+="<div style='display:flex;flex-direction:column;align-items:center;gap:1px'>";
+        h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px'>Fornecedores</span>";
+        h+="<input type='number' min='1' max='20' value='"+S.aqReun[aq.id]+"' data-aid='"+aq.id+"' onchange='setAqReun(this)' style='width:46px;background:var(--bg);border:1px solid var(--bord);border-radius:6px;padding:4px;color:var(--tx);font-size:13px;font-weight:700;text-align:center'/>";
+        h+="</div>";
+        h+="<div style='display:flex;flex-direction:column;align-items:center;gap:1px'>";
+        h+="<span style='font-size:9px;color:var(--az2);text-transform:uppercase;letter-spacing:.4px'>Reuniões</span>";
+        h+="<span style='font-size:13px;font-weight:700;color:var(--az2);width:42px;text-align:center'>"+nTotReun+"</span>";
+        h+="</div>";
+        h+="</div>";
+      }
+      h+="</div>";
+    }
+  }
+
+  h+="</div>";
+
+  // Reuniões
+  h+="<div class='card'><div class='sec-l'>Reuniões do projeto</div>";
+  h+="<div style='font-size:12px;color:var(--tx2);margin-bottom:14px'>Selecione os tipos de reunião e a periodicidade. As horas serão dimensionadas pela proponente.</div>";
+  for(var ri=0;ri<REUN.length;ri++){
+    var r=REUN[ri];
+    // Project Review só aparece se 3D ativo
+    if(r.req3d&&!S.m3d) continue;
+    var rc=S.reun[r.id];
+    if(!rc) rc={inc:r.req3d&&S.m3d,f:r.df,h:2}; if(!rc.h) rc.h=2; S.reun[r.id]=rc;
+    h+="<div class='rcard"+(rc.inc?" on":"")+"'><div class='rcard-top'>";
+    h+="<div class='tog"+(rc.inc?" on":"")+"' onclick='tR(\""+r.id+"\")'></div>";
+    h+="<div style='flex:1'>";
+    h+="<div style='font-size:13px;font-weight:500;color:"+(rc.inc?"var(--tx)":"var(--tx3)")+"'>"+r.t;
+    if(r.req3d) h+="<span style='font-size:10px;margin-left:8px;color:var(--vd2);background:var(--vd-bg);padding:2px 7px;border-radius:10px'>3D</span>";
+    h+="</div></div>";
+    if(rc.inc){
+      h+="<div style='display:flex;align-items:center;gap:8px'>";
+      h+="<span style='font-size:11px;color:var(--tx3)'>Periodicidade:</span>";
+      h+="<select class='sel-i' style='width:auto' onchange='uR(\""+r.id+"\",\"f\",this.value)'>";
+      var freqs=["Semanal","Quinzenal","Mensal","Por evento"];
+      for(var fi=0;fi<freqs.length;fi++){
+        h+="<option"+(rc.f===freqs[fi]?" selected":"")+">"+freqs[fi]+"</option>";
+      }
+      h+="</select>";
+      h+="<span style='font-size:11px;color:var(--tx3);margin-left:10px'>Horas/reun.:</span>";
+      h+="<input type='number' min='1' max='24' value='"+(rc.h||2)+"' class='gest-inp' style='width:52px' data-rid='"+r.id+"' onchange='uR(this.dataset.rid,\"h\",+this.value)'/>";
+      h+="<span style='color:var(--tx3);font-size:12px'>h</span>";
+      h+="</div>";
+    }
+    h+="</div></div>";
+  }
+  // Reunião com fornecedores (aparece quando há cotação de mercado)
+  if(S.aqMode!=="referencia"){
+    if(!S.reun["r_forn"]) S.reun["r_forn"]={inc:true,f:"Por evento"};
+    var rforn=S.reun["r_forn"];
+    h+="<div class='rcard"+(rforn.inc?" on":"")+"'><div class='rcard-top'>";
+    h+="<div class='tog"+(rforn.inc?" on":"")+"'  onclick='tR(\"r_forn\")' ></div>";
+    h+="<div style='flex:1'><div style='font-size:13px;font-weight:500;color:"+(rforn.inc?"var(--tx)":"var(--tx3)")+"'>";
+    h+="Reunião com fornecedores";
+    h+="<span style='font-size:10px;margin-left:8px;color:var(--am2);background:var(--am-bg);padding:2px 7px;border-radius:10px'>Aquisições</span></div></div>";
+    if(rforn.inc){
+      h+="<div style='display:flex;align-items:center;gap:8px'>";
+      h+="<span style='font-size:11px;color:var(--tx3)'>Periodicidade:</span>";
+      h+="<select class='sel-i' style='width:auto' onchange='uR(\"r_forn\",\"f\",this.value)'>";
+      var freqsF=["Semanal","Quinzenal","Mensal","Por evento"];
+      for(var ffi=0;ffi<freqsF.length;ffi++) h+="<option"+(rforn.f===freqsF[ffi]?" selected":"")+">"+freqsF[ffi]+"</option>";
+      h+="</select></div>";
+    }
+    h+="</div></div>";
+  }
+  h+="</div>";
+
+  // Normas e padrões
+  h+="<div class='card'><div class='sec-l'>Normas e padrões</div>";
+  h+="<div style='font-size:12px;color:var(--tx2);margin-bottom:14px'>Selecione os conjuntos de normas que regerão os entregáveis do projeto. A proponente deverá seguir as normas selecionadas.</div>";
+  for(var ni=0;ni<NORMAS.length;ni++){
+    var nr=NORMAS[ni];
+    var nron=S.normas.indexOf(nr.id)>=0;
+    h+="<div style='display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bord)'>";
+    h+="<div class='tog"+(nron?" on":"")+"' onclick='tNorma(\""+nr.id+"\")'></div>";
+    h+="<div><div style='font-size:13px;font-weight:500;color:"+(nron?"var(--tx)":"var(--tx3)")+"'>"+nr.l+"</div>";
+    h+="<div style='font-size:11px;color:var(--tx3);margin-top:2px'>"+nr.desc+"</div></div></div>";
+  }
+
+  h+="<div class='fnav'><button class='btn-s' onclick='goT(0)'>← Voltar</button><button class='btn' onclick='goT(2)'>Definir entregáveis →</button></div>";
+  return h;
+}
+
+function T2(){
+  var sugNv=S.obj?NV_OBJ[S.obj.id]:"A";
+  var incCount=Object.keys(S.sel).length;
+  var busca=S.busca.toLowerCase();
+
+  // Filtros
+  var filtHtml="";
+  var filtList=["Todas"].concat(DISCS);
+  for(var fi=0;fi<filtList.length;fi++){
+    var fd=filtList[fi];
+    filtHtml+="<div class='filtro"+(S.filt===fd?" on":"")+"' onclick='S.filt=\""+fd+"\";render()'>"+(fd==="Todas"?"Todas as disciplinas":fd)+"</div>";
+  }
+
+  // Linhas da tabela
+  var tbody="";
+  var discList=[];
+  for(var di=0;di<DISCS.length;di++){
+    if(S.filt==="Todas"||DISCS[di]===S.filt) discList.push(DISCS[di]);
+  }
+  for(var di2=0;di2<discList.length;di2++){
+    var disc=discList[di2];
+    var items=[];
+    for(var ei=0;ei<E.length;ei++){
+      var e=E[ei];
+      if(e.d!==disc) continue;
+      if(busca&&e.n.toLowerCase().indexOf(busca)<0&&e.c.toLowerCase().indexOf(busca)<0) continue;
+      items.push(e);
+    }
+    if(!items.length) continue;
+    tbody+="<tr class='tr-disc'><td colspan='6'>"+disc+"</td></tr>";
+    for(var ii=0;ii<items.length;ii++){
+      var e2=items[ii];
+      var selNv=S.sel[e2.c]||null;
+      var cells="";
+      for(var ni=0;ni<NVS.length;ni++){
+        var nv=NVS[ni];
+        var stNv=getSt(e2.c,nv);
+        var isSel=(selNv===nv);
+
+        // Conteúdo acumulado — sem labels de nível nos níveis B,C,D
+        var accLines=[];
+        for(var ai=0;ai<=ni;ai++){
+          var ct=(CONT[e2.c]&&CONT[e2.c][NVS[ai]])||"";
+          if(ct&&ct!=="—") accLines.push({nv:NVS[ai],txt:ct,isNew:(ai===ni)});
+        }
+        var ctHtml="";
+        for(var li=0;li<accLines.length;li++){
+          var ln=accLines[li];
+          var isLast=(li===accLines.length-1);
+          ctHtml+="<div style='margin-bottom:"+(isLast?"0":"5px")+";padding-bottom:"+(isLast?"0":"5px")+";border-bottom:"+(isLast?"none":"1px solid rgba(255,255,255,.06)")+"'>";
+          // Nível A: mostra label. Níveis B,C,D: só texto, sem label
+          if(ni===0){
+            ctHtml+="<span style='font-size:11px'>"+ln.txt+"</span>";
+          } else {
+            // sem label de nível
+            ctHtml+="<span style='font-size:11px;opacity:1'>"+ln.txt+"</span>";
+          }
+          ctHtml+="</div>";
+        }
+        if(!ctHtml) ctHtml="<span style='opacity:.2;font-style:italic'>—</span>";
+
+        // Visual: selecionado = verde vibrante + SELECIONADO
+        // Não selecionado = cor metodológica mas opaca
+        var bg,opacity,borderL,ctColor,selLabel="";
+        // Cor base pelo status metodológico
+        if(stNv==="O")         {bg="var(--vd-bg)";ctColor="var(--vd2)";borderL="3px solid var(--vd2)";}
+        else if(stNv==="Op")   {bg="var(--am-bg)";ctColor="var(--am2)";borderL="3px solid var(--am2)";}
+        else if(stNv==="NA")   {bg="var(--vm-bg)";ctColor="var(--vm2)";borderL="3px solid var(--vm2)";}
+        else if(stNv==="PRED") {bg="#070f1e";ctColor="var(--az2)";borderL="3px solid var(--az2)";}
+        else                   {bg="var(--bg3)";ctColor="var(--tx3)";borderL="1px solid var(--bord)";}
+        if(isSel){
+          // Selecionado: sempre verde independente de O ou Op
+          bg="var(--vd-bg)";
+          ctColor="var(--vd2)";
+          borderL="3px solid var(--vd2)";
+          opacity="1";
+          selLabel="<div style='font-size:9px;font-weight:700;color:var(--vd2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px'>✓ SELECIONADO</div>";
+        } else if(stNv==="Op"){
+          // Recomendado não selecionado — amarelo com label RECOMENDADO
+          opacity="0.75";
+          selLabel="<div style='font-size:9px;font-weight:700;color:var(--am2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px'>★ RECOMENDADO</div>";
+        } else {
+          opacity="0.35";
+          borderL="1px solid transparent";
+        }
+
+        cells+="<td class='td-nv' style='background:"+bg+";border-left:"+borderL+";opacity:"+opacity+"' onclick='toggleNv(\""+e2.c+"\",\""+nv+"\")'>";
+        cells+=selLabel;
+        cells+="<div style='font-size:11px;color:"+ctColor+";line-height:1.5'>"+ctHtml+"</div></td>";
+      }
+      tbody+="<tr class='tr-e'>";
+      tbody+="<td class='td-cod'>"+e2.c+"</td>";
+      tbody+="<td class='td-nome' onclick='openDrw(\""+e2.c+"\")'>"+e2.n+"<br><span style='font-size:10px;opacity:.35'>ⓘ informações</span></td>";
+      tbody+=cells+"</tr>";
+    }
+  }
+
+  // Sumário por nível
+  var nvSum="";
+  var nvColors={A:"#5b97ff",B:"#fbbf24",C:"#4ade80",D:"#c084fc"};
+  for(var ni2=0;ni2<NVS.length;ni2++){
+    var nvx=NVS[ni2];
+    var cnt=0;
+    for(var cod in S.sel){if(S.sel[cod]===nvx) cnt++;}
+    if(cnt>0) nvSum+="<div class='sum-item'><div class='sum-n' style='color:"+nvColors[nvx]+"'>"+cnt+"</div><div class='sum-l'>Nível "+nvx+"</div></div>";
+  }
+
+  var h="<div class='titulo'>Definição de entregáveis e níveis</div>";
+  h+="<div class='sub'>Clique em uma célula para selecionar o nível desejado. Células selecionadas ficam em verde. Clique no nome do entregável para ver detalhes e informações de entrada.</div>";
+  h+="<div style='display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;align-items:center'>";
+  h+="<div style='font-family:\"Syne\",sans-serif;font-size:18px;font-weight:700;color:var(--vd2)'>"+incCount+" entregáveis selecionados</div>";
+  h+="<div style='font-size:12px;color:var(--tx3)'>Objetivo: <strong style='color:var(--tx2)'>"+S.obj.l+"</strong></div>";
+  h+="<div style='margin-left:auto'><button class='btn-s' style='font-size:11px;padding:5px 14px' onclick='initSel();render()'>↺ Restaurar sugestão</button></div></div>";
+  h+="<input class='search' placeholder='Buscar entregável ou código...' value='"+S.busca+"' oninput='S.busca=this.value;render()'/>";
+  h+="<div class='filtros'>"+filtHtml+"</div>";
+  h+="<div class='tbl-wrap'><table>";
+  h+="<colgroup><col style='width:90px'/><col style='width:190px'/><col/><col/><col/><col/></colgroup>";
+  h+="<thead>";
+  h+="<tr><th colspan='2' style='border-bottom:none'></th>";
+  h+="<th colspan='4' style='text-align:center;font-size:11px;font-weight:700;color:var(--az2);letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--bord2)'>Nível de desenvolvimento dos entregáveis</th></tr>";
+  h+="<tr>";
+  h+="<th class='th-cod'>Código</th><th class='th-nome'>Entregável</th>";
+  h+="<th class='th-nv'>A</th><th class='th-nv'>B</th><th class='th-nv'>C</th><th class='th-nv'>D</th>";
+  h+="</tr></thead><tbody>"+tbody+"</tbody></table>";
+  h+="<div class='sumario'>";
+  h+="<div class='sum-item'><div class='sum-n' style='color:var(--vd2)'>"+incCount+"</div><div class='sum-l'>Selecionados</div></div>";
+  h+=nvSum;
+  h+="<div style='margin-left:auto'><button class='btn' onclick='goT(3)'>Revisar e aprovar →</button></div>";
+  h+="</div></div>";
+  h+="<div class='fnav'><button class='btn-s' onclick='goT(1)'>← Voltar</button></div>";
+  return h;
+}
+
+function TPRED(){
+  var predList=getPredList();
+  var h="<div class='titulo'>Informações predecessoras</div>";
+  h+="<div class='sub'>Indique quais informações de fases anteriores já estão disponíveis para a proponente.</div>";
+  if(!predList.length){
+    h+="<div style='text-align:center;padding:40px;background:var(--bg2);border:1px solid var(--bord);border-radius:10px;color:var(--tx3)'>Nenhuma informação predecessora identificada para os entregáveis selecionados neste objetivo.</div>";
+  } else {
+    var totP=0,dispP=0;
+    for(var p0=0;p0<predList.length;p0++)
+      for(var c0=0;c0<predList[p0].conts.length;c0++){
+        totP++;
+        if(S.predDisp[predList[p0].e.c+"_"+predList[p0].conts[c0].nv]) dispP++;
+      }
+    // Barra de progresso
+    h+="<div style='display:flex;gap:16px;margin-bottom:12px;align-items:center'>";
+    h+="<div style='flex:1;height:5px;background:var(--bord);border-radius:3px;overflow:hidden'>";
+    h+="<div style='height:100%;width:"+Math.round(dispP/totP*100)+"%;background:"+(dispP===totP?"var(--vd)":"var(--am)")+";border-radius:3px;transition:width .3s'></div></div>";
+    h+="<span style='font-size:13px;font-weight:700;color:"+(dispP===totP?"var(--vd2)":"var(--am2)")+"'>"+dispP+"/"+totP+" disponíveis</span>";
+    h+="</div>";
+    // Botões globais
+    h+="<div style='display:flex;gap:10px;margin-bottom:14px'>";
+    h+="<button onclick='setPredAll(true)' style='padding:7px 16px;border-radius:8px;border:1px solid var(--vd-bord);background:var(--vd-bg);color:var(--vd2);font-size:12px;font-weight:700;cursor:pointer'>✓ Marcar todos disponível</button>";
+    h+="<button onclick='setPredAll(false)' style='padding:7px 16px;border-radius:8px;border:1px solid var(--vm-bord);background:var(--vm-bg);color:var(--vm2);font-size:12px;font-weight:700;cursor:pointer'>✗ Marcar todos pendente</button>";
+    h+="</div>";
+    // Tabela estilo entregáveis
+    var byD={};
+    for(var p1=0;p1<predList.length;p1++){
+      var d=predList[p1].e.d;
+      if(!byD[d]) byD[d]=[];
+      byD[d].push(predList[p1]);
+    }
+    var tbody="";
+    for(var disc in byD){
+      tbody+="<tr class='tr-disc'><td colspan='4'>"+disc+"</td></tr>";
+      for(var p2=0;p2<byD[disc].length;p2++){
+        var item=byD[disc][p2];
+        // Status do item
+        var allDisp=true,anySet=false;
+        for(var cx=0;cx<item.conts.length;cx++){
+          var kx=item.e.c+"_"+item.conts[cx].nv;
+          if(!S.predDisp[kx]) allDisp=false;
+          if(S.predDisp[kx]!==undefined) anySet=true;
+        }
+        var rowBg=allDisp&&anySet?"var(--vd-bg)":anySet?"var(--vm-bg)":"var(--bg2)";
+        var rowBord=allDisp&&anySet?"var(--vd2)":anySet?"var(--vm2)":"var(--bord2)";
+        var statusBadge=allDisp&&anySet
+          ?"<span class='badge' style='background:var(--vd-bg);color:var(--vd2);border:1px solid var(--vd-bord)'>✓ Disponível</span>"
+          :anySet
+          ?"<span class='badge' style='background:var(--vm-bg);color:var(--vm2);border:1px solid var(--vm-bord)'>✗ Pendente</span>"
+          :"<span class='badge' style='background:var(--bg3);color:var(--tx3);border:1px solid var(--bord)'>— Não informado</span>";
+        // Conteúdo: juntar múltiplos com separador
+        var ctHtml="";
+        for(var c2=0;c2<item.conts.length;c2++){
+          if(c2>0) ctHtml+="<div style='height:4px'></div>";
+          ctHtml+="<div style='font-size:12px;color:var(--tx2);line-height:1.5'>"+item.conts[c2].ct+"</div>";
+        }
+        tbody+="<tr style='border-bottom:1px solid var(--bord)'>";
+        tbody+="<td style='padding:10px;font-size:10px;color:var(--tx3);font-weight:600;vertical-align:top;width:86px;border-left:3px solid "+rowBord+";background:"+rowBg+"'>"+item.e.c+"</td>";
+        tbody+="<td style='padding:10px;font-size:12px;color:var(--tx2);font-weight:500;vertical-align:top;width:180px;background:"+rowBg+"'>"+item.e.n+"</td>";
+        tbody+="<td style='padding:10px;vertical-align:top;background:"+rowBg+"'>"+ctHtml+"</td>";
+        tbody+="<td style='padding:10px;vertical-align:middle;text-align:center;width:150px;background:"+rowBg+"'>";
+        tbody+="<div style='display:flex;flex-direction:column;gap:6px;align-items:center'>";
+        tbody+=statusBadge;
+        tbody+="<div style='display:flex;gap:5px'>";
+        tbody+="<button data-cod='"+item.e.c+"' onclick='setPredByCod(this.dataset.cod,true)' style='padding:4px 10px;border-radius:5px;border:1px solid var(--vd-bord);background:"+(allDisp&&anySet?"var(--vd)":"var(--bg3)")+";color:"+(allDisp&&anySet?"#fff":"var(--vd2)")+";font-size:11px;font-weight:700;cursor:pointer'>✓</button>";
+        tbody+="<button data-cod='"+item.e.c+"' onclick='setPredByCod(this.dataset.cod,false)' style='padding:4px 10px;border-radius:5px;border:1px solid var(--vm-bord);background:"+(anySet&&!allDisp?"var(--vm)":"var(--bg3)")+";color:"+(anySet&&!allDisp?"#fff":"var(--vm2)")+";font-size:11px;font-weight:700;cursor:pointer'>✗</button>";
+        tbody+="</div></div></td></tr>";
+      }
+    }
+    h+="<div class='tbl-wrap'><table>";
+    h+="<colgroup><col style='width:86px'/><col style='width:180px'/><col/><col style='width:150px'/></colgroup>";
+    h+="<thead><tr>";
+    h+="<th class='th-cod'>Código</th><th class='th-nome'>Entregável predecessor</th>";
+    h+="<th style='text-align:left;padding:10px;font-size:11px;color:var(--tx2)'>Conteúdo necessário</th>";
+    h+="<th style='text-align:center;padding:10px;font-size:11px;color:var(--tx2)'>Disponibilidade</th>";
+    h+="</tr></thead><tbody>"+tbody+"</tbody></table></div>";
+  }
+  h+="<div class='fnav'>";
+  h+="<button class='btn-s' onclick='goT(2)'>← Voltar</button>";
+  h+="<button class='btn' onclick='goT(4)'>Revisar e aprovar →</button>";
+  h+="</div>";
+  return h;
+}
+
+function T3(){
+  var o=S.obj;
+  var incCount=Object.keys(S.sel).length;
+  var durSem=(S.dur&&S.dur>0)?S.dur:DUR[o.id];
+
+  var h="<div class='titulo'>Revisão e aprovação do escopo</div>";
+  h+="<div class='sub'>Revise todas as configurações antes de aprovar e enviar às proponentes.</div>";
+
+  // ── Grade de cards resumo ─────────────────────────────
+  h+="<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px'>";
+
+  // Objetivo
+  h+="<div class='card' style='margin-bottom:0'>";
+  h+="<div class='sec-l'>Objetivo</div>";
+  h+="<div style='font-size:14px;font-weight:600;line-height:1.3;color:var(--tx)'>"+o.l+"</div>";
+  h+="<div style='font-size:12px;color:var(--tx3);margin-top:4px'>"+o.p+"</div>";
+  h+="</div>";
+
+  // Tipo + Prazo
+  h+="<div class='card' style='margin-bottom:0'>";
+  h+="<div class='sec-l'>Projeto</div>";
+  h+="<div style='font-size:14px;font-weight:600;color:"+(S.tipo==="greenfield"?"var(--vd2)":"var(--am2)")+"'>"+(S.tipo==="greenfield"?"🌱 Greenfield":"🏭 Brownfield")+"</div>";
+  h+="<div style='font-size:12px;color:var(--tx3);margin-top:6px'>⏱ Prazo estimado: <strong style='color:var(--tx)'>"+durSem+" semanas</strong></div>";
+  h+="</div>";
+
+  // Entregáveis
+  var nO=0,nOp=0;
+  for(var cod in S.sel){ var st=getSt(cod,S.sel[cod]); if(st==="O") nO++; else nOp++; }
+  h+="<div class='card' style='margin-bottom:0'>";
+  h+="<div class='sec-l'>Entregáveis</div>";
+  h+="<div style='font-family:Syne,sans-serif;font-size:28px;font-weight:800;color:var(--az2)'>"+incCount+"</div>";
+  h+="<div style='font-size:11px;color:var(--tx3);margin-top:2px'>"+nO+" obrigatórios · "+nOp+" recomendados</div>";
+  h+="</div>";
+
+  h+="</div>";
+
+  // ── Modelamento 3D ────────────────────────────────────
+  if(S.m3d){
+    h+="<div class='card'><div class='sec-l'>Modelamento 3D</div>";
+    h+="<div style='display:flex;gap:16px;flex-wrap:wrap;align-items:center'>";
+    h+="<div><div style='font-size:11px;color:var(--tx3);margin-bottom:2px'>Nível (LOD)</div>";
+    h+="<div style='font-family:Syne,sans-serif;font-size:16px;font-weight:700;color:var(--vd2)'>"+(S.lod||"Não definido")+"</div></div>";
+    if(S.defSoft==="owner"&&S.softs.length){
+      h+="<div><div style='font-size:11px;color:var(--tx3);margin-bottom:2px'>Software</div>";
+      var swNames=S.softs.map(function(id){for(var i=0;i<SOFTS.length;i++){if(SOFTS[i].id===id)return SOFTS[i].l;}return id;}).join(", ");
+      h+="<div style='font-size:14px;font-weight:600;color:var(--tx)'>"+swNames+"</div></div>";
+    } else if(S.defSoft==="proponente"){
+      h+="<div><div style='font-size:11px;color:var(--tx3);margin-bottom:2px'>Software</div>";
+      h+="<div style='font-size:13px;color:var(--tx3);font-style:italic'>A definir pela proponente</div></div>";
+    }
+    h+="</div></div>";
+  }
+
+  // ── Visitas técnicas ──────────────────────────────────
+  if(S.vis.on){
+    h+="<div class='card'><div class='sec-l'>Visitas técnicas</div>";
+    h+="<div style='font-size:13px;font-weight:600;color:"+(S.vis.modo==="obrigatorio"?"var(--vd2)":"var(--am2)")+"'>";
+    h+=(S.vis.modo==="obrigatorio"?"Obrigatório — proponente deve realizar":"Opcional — proponente decide");
+    h+="</div><div style='font-size:11px;color:var(--tx3);margin-top:4px'>Quantidade e disciplinas a definir pela proponente</div>";
+    h+="</div>";
+  }
+
+  // ── Aquisições ────────────────────────────────────────
+  h+="<div class='card'><div class='sec-l'>Aquisições</div>";
+  var aqLabels={referencia:"📊 Preços de referência e índices",mercado:"🏪 Ir ao mercado para cotações",hibrido:"🔀 Híbrido — referências + mercado"};
+  h+="<div style='font-size:13px;font-weight:600;color:var(--tx)'>"+aqLabels[S.aqMode]+"</div>";
+  if(S.aqMode!=="referencia"){
+    var aqNomes={eq_princ:"Equip. principais",eq_aux:"Equip. auxiliares",mat:"Materiais",
+      sv_terra:"Terraplenagem",sv_infra:"Infraestrutura",sv_civil:"Construção civil",
+      sv_mec:"Mont. mecânica",sv_elet:"Mont. elétrica/Automação"};
+    var sel=[];
+    for(var k in S.aqItens){if(S.aqItens[k]) sel.push(aqNomes[k]);}
+    if(sel.length) h+="<div style='font-size:11px;color:var(--tx3);margin-top:6px'>"+sel.join(" · ")+"</div>";
+    if(S.aqReunForn){
+      h+="<div style='margin-top:10px;padding-top:10px;border-top:1px solid var(--bord)'>";
+      h+="<div style='font-size:11px;color:var(--tx3);font-weight:600;margin-bottom:8px'>Licitações por pacote</div>";
+      var aqNR={eq_princ:"Equip. principais",eq_aux:"Equip. auxiliares",mat:"Materiais",
+        sv_terra:"Terraplenagem",sv_infra:"Infraestrutura",sv_civil:"Construção civil",
+        sv_mec:"Mont. mecânica",sv_elet:"Mont. elétrica/Automação"};
+      for(var kr2 in S.aqItens){
+        if(!S.aqItens[kr2]) continue;
+        var nBid2=(S.aqBids&&S.aqBids[kr2])||1;
+        var nForn2=(S.aqReun&&S.aqReun[kr2])||1;
+        h+="<div style='display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bord)'>";
+        h+="<span style='font-size:12px;color:var(--tx2)'>"+aqNR[kr2]+"</span>";
+        h+="<span class='badge' style='background:var(--bg3);color:var(--az2);border:1px solid var(--bord2)'>"+nBid2+" licitação"+(nBid2>1?"ões":"")+"</span>";
+        h+="</div>";
+      }
+      h+="</div>";
+    }
+  }
+  h+="</div>";
+
+  // ── Normas e padrões ──────────────────────────────────
+  if(S.normas.length){
+    h+="<div class='card'><div class='sec-l'>Normas e padrões adotados</div>";
+    h+="<div style='display:flex;gap:8px;flex-wrap:wrap'>";
+    for(var ni=0;ni<NORMAS.length;ni++){
+      if(S.normas.indexOf(NORMAS[ni].id)>=0){
+        h+="<span class='badge' style='background:var(--az-bg,#0a1528);color:var(--az2);border:1px solid var(--bord2);padding:5px 14px;font-size:12px'>"+NORMAS[ni].l+"</span>";
+      }
+    }
+    h+="</div></div>";
+  }
+
+  // ── Reuniões ─────────────────────────────────────────
+  var rInc=[];
+  for(var ri=0;ri<REUN.length;ri++){
+    var rc=S.reun[REUN[ri].id];
+    if(rc&&rc.inc&&(!REUN[ri].req3d||S.m3d)) rInc.push(REUN[ri]);
+  }
+  if(rInc.length){
+    h+="<div class='card'><div class='sec-l'>Reuniões do projeto</div>";
+    var totalReu=0;
+    for(var ri2=0;ri2<rInc.length;ri2++){
+      var r=rInc[ri2];
+      var rc2=S.reun[r.id];
+      var nr=calcA(rc2.f);
+      totalReu+=nr;
+      h+="<div style='display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bord)'>";
+      h+="<span style='font-size:12px;color:var(--tx2)'>"+r.t+(r.req3d?"<span style='font-size:9px;margin-left:6px;color:var(--vd2);background:var(--vd-bg);padding:1px 6px;border-radius:8px'>3D</span>":"")+"</span>";
+      h+="<div style='display:flex;gap:8px;align-items:center'>";
+      h+="<span style='font-size:11px;color:var(--tx3)'>"+rc2.f+"</span>";
+      h+="<span class='badge' style='background:#0A1528;color:var(--az2);border:1px solid var(--bord2)'>"+nr+" reuniões</span>";
+      h+="</div></div>";
+    }
+    // Reunião com fornecedores
+    if(S.aqMode!=="referencia"&&S.reun&&S.reun["r_forn"]&&S.reun["r_forn"].inc){
+      var totalFornR=0;
+      for(var kfr in S.aqItens){
+        if(S.aqItens[kfr]) totalFornR+=(S.aqBids[kfr]||1)*(S.aqReun[kfr]||1);
+      }
+      totalReu+=totalFornR;
+      h+="<div style='display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bord)'>";
+      h+="<span style='font-size:12px;color:var(--tx2)'>Reunião com fornecedores<span style='font-size:10px;margin-left:6px;color:var(--am2);background:var(--am-bg);padding:1px 6px;border-radius:8px'>Aquisições</span></span>";
+      h+="<div style='display:flex;gap:8px;align-items:center'>";
+      h+="<span class='badge' style='background:#0A1528;color:var(--am2);border:1px solid var(--am-bord)'>"+ totalFornR+" reuniões</span>";
+      h+="</div></div>";
+    }
+    h+="<div style='display:flex;justify-content:space-between;align-items:center;padding:10px 0'>";
+    h+="<span style='font-size:13px;font-weight:600'>Total estimado ("+durSem+" semanas)</span>";
+    h+="<span style='font-family:Syne,sans-serif;font-size:18px;font-weight:700;color:var(--az2)'>"+totalReu+" reuniões</span></div>";
+    h+="</div>";
+  }
+
+  // ── Entregáveis por disciplina ────────────────────────
+  h+="<div class='card'><div class='sec-l'>Entregáveis selecionados por disciplina</div>";
+  var dRes={};
+  for(var ei=0;ei<E.length;ei++){
+    if(!S.sel[E[ei].c]) continue;
+    var disc=E[ei].d;
+    if(!dRes[disc]) dRes[disc]={n:0};
+    dRes[disc].n++;
+  }
+  for(var disc in dRes){
+    var dr=dRes[disc];
+    h+="<div style='display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bord)'>";
+    h+="<span style='font-size:12px;color:var(--tx2)'>"+disc+"</span>";
+    h+="<div style='display:flex;gap:8px;align-items:center'>";
+    h+="<span class='badge' style='background:var(--bg3);color:var(--tx2);border:1px solid var(--bord)'>"+dr.n+"</span>";
+    h+="</div></div>";
+  }
+  h+="</div>";
+
+  h+="<div class='fnav'>";
+  h+="<button class='btn-s' onclick='goT(3)'>← Voltar</button>";
+  h+="<button class='btn btn-g' onclick='goT(5)'>✓ Aprovar</button>";
+  h+="</div>";
+  return h;
+}
+
+function T4(){
+  var o=S.obj;
+  var incCount=Object.keys(S.sel).length;
+  var h="<div class='titulo'>Escopo aprovado ✓</div>";
+  h+="<div class='sub'>O escopo está definido e aprovado. Escolha as próximas ações.</div>";
+
+  // Resumo compacto
+  h+="<div class='card' style='display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:20px'>";
+  h+="<div style='flex:1;min-width:140px'>";
+  h+="<div style='font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px'>Objetivo</div>";
+  h+="<div style='font-family:\"Syne\",sans-serif;font-size:15px;font-weight:700'>"+o.l+"</div>";
+  h+="<div style='font-size:12px;color:var(--tx3);margin-top:3px'>"+o.p+"</div></div>";
+  h+="<div style='text-align:center'><div style='font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px'>Tipo</div>";
+  h+="<div style='font-size:13px;color:"+(S.tipo==="greenfield"?"var(--vd2)":"var(--am2)")+"'>"+(S.tipo==="greenfield"?"🌱 Greenfield":"🏭 Brownfield")+"</div></div>";
+  h+="<div style='text-align:center'><div style='font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px'>Entregáveis</div>";
+  h+="<div style='font-family:\"Syne\",sans-serif;font-size:28px;font-weight:800;color:var(--vd2)'>"+incCount+"</div></div>";
+  h+="<div style='text-align:center'><div style='font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px'>Atas prev.</div>";
+  h+="<div style='font-family:\"Syne\",sans-serif;font-size:28px;font-weight:800;color:var(--az2)'>"+totAtas()+"</div></div>";
+  h+="</div>";
+
+  // Cards de ação
+  h+="<div style='display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px'>";
+
+  // Card 1: Gerar RFP
+  h+="<div class='card' style='border:1.5px solid var(--bord2);cursor:pointer;transition:all .2s' onmouseover=\"this.style.borderColor='var(--am)'\" onmouseout=\"this.style.borderColor='var(--bord2)'\" onclick='gerarRFP()'>";
+  h+="<div style='font-size:28px;margin-bottom:12px'>📄</div>";
+  h+="<div style='font-family:\"Syne\",sans-serif;font-size:16px;font-weight:700;margin-bottom:8px'>Gerar RFP</div>";
+  h+="<div style='font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:14px'>Exporta o escopo completo em formato Word (.docx) para envio manual às empresas de engenharia.</div>";
+  h+="<button class='btn' style='background:var(--am);width:100%;justify-content:center' onclick='event.stopPropagation();gerarRFP()'>⬇ Exportar RFP (.docx)</button>";
+  h+="</div>";
+
+  // Card 2: Enviar para proponentes
+  h+="<div class='card' style='border:1.5px solid var(--bord2);cursor:pointer;transition:all .2s' onmouseover=\"this.style.borderColor='var(--px)'\" onmouseout=\"this.style.borderColor='var(--bord2)'\" onclick='enviarProponentes()'>";
+  h+="<div style='font-size:28px;margin-bottom:12px'>📤</div>";
+  h+="<div style='font-family:\"Syne\",sans-serif;font-size:16px;font-weight:700;margin-bottom:8px'>Enviar para Proponentes</div>";
+  h+="<div style='font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:14px'>Convida as empresas de engenharia diretamente pela plataforma. Elas acessam o escopo e preenchem a proposta online.</div>";
+  h+="<button class='btn' style='background:#6D28D9;width:100%;justify-content:center' onclick='event.stopPropagation();enviarProponentes()'>📤 Enviar convite às proponentes</button>";
+  h+="</div>";
+
+  h+="</div>";
+
+  // Card 3: Fazer os dois
+  h+="<div class='card' style='border:1.5px solid var(--bord2);transition:all .2s;text-align:center' onmouseover=\"this.style.borderColor='var(--vd)'\" onmouseout=\"this.style.borderColor='var(--bord2)'\">";
+  h+="<div style='font-size:22px;margin-bottom:8px'>📄 + 📤</div>";
+  h+="<div style='font-family:\"Syne\",sans-serif;font-size:15px;font-weight:700;margin-bottom:6px'>Fazer os dois</div>";
+  h+="<div style='font-size:12px;color:var(--tx2);margin-bottom:14px'>Gera o RFP em Word e envia o convite às proponentes simultaneamente.</div>";
+  h+="<button class='btn btn-g' style='padding:10px 28px' onclick='gerarRFP();enviarProponentes()'>✓ Gerar RFP + Enviar às proponentes</button>";
+  h+="</div>";
+
+  h+="<div class='fnav' style='margin-top:16px'>";
+  h+="<button class='btn-s' onclick='goT(4)'>← Voltar ao escopo</button>";
+  h+="<button class='btn-s' onclick='reset()'>+ Novo projeto</button>";
+  h+="</div>";
+  return h;
+}
+
+// ── RENDER ─────────────────────────────────────────────────
+var Ts=[T0,T1,T2,TPRED,T3,T4];
+function render(){
+  var _tblScroll=0;
+  var _tblEl=document.querySelector('.tbl-wrap');
+  if(_tblEl) _tblScroll=_tblEl.scrollTop;
+  var stepsHtml="";
+  for(var i=0;i<6;i++){
+    var cls=i<S.tela?"done":i===S.tela?"cur":"";
+    var clk=i<S.tela?"onclick='goT("+i+")'":"";
+    stepsHtml+="<div class='stp"+(" "+cls).trim()+"' "+clk+" title='Etapa "+(i+1)+"'></div>";
+  }
+  document.getElementById("steps").innerHTML=stepsHtml;
+  var sc=document.getElementById("scr");
+  sc.className="scr fade";
+  sc.innerHTML=Ts[S.tela]();
+  void sc.offsetWidth;
+  if(_tblScroll>0){
+    var _tblEl2=document.querySelector('.tbl-wrap');
+    if(_tblEl2) _tblEl2.scrollTop=_tblScroll;
+  }
+}
+// ── HANDLERS ───────────────────────────────────────────────
+function selObjAdv(id){ selObj(id); goT(1); }
+function selObj(id){
+  for(var i=0;i<OBJS.length;i++){if(OBJS[i].id===id){S.obj=OBJS[i];break;}}
+  S.dur=DUR[id]; initSel(); render();
+}
+function selObjAdv(id){
+  selObj(id); goT(1);
+}
+function setPredDisp(k,v){S.predDisp[k]=v;render();}
+function tNorma(id){var i=S.normas.indexOf(id);if(i>=0)S.normas.splice(i,1);else S.normas.push(id);render();}
+function setPredGroup(keys,v){
+  for(var i=0;i<keys.length;i++) S.predDisp[keys[i]]=v;
+  render();
+}
+function setPredByCod(cod,v){
+  var pl=getPredList();
+  for(var i=0;i<pl.length;i++){
+    if(pl[i].e.c===cod)
+      for(var j=0;j<pl[i].conts.length;j++) S.predDisp[cod+'_'+pl[i].conts[j].nv]=v;
+  }
+  render();
+}
+function setPredAll(v){
+  var pl=getPredList();
+  for(var i=0;i<pl.length;i++)
+    for(var j=0;j<pl[i].conts.length;j++)
+      S.predDisp[pl[i].e.c+'_'+pl[i].conts[j].nv]=v;
+  render();
+}
+function setAqBids(el){S.aqBids[el.dataset.aid]=+el.value;render();}
+function setAqReun(el){S.aqReun[el.dataset.aid]=+el.value;render();}
+function goT(t){S.tela=t;render();}
+function tR(id){S.reun[id].inc=!S.reun[id].inc;render();}
+function uR(id,k,v){S.reun[id][k]=v;render();}
+function tSoft(id){
+  var idx=S.softs.indexOf(id);
+  if(idx>=0) S.softs.splice(idx,1); else S.softs.push(id);
+  render();
+}
+function tDV(d){
+  var idx=S.vis.ds.indexOf(d);
+  if(idx>=0) S.vis.ds.splice(idx,1); else S.vis.ds.push(d);
+  render();
+}
+function enviarEscopo(){
+  var msg='Escopo enviado para as proponentes!\n\nEm produção, as proponentes receberão um e-mail com link de acesso ao módulo de proposta contendo o escopo definido.';
+  alert(msg);
+}
+function enviarEscopo(){
+  alert('Escopo enviado!\nEm produção, as proponentes receberão um convite por e-mail com acesso ao módulo de proposta.');
+}
+function gerarRFP(){
+  var w=window.open('','_blank');
+  w.document.write(gerarHTMLRFP());
+  w.document.close();
+  setTimeout(function(){w.print();},600);
+}
+function gerarHTMLRFP(){
+  var o=S.obj;
+  var dt=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  var aqNomes={eq_princ:'Equip. principais',eq_aux:'Equip. auxiliares',mat:'Materiais',
+    sv_terra:'Terraplenagem',sv_infra:'Infraestrutura',sv_civil:'Construção civil',
+    sv_mec:'Mont. mecânica',sv_elet:'Mont. elétrica/Automação'};
+  var normaLabel={abnt:'ABNT',asme:'ASME/API/IEEE',iso:'ISO',en:'EN',nrs:'NRs'};
+  var h='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"/>'
+    +'<title>RFP — '+o.l+'</title>'
+    +'<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;font-size:11pt;color:#111;padding:0}'
+    +'@page{size:A4;margin:20mm 18mm}@media print{.no-print{display:none}}'
+    +'.pg{max-width:210mm;margin:0 auto;padding:20mm 18mm}'
+    +'h1{font-size:20pt;font-weight:700;color:#0D1F3C;margin-bottom:6px}'
+    +'h2{font-size:13pt;font-weight:700;color:#0D1F3C;border-bottom:2px solid #0D1F3C;padding-bottom:4px;margin:24px 0 12px}'
+    +'h3{font-size:11pt;font-weight:700;color:#1E3A6E;margin:14px 0 6px}'
+    +'table{width:100%;border-collapse:collapse;font-size:10pt;margin-bottom:12px}'
+    +'th{background:#0D1F3C;color:#fff;padding:7px 10px;text-align:left;font-size:9pt}'
+    +'td{padding:6px 10px;border-bottom:1px solid #DDE3ED}'
+    +'tr:even td,tr:nth-child(even) td{background:#F5F7FC}'
+    +'.badge{display:inline-block;background:#E8F0FF;color:#1E3A6E;border-radius:4px;padding:2px 8px;font-size:9pt;margin:2px}'
+    +'.hdr{border-bottom:3px solid #0D1F3C;padding-bottom:16px;margin-bottom:24px}'
+    +'.ftr{margin-top:32px;padding-top:12px;border-top:1px solid #DDE3ED;font-size:9pt;color:#666;text-align:center}'
+    +'</style></head><body><div class="pg">';
+  // Cabeçalho
+  h+='<div class="hdr"><div style="font-size:9pt;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Request for Proposal — StandardX</div>';
+  h+='<h1>'+o.l+'</h1><div style="font-size:11pt;color:#1E3A6E;margin-bottom:8px">'+o.p+'</div>';
+  h+='<div style="font-size:9pt;color:#666">Emitido em: '+dt+' &nbsp;|&nbsp; Prazo: '+(S.dur||16)+' semanas &nbsp;|&nbsp; Tipo: '+(S.tipo==="greenfield"?"Greenfield":"Brownfield")+'</div></div>';
+  // Entregáveis por disciplina
+  h+='<h2>1. Entregáveis</h2>';
+  var byDisc={};
+  for(var cod in S.sel){for(var i=0;i<E.length;i++){if(E[i].c===cod){var d=E[i].d;if(!byDisc[d])byDisc[d]=[];byDisc[d].push(E[i]);break;}}}
+  for(var disc in byDisc){
+    h+='<h3>'+disc+'</h3><table><tr><th style="width:90px">Código</th><th>Entregável</th><th style="width:80px;text-align:center">Nível</th></tr>';
+    for(var i=0;i<byDisc[disc].length;i++){var e2=byDisc[disc][i];var nv=ST[e2.c]&&ST[e2.c][S.obj.nv]||'O';
+      h+='<tr><td><code>'+e2.c+'</code></td><td>'+e2.n+'</td><td style="text-align:center"><span class="badge">'+nv+'</span></td></tr>';}
+    h+='</table>';}
+  // Reuniões
+  var reuns=REUN.filter(function(r){return S.reun[r.id]&&S.reun[r.id].inc;});
+  if(reuns.length){h+='<h2>2. Reuniões</h2><table><tr><th>Reunião</th><th>Periodicidade</th><th>Horas/reun.</th></tr>';
+    for(var ri=0;ri<reuns.length;ri++){var r2=reuns[ri];var rc2=S.reun[r2.id];
+      h+='<tr><td>'+r2.t+'</td><td>'+rc2.f+'</td><td>'+(rc2.h||2)+'h</td></tr>';}
+    if(S.aqReunForn&&S.reun&&S.reun['r_forn']&&S.reun['r_forn'].inc)
+      h+='<tr><td>Reunião com fornecedores <span class="badge">Aq.</span></td><td>Por evento</td><td>—</td></tr>';
+    h+='</table>';}
+  // Normas
+  if(S.normas&&S.normas.length){h+='<h2>3. Normas e Padrões</h2><p>';
+    for(var ni=0;ni<S.normas.length;ni++) h+='<span class="badge">'+normaLabel[S.normas[ni]]+'</span> ';
+    h+='</p>';}
+  // Instruções
+  h+='<h2>4. Instruções para a Proposta</h2>';
+  h+='<p>A proposta deve ser elaborada via plataforma StandardX com o link fornecido separadamente.</p>';
+  h+='<div class="ftr">StandardX · RFP · '+dt+'</div></div>';
+  h+='<div class="no-print" style="text-align:center;padding:20px;background:#f5f5f5">';
+  h+='<button onclick="window.print()" style="background:#0D1F3C;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:14px;cursor:pointer;margin-right:10px">🖨️ Imprimir / PDF</button>';
+  h+='<button onclick="window.close()" style="background:#eee;border:none;padding:12px 20px;border-radius:8px;font-size:14px;cursor:pointer">Fechar</button></div>';
+  h+='</body></html>';
+  return h;
+}
+function enviarProponentes(){
+  var escopo={
+    obj:{id:S.obj.id,l:S.obj.l,p:S.obj.p,nv:S.obj.nv},
+    tipo:S.tipo, vis:S.vis, m3d:S.m3d, lod:S.lod||null, softs:S.softs,
+    dur:S.dur||16, defSoft:S.defSoft,
+    reunioes:REUN.filter(function(r){return S.reun[r.id]&&S.reun[r.id].inc;}).map(function(r){
+      return{id:r.id,t:r.t,f:S.reun[r.id].f,h:S.reun[r.id].h||2};
+    }),
+    sel:S.sel, predDisp:S.predDisp, normas:S.normas,
+    aqMode:S.aqMode, aqForn:S.aqForn, aqReunForn:S.aqReunForn,
+    aqBids:S.aqBids, aqReun:S.aqReun, aqItens:S.aqItens
+  };
+  try{ localStorage.setItem("stdx_escopo", JSON.stringify(escopo)); }catch(e){}
+  var b64=btoa(unescape(encodeURIComponent(JSON.stringify(escopo))));
+  var proponenteUrl="StandardX_Proponente_v1.html?escopo="+b64;
+  showLinkModal(proponenteUrl);
+}
+function showLinkModal(url){
+  var ov=document.createElement("div");
+  ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px";
+  var box=document.createElement("div");
+  box.style.cssText="background:#0F1520;border:1px solid #243352;border-radius:14px;padding:28px;max-width:520px;width:100%";
+  box.innerHTML="<div style='font-family:Syne,sans-serif;font-size:18px;font-weight:700;color:#EEF2FF;margin-bottom:6px'>Escopo enviado ✓</div>"
+    +"<div style='font-size:12px;color:#94A3B8;margin-bottom:16px;line-height:1.6'>Os dois arquivos HTML devem estar na mesma pasta para o link funcionar.</div>"
+    +"<div style='background:#07090F;border:1px solid #1B2840;border-radius:8px;padding:10px 14px;font-size:10px;color:#64748B;word-break:break-all;margin-bottom:12px;font-family:monospace;max-height:70px;overflow:auto'>"+url+"</div>"
+    +"<div style='display:flex;gap:10px;margin-bottom:14px'>"
+    +"<button id='btnCopyLink' style='flex:1;background:#243352;color:#EEF2FF;border:none;border-radius:8px;padding:12px;font-size:13px;font-weight:700;cursor:pointer'>📋 Copiar link</button>"
+    +"<button id='btnOpenProp' style='flex:1;background:#0FB981;color:#07090F;border:none;border-radius:8px;padding:12px;font-size:13px;font-weight:700;cursor:pointer'>🚀 Abrir módulo proponente</button>"
+    +"</div>"
+    +"<div style='text-align:center;margin-bottom:14px'>"
+    +"<div style='font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px'>QR Code</div>"
+    +"<div id='qrWrap' style='display:inline-block;background:#fff;padding:10px;border-radius:8px'></div>"
+    +"</div>"
+    +"<button id='btnCloseM' style='width:100%;background:transparent;color:#94A3B8;border:1px solid #1B2840;border-radius:8px;padding:10px;font-size:13px;cursor:pointer'>Fechar</button>";
+  ov.appendChild(box);
+  document.body.appendChild(ov);
+  document.getElementById("btnCopyLink").onclick=function(){
+    var ta=document.createElement("textarea");
+    ta.value=url; document.body.appendChild(ta); ta.select();
+    try{document.execCommand("copy");}catch(e){}
+    document.body.removeChild(ta);
+    document.getElementById("btnCopyLink").textContent="✅ Copiado!";
+    setTimeout(function(){if(document.getElementById("btnCopyLink"))document.getElementById("btnCopyLink").textContent="📋 Copiar link";},2000);
+  };
+  document.getElementById("btnOpenProp").onclick=function(){
+    window.location.href="StandardX_Proponente_v1.html";
+  };
+  document.getElementById("btnCloseM").onclick=function(){document.body.removeChild(ov);};
+  var qrImg=document.createElement("img");
+  var shortUrl=url.length>400?window.location.origin+window.location.pathname.replace("StandardX_MVP_v14.html","StandardX_Proponente_v1.html"):url;
+  qrImg.src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+encodeURIComponent(shortUrl);
+  qrImg.style.cssText="width:150px;height:150px;display:block";
+  qrImg.onerror=function(){document.getElementById("qrWrap").innerHTML="<div style='font-size:10px;color:#666;padding:10px'>Use copiar link</div>";};
+  document.getElementById("qrWrap").appendChild(qrImg);
+}
+function reset(){
+  S={tela:0,obj:null,tipo:"greenfield",vis:{on:false,modo:"obrigatorio"},dur:0,dur:0,m3d:false,defSoft:"owner",softs:[],lod:null,normas:[],aqMode:"referencia",aqForn:3,aqReunForn:true,aqBids:{},aqReun:{},aqItens:{eq_princ:false,eq_aux:false,mat:false,sv_terra:false,sv_infra:false,sv_civil:false,sv_mec:false,sv_elet:false},reun:{},sel:{},filt:"Todas",busca:"",tab2:"ent",predDisp:{}};
+  for(var ri=0;ri<REUN.length;ri++) S.reun[REUN[ri].id]={inc:true,f:REUN[ri].df};
+  render();
+}
+
+var _auth=(function(){try{return sessionStorage.getItem("stdx_auth")==="ok";}catch(e){return false;}}
+)();
+function verificarSenha(){
+  var inp=document.getElementById("_lInp");
+  if(!inp)return;
+  if(inp.value==="standardx2025"){
+    try{sessionStorage.setItem("stdx_auth","ok");}catch(e){}
+    var ov=document.getElementById("_lOv");
+    if(ov) document.body.removeChild(ov);
+    render();
+  }else{
+    var err=document.getElementById("_lErr");
+    if(err) err.textContent="Senha incorreta.";
+    inp.value=""; inp.focus();
+  }
+}
+function mostrarLogin(){
+  var ov=document.createElement("div");
+  ov.id="_lOv"; ov.className="login-overlay";
+  ov.innerHTML="<div class='login-box'>"
+    +"<div class='login-logo'>StandardX</div>"
+    +"<div class='login-sub'>MVP · Acesso restrito</div>"
+    +"<input id='_lInp' class='login-inp' type='password' placeholder='Senha de acesso' "
+    +"onkeydown=\"if(event.key==='Enter')verificarSenha()\"/>"
+    +"<button class='login-btn' onclick='verificarSenha()'>Entrar →</button>"
+    +"<div id='_lErr' class='login-err'></div></div>";
+  document.body.appendChild(ov);
+  setTimeout(function(){var el=document.getElementById("_lInp");if(el)el.focus();},100);
+}
+
+if(!_auth){mostrarLogin();}else{render();}
+
+</script>
+<div class='watermark'>StandardX MVP · Versão de Teste · Não distribuir</div>
+</body>
+</html>
