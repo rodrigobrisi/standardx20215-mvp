@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang='pt-BR'>
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>StandardX &mdash; Plataforma de Engenharia FEL</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<meta charset='UTF-8'/>
+<meta name='viewport' content='width=device-width,initial-scale=1'/>
+<title>StandardX</title>
+<link rel='preconnect' href='https://fonts.googleapis.com'/>
+<link href='https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap' rel='stylesheet'/>
 <style>
 
 :root{
@@ -219,31 +219,33 @@ table th{background:var(--bg2);padding:8px 10px;font-size:11px;font-weight:700;t
 input[type=number]{-moz-appearance:textfield}
 input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
-.mod-selector{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
-.mod-box{background:var(--bg2);border:1px solid var(--bord);border-radius:20px;padding:48px 40px;max-width:480px;width:100%;text-align:center}
-.mod-logo{font-family:Syne,sans-serif;font-size:32px;font-weight:800;color:var(--px2);margin-bottom:6px}
-.mod-sub{font-size:13px;color:var(--tx3);margin-bottom:36px;line-height:1.7}
-.mod-btn{width:100%;padding:18px 20px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:12px;text-align:left;display:flex;align-items:center;gap:14px;transition:opacity .15s}
-.mod-btn:hover{opacity:.88}
-.mod-btn-owner{background:var(--az);color:#07090F}
-.mod-btn-prop{background:var(--bg3);color:var(--tx2);border:1px solid var(--bord2)}
-.watermark{position:fixed;bottom:10px;right:14px;font-size:10px;color:rgba(255,255,255,.1);pointer-events:none;z-index:998;font-family:Syne,sans-serif;letter-spacing:1px;user-select:none}
+.mod-sel{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px}
+.mod-box{background:var(--bg2);border:1px solid var(--bord);border-radius:20px;padding:48px 36px;max-width:460px;width:100%;text-align:center}
+.mod-logo{font-family:Syne,sans-serif;font-size:30px;font-weight:800;color:var(--px2);margin-bottom:4px}
+.mod-tagline{font-size:12px;color:var(--tx3);margin-bottom:32px;line-height:1.6}
+.mod-card{display:flex;align-items:center;gap:14px;width:100%;padding:16px 20px;border-radius:12px;border:none;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;text-align:left;transition:opacity .15s}
+.mod-card:hover{opacity:.88}
+.mod-card-owner{background:var(--az);color:#07090F}
+.mod-card-prop{background:var(--bg3);color:var(--tx);border:1px solid var(--bord2)}
+.mod-icon{font-size:26px;line-height:1}
+.mod-card-title{font-size:14px;font-weight:700}
+.mod-card-sub{font-size:11px;font-weight:400;opacity:.75;margin-top:2px}
 </style>
 </head>
 <body>
-<div id="modSelector" class="mod-selector">
+<div id="modSelector" class="mod-sel">
   <div class="mod-box">
     <div class="mod-logo">StandardX</div>
-    <div class="mod-sub">Plataforma de Engenharia FEL &middot; MVP<br>Selecione seu perfil para continuar</div>
-    <button class="mod-btn mod-btn-owner" onclick="iniciarOwner()">
-      <span style="font-size:24px">&#127959;</span>
-      <div><div>Owner</div><div style="font-size:11px;font-weight:500;opacity:.8">Definir escopo e gerar RFP</div></div>
+    <div class="mod-tagline">Plataforma de Engenharia FEL &middot; MVP</div>
+    <button class="mod-card mod-card-owner" onclick="iniciarOwner()">
+      <div class="mod-icon">&#127959;</div>
+      <div><div class="mod-card-title">Owner</div><div class="mod-card-sub">Definir escopo e gerar RFP</div></div>
     </button>
-    <button class="mod-btn mod-btn-prop" onclick="iniciarProponente()">
-      <span style="font-size:24px">&#128203;</span>
-      <div><div>Proponente</div><div style="font-size:11px;font-weight:500;opacity:.8">Elaborar proposta t&eacute;cnica</div></div>
+    <button class="mod-card mod-card-prop" onclick="iniciarProponente()">
+      <div class="mod-icon">&#128203;</div>
+      <div><div class="mod-card-title">Proponente</div><div class="mod-card-sub">Elaborar proposta t&eacute;cnica</div></div>
     </button>
-    <div style="font-size:10px;color:var(--tx3);margin-top:20px">Vers&atilde;o de teste &middot; Acesso restrito</div>
+    <div style="font-size:10px;color:var(--tx3);margin-top:16px">Vers&atilde;o de teste &middot; Acesso restrito</div>
   </div>
 </div>
 <div id="app-owner" style="display:none">
@@ -254,11 +256,8 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
   <div id="steps-prop" class="steps"></div>
   <div id="scr-prop" class="scr"></div>
 </div>
-<div class="watermark">StandardX MVP &middot; Vers&atilde;o de Teste</div>
 <script>
-
-var _modAtivo=null;
-var _escopoInjetado=null;
+var _modAtivo=null,_escopoInjetado=null;
 var _autenticado=(function(){try{return sessionStorage.getItem("stdx_auth")==="ok";}catch(e){return false;}})();
 
 function iniciarOwner(){
@@ -275,41 +274,68 @@ function iniciarProponente(){
 }
 function pedirSenha(destino){
   var ov=document.createElement("div");ov.id="senhaOv";
-  ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px";
+  ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px";
   var box=document.createElement("div");
   box.style.cssText="background:#0F1520;border:1px solid #243352;border-radius:14px;padding:36px;max-width:360px;width:100%;text-align:center";
-  box.innerHTML="<div style='font-family:Syne,sans-serif;font-size:22px;font-weight:800;color:#EEF2FF;margin-bottom:4px'>StandardX</div>"
-    +"<div style='font-size:12px;color:#94A3B8;margin-bottom:24px'>Insira a senha de acesso</div>"
-    +"<input id='senhaInp' type='password' style='width:100%;background:#07090F;border:1px solid #243352;border-radius:8px;padding:13px;color:#EEF2FF;font-size:16px;text-align:center;letter-spacing:4px;outline:none;margin-bottom:10px'/>"
-    +"<button id='senhaBtn' style='width:100%;background:#7C3AED;color:#fff;border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px'>Entrar</button>"
-    +"<div id='senhaErr' style='font-size:12px;color:#F87171;min-height:16px'></div>";
+  box.innerHTML="<div style=\"font-family:Syne,sans-serif;font-size:22px;font-weight:800;color:#EEF2FF;margin-bottom:4px\">StandardX</div>"
+    +"<div style=\"font-size:12px;color:#94A3B8;margin-bottom:22px\">Insira a senha de acesso</div>"
+    +"<input id=\"senhaInp\" type=\"password\" style=\"width:100%;background:#07090F;border:1px solid #243352;border-radius:8px;padding:13px;color:#EEF2FF;font-size:16px;text-align:center;letter-spacing:4px;outline:none;margin-bottom:10px\"/>"
+    +"<button id=\"senhaBtn\" style=\"width:100%;background:#7C3AED;color:#fff;border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px\">Entrar</button>"
+    +"<div id=\"senhaErr\" style=\"font-size:12px;color:#F87171;min-height:16px\"></div>";
   ov.appendChild(box);document.body.appendChild(ov);
   var inp=document.getElementById("senhaInp");inp.focus();
   inp.onkeydown=function(e){if(e.key==="Enter")validarSenha(destino);};
   document.getElementById("senhaBtn").onclick=function(){validarSenha(destino);};
 }
-function validarSenha(destino){var inp=document.getElementById("senhaInp");if(inp.value==="standardx2025"){try{sessionStorage.setItem("stdx_auth","ok");}catch(e){}_autenticado=true;document.getElementById("senhaOv").remove();if(destino==="owner")iniciarOwner();else iniciarProponente();}else{document.getElementById("senhaErr").textContent="Senha incorreta.";inp.value="";inp.focus();}}
+function validarSenha(destino){
+  var inp=document.getElementById("senhaInp");
+  if(inp.value==="standardx2025"){
+    try{sessionStorage.setItem("stdx_auth","ok");}catch(e){}
+    _autenticado=true;
+    document.getElementById("senhaOv").remove();
+    if(destino==="owner") iniciarOwner(); else iniciarProponente();
+  } else {
+    document.getElementById("senhaErr").textContent="Senha incorreta.";
+    inp.value=""; inp.focus();
+  }
+}
 function render(){
   var _sc=0,_el=document.querySelector("#app-owner .tbl-wrap");if(_el)_sc=_el.scrollTop;
-  var h="";for(var i=1;i<5;i++){var c=i<S.tela?"done":i===S.tela?"cur":"";var k=i<S.tela?"onclick='goT("+i+")' style='cursor:pointer'":"";h+="<div class='stp "+c+"' "+k+"></div>";}
+  var h="";
+  for(var i=1;i<5;i++){
+    var c=i<S.tela?"done":i===S.tela?"cur":"";
+    var k=i<S.tela?"onclick='goT("+i+")' style='cursor:pointer'":"";
+    h+="<div class='stp "+c+"' "+k+"></div>";
+  }
   document.getElementById("steps-owner").innerHTML=h;
-  var sc=document.getElementById("scr-owner");sc.className="scr fade";sc.innerHTML=Ts[S.tela]();void sc.offsetWidth;sc.className="scr";
+  var sc=document.getElementById("scr-owner");
+  sc.className="scr fade"; sc.innerHTML=Ts[S.tela](); void sc.offsetWidth; sc.className="scr";
   if(_sc>0){var e2=document.querySelector("#app-owner .tbl-wrap");if(e2)e2.scrollTop=_sc;}
 }
 function _Prender(){
   var _sc=0,_el=document.querySelector("#app-prop .tbody-scroll");if(_el)_sc=_el.scrollTop;
-  var h="";for(var i=1;i<8;i++){var c=i<P.tela?"done":i===P.tela?"cur":"";var k=i<P.tela?"onclick='_PgoT("+i+")' style='cursor:pointer'":"";h+="<div class='stp "+c+"' "+k+"></div>";}
+  var h="";
+  for(var i=1;i<8;i++){
+    var c=i<P.tela?"done":i===P.tela?"cur":"";
+    var k=i<P.tela?"onclick='_PgoT("+i+")' style='cursor:pointer'":"";
+    h+="<div class='stp "+c+"' "+k+"></div>";
+  }
   document.getElementById("steps-prop").innerHTML=h;
-  var sc=document.getElementById("scr-prop");sc.className="scr fade";sc.innerHTML=_PTs[P.tela]();void sc.offsetWidth;sc.className="scr";
+  var sc=document.getElementById("scr-prop");
+  sc.className="scr fade"; sc.innerHTML=_PTs[P.tela](); void sc.offsetWidth; sc.className="scr";
   if(_sc>0){var e2=document.querySelector("#app-prop .tbody-scroll");if(e2)e2.scrollTop=_sc;}
 }
 function irParaProponente(){
   var escopo={
-    obj:{id:S.obj.id,l:S.obj.l,p:S.obj.p,nv:S.obj.nv},tipo:S.tipo,vis:S.vis,m3d:S.m3d,lod:S.lod||null,softs:S.softs,
+    obj:{id:S.obj.id,l:S.obj.l,p:S.obj.p,nv:S.obj.nv},
+    tipo:S.tipo,vis:S.vis,m3d:S.m3d,lod:S.lod||null,softs:S.softs,
     dur:S.dur||16,defSoft:S.defSoft,
-    reunioes:REUN.filter(function(r){return S.reun[r.id]&&S.reun[r.id].inc;}).map(function(r){return{id:r.id,t:r.t,f:S.reun[r.id].f,h:S.reun[r.id].h||2};}),
+    reunioes:REUN.filter(function(r){return S.reun[r.id]&&S.reun[r.id].inc;}).map(function(r){
+      return{id:r.id,t:r.t,f:S.reun[r.id].f,h:S.reun[r.id].h||2};
+    }),
     sel:S.sel,predDisp:S.predDisp,normas:S.normas,
-    aqMode:S.aqMode,aqForn:S.aqForn,aqReunForn:S.aqReunForn,aqBids:S.aqBids,aqReun:S.aqReun,aqItens:S.aqItens
+    aqMode:S.aqMode,aqForn:S.aqForn,aqReunForn:S.aqReunForn,
+    aqBids:S.aqBids,aqReun:S.aqReun,aqItens:S.aqItens
   };
   _escopoInjetado=escopo;
   try{localStorage.setItem("stdx_escopo",JSON.stringify(escopo));}catch(e){}
@@ -1798,7 +1824,6 @@ function T4(){
 
 // ── RENDER ─────────────────────────────────────────────────
 var Ts=[T0,T1,T2,TPRED,T3,T4];
-// render() do controlador
 // ── HANDLERS ───────────────────────────────────────────────
 function selObjAdv(id){ selObj(id); goT(1); }
 function selObj(id){
@@ -1979,11 +2004,13 @@ function reset(){
 
 
 
+
+// ── ESCOPO: vem do Owner (via _escopoInjetado) ou simulado ──
 var ESCOPO=(function(){
   if(typeof _escopoInjetado!=="undefined"&&_escopoInjetado&&_escopoInjetado.obj) return _escopoInjetado;
   try{var s=localStorage.getItem("stdx_escopo");if(s){var p=JSON.parse(s);if(p&&p.obj)return p;}}catch(e){}
   return {
-    obj:{id:"fel2",l:"Desenvolvimento de Escopo e Seleção de Alternativas",p:"Estimativa de Investimento ±25%",nv:"B"},
+    obj:{id:"fel2",l:"Desenvolvimento de Escopo e Seleção de Alternativas",p:"Estimativa de Investimento \u00b125%",nv:"B"},
     tipo:"greenfield",vis:{on:true,modo:"obrigatorio"},m3d:true,lod:"LOD 200",softs:["E3D"],defSoft:"owner",
     normas:["abnt"],dur:16,aqMode:"mercado",aqForn:3,aqReunForn:true,
     aqBids:{eq_princ:2,mat:1,sv_civil:1,sv_mec:1},aqReun:{eq_princ:3,mat:3,sv_civil:3,sv_mec:3},
@@ -2443,7 +2470,8 @@ var P={
 // Inicializar reuniões do owner
 for(var _ri=0;_ri<ESCOPO.reunioes.length;_ri++){
   var _r=ESCOPO.reunioes[_ri];
-  P.reunPart[_r.id]=2; P.reunH[_r.id]=2;
+  P.reunPart[_r.id]=2;
+  P.reunH[_r.id]=(_r.h&&_r.h>0)?_r.h:2;
 }
 // Inicializar qtd reuniões internas baseadas na duração do projeto
 (function(){
@@ -2481,13 +2509,13 @@ function getPredList(){
   }
   return list;
 }
-function _P_PhTec(){
+function _PhTec(){
   var t=0;
   for(var cod in P.hCat) for(var c in P.hCat[cod]) t+=P.hCat[cod][c];
   return t;
 }
-function _P_PhGest(){ return Math.round(_PhTec()*P.gest.pct/100)+(P.gest.hExtra||0); }
-function _P_PhReunOwner(){
+function _PhGest(){ return Math.round(_PhTec()*P.gest.pct/100)+(P.gest.hExtra||0); }
+function _PhReunOwner(){
   var t=0;
   for(var i=0;i<ESCOPO.reunioes.length;i++){
     var r=ESCOPO.reunioes[i];
@@ -2495,7 +2523,7 @@ function _P_PhReunOwner(){
   }
   return t;
 }
-function _P_PhReunInt(){
+function _PhReunInt(){
   var t=0;
   for(var id in P.reunInt){
     var ri=P.reunInt[id];
@@ -2503,12 +2531,12 @@ function _P_PhReunInt(){
   }
   return t;
 }
-function _P_PhVisitas(){
+function _PhVisitas(){
   if(!ESCOPO.vis||!ESCOPO.vis.on) return 0;
   if(ESCOPO.vis.modo==="opcional"&&!P.visRealiza) return 0;
   return P.visHoras||0;
 }
-function _P_PhTotal(){ return _PhTec()+_PhGest()+_PhAtivTotal(); }
+function _PhTotal(){ return _PhTec()+_PhGest()+_PhAtivTotal(); }
 
 // ── DRAWER ─────────────────────────────────────────────────
 var _drwCod=null;
@@ -2577,7 +2605,7 @@ function handleInfChk(el){
   P.infConf[_drwCod][el.dataset.tipo+"_"+el.dataset.idx]=(el.checked);
   openDrw(_drwCod);
 }
-function _P_PsetCatAtiv(el){
+function _PsetCatAtiv(el){
   var aid=el.dataset.a, cat=el.dataset.cat;
   if(!P.hAtiv[aid]) P.hAtiv[aid]={};
   P.hAtiv[aid][cat]=+el.value||0;
@@ -2588,14 +2616,14 @@ function _P_PsetCatAtiv(el){
     tdTot.textContent=tot>0?tot+'h':'—';
     tdTot.style.color=tot>0?'var(--am2)':'var(--tx3)';
   }
-  updSum();
+  _PupdSum();
 }
-function _P_PhAtivTotal(){
+function _PhAtivTotal(){
   var t=0;
   for(var aid in P.hAtiv) for(var c in P.hAtiv[aid]) t+=P.hAtiv[aid][c];
   return t;
 }
-function _P_PsetCat(el){
+function _PsetCat(el){
   var cod=el.dataset.c,cat=el.dataset.cat;
   if(!P.hCat[cod]) P.hCat[cod]={};
   P.hCat[cod][cat]=+el.value||0;
@@ -2606,13 +2634,13 @@ function _P_PsetCat(el){
     tdTot.textContent=tot>0?tot+'h':'—';
     tdTot.style.color=tot>0?'var(--px2)':'var(--tx3)';
   }
-  updSum();
+  _PupdSum();
 }
 function setD(el){
   if(!P.hCat[el.dataset.c]) P.hCat[el.dataset.c]={};
   P._disc=P._disc||{}; P._disc[el.dataset.c]=el.value;
 }
-function _P_PbuildCatBarsHTML(){
+function _PbuildCatBarsHTML(){
   var allCats=CATS_TEC.concat(CATS_GEST);
   var maxH=0;
   for(var ca=0;ca<allCats.length;ca++){
@@ -2640,32 +2668,32 @@ function _P_PbuildCatBarsHTML(){
   html+='</div>';
   return html;
 }
-function updSum(){
+function _PupdSum(){
   var te=document.getElementById('sum-tec'); if(te) te.textContent=_PhTec()+'h';
   var tg=document.getElementById('sum-gest'); if(tg) tg.textContent=_PhGest()+'h';
   var tt=document.getElementById('sum-tot'); if(tt) tt.textContent=_PhTotal()+'h';
   var cb=document.getElementById('cat-bars'); if(cb) cb.innerHTML=_PbuildCatBarsHTML();
 }
-function _P_PsetFilt(f){P.filt=f;_Prender();}
-function _P_PsetBusca(v){P.busca=v;_Prender();}
-function _P_PsetRP(el){P.reunPart[el.dataset.rid]=+el.value;_Prender();}
-function _P_PsetRH(el){P.reunH[el.dataset.rid]=+el.value;_Prender();}
-function _P_PtogRI(id){
+function _PsetFilt(f){P.filt=f;render();}
+function _PsetBusca(v){P.busca=v;render();}
+function _PsetRP(el){P.reunPart[el.dataset.rid]=+el.value;render();}
+function _PsetRH(el){P.reunH[el.dataset.rid]=+el.value;render();}
+function _PtogRI(id){
   P.reunInt[id].inc=!P.reunInt[id].inc;
   if(P.reunInt[id].inc){
     // Recalcular qtd com base na periodicidade e duração do projeto
     var f=P.reunInt[id].f;
     P.reunInt[id].qtd=_PcalcRI(f);
   }
-  _Prender();
+  render();
 }
-function _P_PsetRIQ(el){P.reunInt[el.dataset.rid].qtd=+el.value;_Prender();}
-function _P_PsetRIPart(el){P.reunInt[el.dataset.rid].part=+el.value;_Prender();}
-function _P_PsetRIH(el){P.reunInt[el.dataset.rid].h=+el.value;_Prender();}
-function _P_PsetRIF(el){
+function _PsetRIQ(el){P.reunInt[el.dataset.rid].qtd=+el.value;render();}
+function _PsetRIPart(el){P.reunInt[el.dataset.rid].part=+el.value;render();}
+function _PsetRIH(el){P.reunInt[el.dataset.rid].h=+el.value;render();}
+function _PsetRIF(el){
   P.reunInt[el.dataset.rid].f=el.value;
   P.reunInt[el.dataset.rid].qtd=_PcalcRI(el.value);
-  _Prender();
+  render();
 }
 
 // ── T0: LOGIN ──────────────────────────────────────────────
@@ -2935,17 +2963,20 @@ function _PT4(){
     if(r.id==="r_forn") continue;
     var part=P.reunPart[r.id]||1;
     var rh=P.reunH[r.id]||0;
-    totRO+=part*rh;
-    h+="<div class='gest-row'><div style='flex:1'><div style='font-size:13px;font-weight:500'>"+r.t+"</div>";
-    h+="<div style='font-size:11px;color:var(--tx3)'>"+r.f+" · total: "+(part*rh)+"h</div></div>";
+    var nRO=(FW[r.f]&&FW[r.f]>0)?Math.max(1,Math.round((ESCOPO.dur||16)/FW[r.f])):1;
+    totRO+=nRO*part*rh;
+    h+="<div class='gest-row'><div style='flex:1'><div style='font-size:13px;font-weight:500'>"+ r.t+"</div>";
+    h+="<div style='font-size:11px;color:var(--tx3)'>"+r.f+" · "+nRO+" reun. × "+part+" rec. × "+rh+"h = "+(nRO*part*rh)+"h</div></div>";
     h+="<div style='display:flex;align-items:center;gap:8px'>";
     h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
     h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Recursos</span>";
     h+="<input type='number' class='gest-inp' style='width:58px' min='1' value='"+part+"' data-rid='"+r.id+"' onchange='_PsetRP(this)'/></div>";
     h+="<span style='font-size:14px;color:var(--tx3)'>×</span>";
     h+="<div style='display:flex;flex-direction:column;align-items:center;gap:2px'>";
-    h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Horas</span>";
-    h+="<input type='number' class='gest-inp' style='width:58px' min='0' value='"+rh+"' data-rid='"+r.id+"' onchange='_PsetRH(this)'/></div>";
+    h+="<span style='font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px'>Horas/reun.</span>";
+    h+="<div style='width:58px;background:var(--bg3);border:1px solid var(--bord);border-radius:6px;padding:6px 4px;text-align:center;font-size:13px;font-weight:700;color:var(--vd2)'>"+rh+"h</div>";
+    h+="<span style='font-size:8px;color:var(--vd2);opacity:.8'>Owner</span>";
+    h+="</div>";
     h+="<span style='font-size:11px;color:var(--tx3)'>/reun.</span></div></div>";
   }
   // Reunião com fornecedores por pacote
@@ -3039,8 +3070,11 @@ function _PT3b(){
     var r=ESCOPO.reunioes[ri];
     if(r.id==="r_forn") continue;
     var part=P.reunPart[r.id]||1, rh=P.reunH[r.id]||0;
-    var reun_tot=part*rh;
-    ativs.push({id:"reun_"+r.id, grp:"Reuniões com Owner", l:r.t, sub:part+" rec. × "+rh+"h/reun.", ref:reun_tot});
+    var nRO2=(FW[r.f]&&FW[r.f]>0)?Math.max(1,Math.round((ESCOPO.dur||16)/FW[r.f])):1;
+    var reun_tot=nRO2*part*rh;
+    ativs.push({id:"reun_"+r.id, grp:"Reuniões com Owner", l:r.t,
+      sub:nRO2+" reun. × "+part+" rec. × "+rh+"h/reun.",
+      ref:reun_tot});
   }
   // Reuniões com fornecedores
   if(ESCOPO.aqMode&&ESCOPO.aqMode!=="referencia"&&ESCOPO.aqReunForn&&ESCOPO.aqItens){
@@ -3378,7 +3412,8 @@ function _PT5(){
   var totRO=0;
   for(var ri=0;ri<ESCOPO.reunioes.length;ri++){
     var r2=ESCOPO.reunioes[ri]; if(r2.id==="r_forn") continue;
-    totRO+=(P.reunPart[r2.id]||1)*(P.reunH[r2.id]||0);
+    var nRO_t5=(FW[r2.f]&&FW[r2.f]>0)?Math.max(1,Math.round((ESCOPO.dur||16)/FW[r2.f])):1;
+    totRO+=nRO_t5*(P.reunPart[r2.id]||1)*(P.reunH[r2.id]||0);
   }
   if(ESCOPO.aqMode&&ESCOPO.aqMode!=="referencia"&&ESCOPO.aqReunForn&&ESCOPO.aqItens){
     for(var fkx in ESCOPO.aqItens){
@@ -3578,25 +3613,150 @@ function _PT5(){
     }
     h+="</div>";
   }
-  h+="<div style='margin:20px auto 0;background:var(--bg2);border:1px solid var(--bord);border-radius:10px;padding:14px;max-width:440px;font-size:11px;color:var(--tx3);line-height:1.6;text-align:center'>StandardX · Proponente v1 · Exportação disponível na versão de produção.</div>";
+  h+="<div style='display:flex;gap:12px;margin-top:24px;flex-wrap:wrap'>";
+  h+="<button onclick='_PgerarProposta()' style='flex:1;min-width:180px;background:var(--vd);color:#07090F;border:none;border-radius:10px;padding:16px;font-size:14px;font-weight:700;cursor:pointer'>📄 Gerar Proposta (PDF)</button>";
+  h+="</div>";
+  return h;
+}
+
+
+function _PgerarProposta(){
+  var doc=_PgerarHTMLProposta();
+  var w=window.open("","_blank");
+  if(!w){alert("Permita popups para gerar a proposta.");return;}
+  w.document.write(doc);
+  w.document.close();
+  setTimeout(function(){w.print();},600);
+}
+function _PgerarHTMLProposta(){
+  var o=ESCOPO.obj;
+  var cenarioLabel={otimista:"Otimista (×0.75)",realista:"Realista (×1.00)",pessimista:"Pessimista (×1.40)"}[P.cenario]||"—";
+  var dt=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"long",year:"numeric"});
+  var CATS_ALL=CATS_TEC.concat(CATS_GEST);
+
+  var h="<!DOCTYPE html><html lang='pt-BR'><head><meta charset='UTF-8'/>";
+  h+="<title>Proposta — "+o.l+"</title>";
+  h+="<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;font-size:9.5pt;color:#111}";
+  h+="@page{size:A4 landscape;margin:14mm 12mm}@media print{.no-print{display:none}}";
+  h+=".pg{max-width:277mm;margin:0 auto;padding:14mm 12mm}";
+  h+="h1{font-size:17pt;font-weight:700;color:#0D1F3C;margin-bottom:4px}";
+  h+="h2{font-size:11pt;font-weight:700;color:#0D1F3C;border-bottom:2px solid #0D1F3C;padding-bottom:3px;margin:18px 0 8px}";
+  h+="h3{font-size:9.5pt;font-weight:700;color:#1E3A6E;margin:10px 0 3px}";
+  h+="table{width:100%;border-collapse:collapse;font-size:8pt;margin-bottom:8px}";
+  h+="th{background:#0D1F3C;color:#fff;padding:5px 6px;text-align:center;font-size:7.5pt}";
+  h+="th.left{text-align:left}td{padding:3px 6px;border-bottom:1px solid #E2E8F0}";
+  h+="td.num{text-align:center;font-family:monospace}";
+  h+="tr:nth-child(even) td{background:#F8FAFC}";
+  h+=".tr-disc td{background:#EFF6FF;font-weight:700;color:#1E3A6E;padding:5px 6px}";
+  h+=".header{border-bottom:3px solid #0D1F3C;padding-bottom:10px;margin-bottom:16px}";
+  h+=".sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}";
+  h+=".sum-box{background:#F0F4FF;border-radius:5px;padding:8px;text-align:center}";
+  h+=".sum-n{font-size:18pt;font-weight:700}";
+  h+=".sum-l{font-size:7.5pt;color:#666;margin-top:1px}";
+  h+=".footer{margin-top:20px;padding-top:8px;border-top:1px solid #E2E8F0;font-size:8pt;color:#666;text-align:center}";
+  h+="</style></head><body><div class='pg'>";
+
+  // Cabeçalho
+  h+="<div class='header'>";
+  h+="<div style='font-size:8pt;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px'>Proposta Técnica e Comercial — StandardX</div>";
+  h+="<h1>"+o.l+"</h1>";
+  h+="<div style='font-size:9.5pt;color:#1E3A6E;margin-bottom:4px'>"+o.p+"</div>";
+  h+="<div style='font-size:8pt;color:#666'>"+dt+" &nbsp;|&nbsp; Prazo: "+(ESCOPO.dur||16)+" sem. &nbsp;|&nbsp; "+(ESCOPO.tipo==="greenfield"?"Greenfield":"Brownfield")+" &nbsp;|&nbsp; Cenário: "+cenarioLabel+"</div>";
+  h+="</div>";
+
+  // Resumo de horas
+  h+="<h2>1. Resumo de Horas</h2>";
+  h+="<div class='sum-grid'>";
+  var hItems=[["Técnicas",_PhTec(),"#1E3A6E"],["Gestão",_PhGest(),"#92400E"],["Atividades",_PhAtivTotal(),"#065F46"],["Total Geral",_PhTotal(),"#0D4F2E"]];
+  for(var i=0;i<hItems.length;i++){
+    h+="<div class='sum-box'><div class='sum-n' style='color:"+hItems[i][2]+"'>"+hItems[i][1]+"h</div><div class='sum-l'>"+hItems[i][0]+"</div></div>";
+  }
+  h+="</div>";
+  if(P.valor) h+="<div style='background:#FFFBEB;border:1px solid #D97706;border-radius:5px;padding:8px 12px;margin-bottom:12px'><span style='font-size:8.5pt;color:#666'>Valor proposto: </span><strong style='font-size:13pt;color:#92400E'>"+P.valor+"</strong></div>";
+
+  // Distribuição por categoria
+  h+="<h2>2. Distribuição de Horas por Categoria</h2>";
+  h+="<table><tr>";
+  var catTots={};
+  for(var ci=0;ci<CATS_ALL.length;ci++){
+    catTots[CATS_ALL[ci]]=0;
+    var isTec=CATS_TEC.indexOf(CATS_ALL[ci])>=0;
+    h+="<th style='background:"+(isTec?"#1E3A6E":"#4C1D95")+"'>"+CATS_ALL[ci]+"</th>";
+  }
+  h+="<th>Total</th></tr><tr>";
+  for(var cod in P.hCat) for(var c in P.hCat[cod]) if(catTots[c]!==undefined) catTots[c]+=P.hCat[cod][c];
+  for(var aid in P.hAtiv) for(var c2 in P.hAtiv[aid]) if(catTots[c2]!==undefined) catTots[c2]+=P.hAtiv[aid][c2];
+  var gtot=0;
+  for(var ci2=0;ci2<CATS_ALL.length;ci2++){var v=catTots[CATS_ALL[ci2]]||0;h+="<td class='num'>"+(v||"—")+"</td>";gtot+=v;}
+  h+="<td class='num' style='font-weight:700'>"+gtot+"h</td></tr></table>";
+
+  // Horas por entregável
+  h+="<h2>3. Horas por Entregável</h2>";
+  h+="<table><tr><th class='left' style='width:70px'>Cód.</th><th class='left'>Entregável</th>";
+  for(var ci3=0;ci3<CATS_ALL.length;ci3++){
+    var isTec2=CATS_TEC.indexOf(CATS_ALL[ci3])>=0;
+    h+="<th style='background:"+(isTec2?"#1E3A6E":"#4C1D95")+"'>"+CATS_ALL[ci3]+"</th>";
+  }
+  h+="<th>Total</th></tr>";
+  var curDisc="";
+  for(var ei=0;ei<E.length;ei++){
+    var e2=E[ei]; if(!ESCOPO.sel[e2.c]) continue;
+    if(e2.d!==curDisc){curDisc=e2.d;h+="<tr class='tr-disc'><td colspan='"+(3+CATS_ALL.length)+"'>"+curDisc+"</td></tr>";}
+    var cats=P.hCat[e2.c]||{}; var eTot=0; for(var c3 in cats) eTot+=cats[c3];
+    h+="<tr><td style='font-family:monospace;font-size:7.5pt'>"+e2.c+"</td><td>"+e2.n+"</td>";
+    for(var ci4=0;ci4<CATS_ALL.length;ci4++){var cv=cats[CATS_ALL[ci4]]||0;h+="<td class='num'>"+(cv||"—")+"</td>";}
+    h+="<td class='num' style='font-weight:700'>"+(eTot||"—")+"</td></tr>";
+  }
+  h+="</table>";
+
+  // Horas por atividade
+  var hasAtiv=false; for(var a in P.hAtiv){var t2=0;for(var c4 in P.hAtiv[a])t2+=P.hAtiv[a][c4];if(t2>0){hasAtiv=true;break;}}
+  if(hasAtiv){
+    h+="<h2>4. Horas por Atividade de Suporte</h2>";
+    h+="<table><tr><th class='left'>Atividade</th>";
+    for(var ci5=0;ci5<CATS_ALL.length;ci5++){
+      var isTec3=CATS_TEC.indexOf(CATS_ALL[ci5])>=0;
+      h+="<th style='background:"+(isTec3?"#1E3A6E":"#4C1D95")+"'>"+CATS_ALL[ci5]+"</th>";
+    }
+    h+="<th>Total</th></tr>";
+    var aLabels={gestao:"Gestão"};
+    for(var ri=0;ri<ESCOPO.reunioes.length;ri++) aLabels["reun_"+ESCOPO.reunioes[ri].id]=ESCOPO.reunioes[ri].t;
+    for(var ii=0;ii<REUN_INT.length;ii++) aLabels["rint_"+REUN_INT[ii].id]=REUN_INT[ii].t;
+    aLabels["visitas"]="Visitas técnicas";
+    for(var aid2 in P.hAtiv){
+      var acat=P.hAtiv[aid2]; var aT=0; for(var c5 in acat) aT+=acat[c5];
+      if(!aT) continue;
+      h+="<tr><td>"+(aLabels[aid2]||aid2)+"</td>";
+      for(var ci6=0;ci6<CATS_ALL.length;ci6++){var av=acat[CATS_ALL[ci6]]||0;h+="<td class='num'>"+(av||"—")+"</td>";}
+      h+="<td class='num' style='font-weight:700'>"+aT+"h</td></tr>";
+    }
+    h+="</table>";
+  }
+
+  if(P.obs) h+="<h2>5. Observações</h2><p style='line-height:1.7;white-space:pre-wrap'>"+P.obs+"</p>";
+
+  h+="<div class='footer'>StandardX · Proposta Técnica e Comercial · "+dt+"</div></div>";
+  h+="<div class='no-print' style='text-align:center;padding:18px;background:#f5f5f5'>";
+  h+="<button onclick='window.print()' style='background:#0D1F3C;color:#fff;border:none;padding:11px 26px;border-radius:8px;font-size:14px;cursor:pointer;margin-right:10px'>🖨️ Imprimir / Salvar PDF</button>";
+  h+="<button onclick='window.close()' style='background:#eee;border:none;padding:11px 18px;border-radius:8px;font-size:14px;cursor:pointer'>Fechar</button></div>";
+  h+="</body></html>";
   return h;
 }
 
 // ── RENDER ─────────────────────────────────────────────────
 var _PTs=[_PT0,_PT1,_PT2,_PT4,_PT3b,_PT3,_PT6,_PT5];
-// render() do proponente removido — gerenciado pelo controlador
-function _P_PsetVisRealiza(v){P.visRealiza=v;_Prender();}
-function _P_PtSoftProp(id){if(!P.softPropList)P.softPropList=[];var i=P.softPropList.indexOf(id);if(i>=0)P.softPropList.splice(i,1);else P.softPropList.push(id);_Prender();}
-function setFornPac(el){if(!P.fornPac)P.fornPac={};P.fornPac[el.dataset.fk]=+el.value;_Prender();}
-function setFornH(el){if(!P.fornH)P.fornH={};P.fornH[el.dataset.fk]=+el.value;_Prender();}
-function _P_PcalcRI(f){
+function _PsetVisRealiza(v){P.visRealiza=v;render();}
+function _PtSoftProp(id){if(!P.softPropList)P.softPropList=[];var i=P.softPropList.indexOf(id);if(i>=0)P.softPropList.splice(i,1);else P.softPropList.push(id);render();}
+function setFornPac(el){if(!P.fornPac)P.fornPac={};P.fornPac[el.dataset.fk]=+el.value;render();}
+function setFornH(el){if(!P.fornH)P.fornH={};P.fornH[el.dataset.fk]=+el.value;render();}
+function _PcalcRI(f){
   var dur=ESCOPO.dur||16;
   var w=FW[f]||0;
   if(!w) return 1; // Por evento = 1
   return Math.max(1,Math.round(dur/w));
 }
 
-function _P_PaplicarCenario(c){
+function _PaplicarCenario(c){
   P.cenario=c;
   var rawId=ESCOPO.obj&&ESCOPO.obj.id||"fel2";
   // Mapear id do objetivo para chave da tabela HORAS_REF
@@ -3641,15 +3801,15 @@ function _P_PaplicarCenario(c){
       P.hCat[cod][activeCats[activeCats.length-1]]=Math.max(0,totalH-allocated);
     }
   }
-  _Prender();
+  render();
 }
 
-function _P_PgoT(t){P.tela=t;_Prender();}
-function _P_PsetFornPacote(el){if(!P.fornPacote)P.fornPacote={};P.fornPacote[el.dataset.pid]=+el.value;_Prender();}
-function tSoftP(id){if(!P.softsP)P.softsP=[];var i=P.softsP.indexOf(id);if(i>=0)P.softsP.splice(i,1);else P.softsP.push(id);_Prender();}
-function _P_PsetVisRealiza(v){P.visRealiza=v;_Prender();}
-function _P_PtVisDV(dv){var i=P.visDisciplinas.indexOf(dv);if(i>=0)P.visDisciplinas.splice(i,1);else P.visDisciplinas.push(dv);_Prender();}
-// Init pelo controlador
+function _PgoT(t){P.tela=t;render();}
+function _PsetFornPacote(el){if(!P.fornPacote)P.fornPacote={};P.fornPacote[el.dataset.pid]=+el.value;render();}
+function tSoftP(id){if(!P.softsP)P.softsP=[];var i=P.softsP.indexOf(id);if(i>=0)P.softsP.splice(i,1);else P.softsP.push(id);render();}
+function _PsetVisRealiza(v){P.visRealiza=v;render();}
+function _PtVisDV(dv){var i=P.visDisciplinas.indexOf(dv);if(i>=0)P.visDisciplinas.splice(i,1);else P.visDisciplinas.push(dv);render();}
+// init pelo controlador
 </script>
 </body>
 </html>
